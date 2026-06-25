@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Zap, Building2, Package, Plug, CheckCircle2, ChevronRight, Plus, X } from "lucide-react";
 import { workspaceApi } from "@/lib/api";
@@ -106,6 +106,9 @@ export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("company");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [hasWorkspace, setHasWorkspace] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [error, setError] = useState("");
 
   // Step 1 — Company
@@ -125,6 +128,45 @@ export default function OnboardingPage() {
   const [dealSize, setDealSize] = useState("");
   const [salesCycle, setSalesCycle] = useState("");
 
+  // Backfill from existing workspace settings on mount
+  useEffect(() => {
+    workspaceApi.get()
+      .then(({ data }) => {
+        const s = (data.settings ?? {}) as Record<string, unknown>;
+        const icp = (s.icp_profile ?? {}) as Record<string, unknown>;
+        const hasContext = Boolean(s.sender_name || s.product_description);
+
+        setHasWorkspace(true);
+        setIsUpdate(hasContext);
+
+        if (data.name) setCompanyName(data.name);
+        if (typeof s.sender_name === "string") setSenderName(s.sender_name);
+        if (typeof s.sender_title === "string") setSenderTitle(s.sender_title);
+        if (Array.isArray(s.seller_domains)) setSellerDomains(s.seller_domains as string[]);
+
+        if (typeof icp.product_name === "string") setProductName(icp.product_name);
+        if (typeof s.product_description === "string") {
+          // stored as "ProductName: description" — strip the prefix if present
+          const raw = s.product_description;
+          const sep = raw.indexOf(": ");
+          setProductDesc(sep > -1 ? raw.slice(sep + 2) : raw);
+        }
+        if (Array.isArray(icp.differentiators)) setDifferentiators(icp.differentiators as string[]);
+        if (Array.isArray(icp.competitors)) setCompetitors(icp.competitors as string[]);
+        if (Array.isArray(icp.pain_points)) setPainPoints(icp.pain_points as string[]);
+        if (Array.isArray(icp.icp_industries)) setIndustries(icp.icp_industries as string[]);
+        if (Array.isArray(icp.icp_regions)) setRegions(icp.icp_regions as string[]);
+        if (typeof icp.typical_deal_size === "string") setDealSize(icp.typical_deal_size);
+        if (typeof icp.sales_cycle_months === "string") setSalesCycle(icp.sales_cycle_months);
+      })
+      .catch(() => {
+        // No workspace yet — fresh onboarding, leave all fields empty
+        setHasWorkspace(false);
+        setIsUpdate(false);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   const slugify = (s: string) =>
     s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
@@ -134,6 +176,13 @@ export default function OnboardingPage() {
       return;
     }
     setError("");
+
+    if (hasWorkspace) {
+      // Workspace already exists — no need to create, proceed directly
+      setStep("product");
+      return;
+    }
+
     setSaving(true);
     try {
       await workspaceApi.create({
@@ -143,6 +192,7 @@ export default function OnboardingPage() {
         sender_title: senderTitle.trim() || "Account Executive",
         seller_domains: sellerDomains,
       });
+      setHasWorkspace(true);
       setStep("product");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Failed to create workspace.");
@@ -190,6 +240,17 @@ export default function OnboardingPage() {
   const btnSecondary =
     "text-sm text-zinc-400 hover:text-zinc-200 transition-colors";
 
+  if (loading) {
+    return (
+      <div className="w-full max-w-xl flex items-center justify-center py-24">
+        <div className="flex flex-col items-center gap-3 text-zinc-500">
+          <div className="w-6 h-6 border-2 border-zinc-600 border-t-brand-500 rounded-full animate-spin" />
+          <span className="text-sm">Loading your workspace...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-xl">
       {/* Logo */}
@@ -213,8 +274,14 @@ export default function OnboardingPage() {
         {step === "company" && (
           <div className="space-y-5">
             <div>
-              <h2 className="text-lg font-semibold text-zinc-100 mb-1">Set up your workspace</h2>
-              <p className="text-sm text-zinc-500">Tell us about your company so agents write in the right voice.</p>
+              <h2 className="text-lg font-semibold text-zinc-100 mb-1">
+                {isUpdate ? "Update your workspace" : "Set up your workspace"}
+              </h2>
+              <p className="text-sm text-zinc-500">
+                {isUpdate
+                  ? "Your existing settings are pre-filled below. Edit anything and continue."
+                  : "Tell us about your company so agents write in the right voice."}
+              </p>
             </div>
 
             <div>
@@ -426,9 +493,13 @@ export default function OnboardingPage() {
                 <CheckCircle2 className="w-7 h-7 text-emerald-400" />
               </div>
             </div>
-            <h2 className="text-lg font-semibold text-zinc-100">You're all set</h2>
+            <h2 className="text-lg font-semibold text-zinc-100">
+              {isUpdate ? "Settings updated" : "You're all set"}
+            </h2>
             <p className="text-sm text-zinc-500 max-w-sm mx-auto">
-              Vantage is ready. Add your HubSpot deals and run your first agent sweep from the Inbox.
+              {isUpdate
+                ? "Your agent context has been saved. The next sweep will use your updated product and ICP settings."
+                : "Vantage is ready. Add your HubSpot deals and run your first agent sweep from the Inbox."}
             </p>
             <div className="flex flex-col gap-2 pt-2">
               <button
