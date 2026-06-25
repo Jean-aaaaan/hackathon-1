@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vantage — Product Plan 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brand:    #4f46e5;
+    --brand-lt: #eef2ff;
+    --brand-md: #818cf8;
+    --zinc-900: #18181b;
+    --zinc-700: #3f3f46;
+    --zinc-500: #71717a;
+    --zinc-300: #d4d4d8;
+    --zinc-100: #f4f4f5;
+    --zinc-50:  #fafafa;
+    --red:      #ef4444;
+    --red-lt:   #fef2f2;
+    --amber:    #f59e0b;
+    --amber-lt: #fffbeb;
+    --blue:     #3b82f6;
+    --blue-lt:  #eff6ff;
+    --green:    #22c55e;
+    --green-lt: #f0fdf4;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+    background: #fff;
+    color: var(--zinc-900);
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  /* ── Layout ── */
+  .page { display: flex; max-width: 1280px; margin: 0 auto; min-height: 100vh; }
+
+  .nav {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 40px 20px 40px 24px;
+    border-right: 1px solid var(--zinc-100);
+    background: #fff;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+  .nav-logo-icon {
+    width: 28px; height: 28px;
+    background: var(--brand);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-logo-icon svg { width: 14px; height: 14px; fill: #fff; }
+  .nav-logo-name { font-size: 15px; font-weight: 700; color: var(--zinc-900); }
+  .nav-logo-sub  { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--zinc-500); margin-top: 1px; }
+
+  .nav-section { margin-bottom: 28px; }
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--zinc-500);
+    margin-bottom: 8px;
+  }
+  .nav a {
+    display: block;
+    font-size: 13px;
+    color: var(--zinc-500);
+    text-decoration: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: background .12s, color .12s;
+    line-height: 1.4;
+  }
+  .nav a:hover { background: var(--zinc-100); color: var(--zinc-900); }
+  .nav a.active { background: var(--brand-lt); color: var(--brand); font-weight: 600; }
+
+  .content { flex: 1; padding: 48px 56px 96px 56px; max-width: 960px; }
+
+  /* ── Typography ── */
+  h1 { font-size: 28px; font-weight: 800; color: var(--zinc-900); letter-spacing: -.02em; margin-bottom: 8px; }
+  h2 { font-size: 20px; font-weight: 700; color: var(--zinc-900); letter-spacing: -.01em; margin: 48px 0 16px; }
+  h3 { font-size: 15px; font-weight: 700; color: var(--zinc-900); margin: 28px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; color: var(--zinc-700); margin: 16px 0 6px; }
+  p  { color: var(--zinc-700); margin-bottom: 12px; line-height: 1.7; }
+  ul { color: var(--zinc-700); padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; line-height: 1.7; }
+  strong { color: var(--zinc-900); font-weight: 600; }
+
+  .section { border-top: 1px solid var(--zinc-100); padding-top: 12px; margin-top: 4px; }
+
+  /* ── Hero ── */
+  .hero {
+    background: linear-gradient(135deg, var(--brand-lt) 0%, #f0f0fe 100%);
+    border: 1px solid #e0e7ff;
+    border-radius: 16px;
+    padding: 32px 36px;
+    margin-bottom: 40px;
+  }
+  .hero-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--brand);
+    margin-bottom: 10px;
+  }
+  .hero h1 { color: var(--brand); margin-bottom: 12px; }
+  .hero-tagline {
+    font-size: 17px;
+    color: #3730a3;
+    font-style: italic;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .hero-meta-item { font-size: 12px; color: var(--zinc-500); }
+  .hero-meta-item strong { color: var(--zinc-700); }
+
+  /* ── Chips / Badges ── */
+  .chip {
+    display: inline-flex; align-items: center;
+    font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 20px;
+    white-space: nowrap;
+  }
+  .chip-brand  { background: var(--brand-lt); color: var(--brand); }
+  .chip-red    { background: var(--red-lt);   color: var(--red); }
+  .chip-amber  { background: var(--amber-lt); color: #92400e; }
+  .chip-blue   { background: var(--blue-lt);  color: #1e40af; }
+  .chip-green  { background: var(--green-lt); color: #166534; }
+  .chip-zinc   { background: var(--zinc-100); color: var(--zinc-700); }
+
+  /* ── Capability grid ── */
+  .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .cap-card {
+    background: var(--zinc-50);
+    border: 1px solid var(--zinc-100);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .cap-card-area { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--brand); margin-bottom: 6px; }
+  .cap-card ul { padding-left: 14px; margin: 0; }
+  .cap-card li { font-size: 12px; color: var(--zinc-700); margin-bottom: 2px; }
+
+  /* ── Gap table ── */
+  .gap-tier { margin-bottom: 36px; }
+  .tier-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .tier-number {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; flex-shrink: 0;
+  }
+  .tier-1 .tier-number { background: var(--red);   color: #fff; }
+  .tier-2 .tier-number { background: var(--amber);  color: #fff; }
+  .tier-3 .tier-number { background: var(--blue);   color: #fff; }
+  .tier-4 .tier-number { background: var(--zinc-500); color: #fff; }
+  .tier-title  { font-size: 14px; font-weight: 700; }
+  .tier-desc   { font-size: 12px; color: var(--zinc-500); }
+
+  .gap-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .gap-table th {
+    text-align: left; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--zinc-500); padding: 6px 12px;
+    border-bottom: 1px solid var(--zinc-100);
+  }
+  .gap-table td { padding: 10px 12px; border-bottom: 1px solid var(--zinc-100); vertical-align: top; }
+  .gap-table tr:last-child td { border-bottom: none; }
+  .gap-table tr:hover td { background: var(--zinc-50); }
+  .gap-num  { font-size: 11px; font-weight: 700; color: var(--zinc-300); width: 28px; }
+  .gap-name { font-size: 13px; font-weight: 600; color: var(--zinc-900); }
+  .gap-why  { font-size: 12px; color: var(--zinc-500); margin-top: 2px; }
+  .gap-area { width: 90px; }
+  .gap-effort { width: 60px; font-size: 12px; font-weight: 600; color: var(--zinc-700); text-align: right; }
+
+  /* ── Sprint plan ── */
+  .sprint-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .sprint-card {
+    border: 1px solid var(--zinc-100);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .sprint-header {
+    padding: 12px 16px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    border-bottom: 1px solid var(--zinc-100);
+  }
+  .sprint-name { font-size: 13px; font-weight: 700; }
+  .sprint-days { font-size: 11px; color: var(--zinc-500); }
+  .sprint-goal {
+    padding: 10px 16px 4px;
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--zinc-500);
+  }
+  .sprint-goal-text {
+    padding: 0 16px 10px;
+    font-size: 12px; color: var(--zinc-700); font-style: italic;
+    border-bottom: 1px solid var(--zinc-100);
+  }
+  .sprint-items { padding: 10px 16px 14px; }
+  .sprint-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--zinc-700);
+    margin-bottom: 6px; line-height: 1.4;
+  }
+  .sprint-item-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    margin-top: 5px; flex-shrink: 0;
+  }
+  .s7 { border-top: 3px solid var(--red); }
+  .s8 { border-top: 3px solid var(--amber); }
+  .s9 { border-top: 3px solid var(--brand); }
+  .s10{ border-top: 3px solid var(--blue); }
+  .s11{ border-top: 3px solid var(--zinc-500); }
+  .s7 .sprint-item-dot { background: var(--red); }
+  .s8 .sprint-item-dot { background: var(--amber); }
+  .s9 .sprint-item-dot { background: var(--brand); }
+  .s10 .sprint-item-dot{ background: var(--blue); }
+  .s11 .sprint-item-dot{ background: var(--zinc-500); }
+
+  /* ── Metrics ── */
+  .metric-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card {
+    background: var(--zinc-50);
+    border: 1px solid var(--zinc-100);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .metric-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--zinc-500); margin-bottom: 6px; }
+  .metric-value { font-size: 22px; font-weight: 800; color: var(--zinc-900); margin-bottom: 2px; }
+  .metric-target { font-size: 11px; color: var(--zinc-500); }
+  .metric-primary .metric-value { color: var(--brand); }
+  .metric-primary { border-color: #c7d2fe; background: var(--brand-lt); }
+
+  /* ── Principle cards ── */
+  .principle-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .principle-card {
+    background: var(--zinc-50);
+    border: 1px solid var(--zinc-100);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .principle-q  { font-size: 13px; font-weight: 700; color: var(--zinc-900); margin-bottom: 6px; line-height: 1.4; }
+  .principle-ex { font-size: 11px; color: var(--zinc-500); line-height: 1.5; }
+
+  /* ── Callout ── */
+  .callout {
+    border-left: 3px solid var(--brand);
+    background: var(--brand-lt);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #3730a3;
+    line-height: 1.6;
+  }
+  .callout strong { color: #312e81; }
+
+  .callout-warn {
+    border-left-color: var(--amber);
+    background: var(--amber-lt);
+    color: #78350f;
+  }
+  .callout-warn strong { color: #451a03; }
+
+  /* ── Feedback loop diagram ── */
+  .loop-diagram {
+    display: flex; align-items: center; justify-content: center;
+    gap: 0; margin: 24px 0; flex-wrap: wrap;
+  }
+  .loop-step {
+    background: var(--zinc-50);
+    border: 1px solid var(--zinc-100);
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 110px;
+  }
+  .loop-step-icon { font-size: 18px; margin-bottom: 4px; }
+  .loop-step-label { font-size: 11px; font-weight: 700; color: var(--zinc-900); }
+  .loop-step-sub   { font-size: 10px; color: var(--zinc-500); margin-top: 1px; }
+  .loop-arrow {
+    font-size: 16px; color: var(--zinc-300);
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── Print ── */
+  @media print {
+    .nav { display: none; }
+    .content { padding: 24px; max-width: 100%; }
+    .sprint-grid, .metric-grid, .principle-grid, .cap-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 800px) {
+    .nav { display: none; }
+    .content { padding: 24px; }
+    .sprint-grid, .metric-grid, .principle-grid, .cap-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- ── Sidebar nav ── -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg viewBox="0 0 16 16"><path d="M8 1L1 5v6l7 4 7-4V5L8 1zm0 2.2l4.5 2.6v5.2L8 13.6 3.5 11V5.8L8 3.2z"/></svg>
+    </div>
+    <div>
+      <div class="nav-logo-name">Vantage</div>
+      <div class="nav-logo-sub">Product Plan · 2026</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Overview</div>
+    <a href="#vision">Vision &amp; North Star</a>
+    <a href="#flywheel">The Flywheel</a>
+    <a href="#current">Current Capabilities</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">The Gaps</div>
+    <a href="#tier1">Tier 1 — Must Ship</a>
+    <a href="#tier2">Tier 2 — High Value</a>
+    <a href="#tier3">Tier 3 — Analytics</a>
+    <a href="#tier4">Tier 4 — Action Surfaces</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Execution</div>
+    <a href="#sprints">Sprint Plan</a>
+    <a href="#metrics">Metrics</a>
+    <a href="#principles">Design Principles</a>
+  </div>
+</nav>
+
+<!-- ── Main content ── -->
+<main class="content">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-label">Vantage · Internal Product Plan</div>
+    <h1>Self-Driving Deal Engine</h1>
+    <p class="hero-tagline">"Agent-as-deal-manager. Rep-as-executor. The agent owns the plan. The rep executes it."</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><strong>Sprint baseline:</strong> 6 (shipped)</div>
+      <div class="hero-meta-item"><strong>Remaining sprints:</strong> 7 – 11</div>
+      <div class="hero-meta-item"><strong>Total remaining effort:</strong> ~22 dev days</div>
+      <div class="hero-meta-item"><strong>North star metric:</strong> Execution Rate &gt;60%</div>
+      <div class="hero-meta-item"><strong>Date:</strong> May 2026</div>
+    </div>
+  </div>
+
+  <!-- ── Vision ── -->
+  <section id="vision" class="section">
+    <h2>Vision &amp; North Star</h2>
+
+    <p>Vantage is a per-account AI deal engine. One agent per HubSpot deal. The agent monitors signals 24/7, maintains a living action plan, and generates prepared content for every step. The rep's interface is a queue — not a dashboard to interpret, but a sequence to execute.</p>
+
+    <p>This is meaningfully different from existing tools. Salesforce Einstein and Gong surface insights. Attio automates workflows. Octolane AI updates CRM fields. Vantage does something none of them do: <strong>it plans and prepares each deal's next move, continuously, and presents it as a ready-to-execute action with content already drafted.</strong></p>
+
+    <div class="callout">
+      <strong>The test for every feature:</strong> Does the rep know what to do next without thinking? Does the agent get smarter from what they did? If not, the feature is either passive information or a dead end.
+    </div>
+
+    <h3>Why Execution Rate, not DAR</h3>
+    <p>Draft Acceptance Rate (DAR) measures "did the rep approve the agent's draft?" That is a proxy for draft quality, not for whether the platform is driving outcomes. A rep can approve every draft and still close nothing.</p>
+
+    <p>The metric chain that matters:</p>
+    <div class="loop-diagram">
+      <div class="loop-step">
+        <div class="loop-step-icon">📋</div>
+        <div class="loop-step-label">Action generated</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-step-icon">✅</div>
+        <div class="loop-step-label">Action executed</div>
+        <div class="loop-step-sub">Execution Rate</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-step-icon">💬</div>
+        <div class="loop-step-label">Reply received</div>
+        <div class="loop-step-sub">Reply Rate</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-step-icon">📈</div>
+        <div class="loop-step-label">Stage advance</div>
+        <div class="loop-step-sub">Velocity</div>
+      </div>
+      <div class="loop-arrow">→</div>
+      <div class="loop-step">
+        <div class="loop-step-icon">🏆</div>
+        <div class="loop-step-label">Deal closed</div>
+        <div class="loop-step-sub">Agent ROI</div>
+      </div>
+    </div>
+
+    <p>DAR covers step 1. Execution Rate covers steps 1–2 and forces the question: is the agent generating actions the rep actually finds useful enough to execute? <strong>Target: &gt;60% within 8 weeks of active use.</strong></p>
+  </section>
+
+  <!-- ── Flywheel ── -->
+  <section id="flywheel" class="section">
+    <h2>The Self-Driving Flywheel</h2>
+
+    <p>The flywheel only spins if every step feeds the next. Right now it stalls at step 3 — the agent generates actions, the rep executes them, and the agent never learns what happened. That's the most critical gap in the platform today.</p>
+
+    <div class="loop-diagram" style="flex-direction:column; align-items:flex-start; gap:8px; margin-left:20px;">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">1</div>
+        <div><strong>Data in</strong> — HubSpot emails, notes, contacts, stage history + Fireflies transcripts + Outlook calendar + Perplexity news signals</div>
+      </div>
+      <div style="margin-left:14px;color:var(--zinc-300);font-size:18px">↓</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">2</div>
+        <div><strong>Agent runs</strong> — Researcher → RiskScanner → Grounding → Prioritiser → Drafter → Gap-fill → TimelineActions generated with prepared content</div>
+      </div>
+      <div style="margin-left:14px;color:var(--zinc-300);font-size:18px">↓</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">3</div>
+        <div><strong>Rep executes</strong> — Action Queue surfaces today's actions. Rep approves drafts, completes actions, records outcomes</div>
+      </div>
+      <div style="margin-left:14px;color:var(--zinc-300);font-size:18px">↓</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">4</div>
+        <div><strong style="color:var(--red)">Outcome fed back</strong> — ⚠ MISSING. Completion notes → Interaction table → agent context on next run → smarter next action</div>
+      </div>
+      <div style="margin-left:14px;color:var(--zinc-300);font-size:18px">↓</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--zinc-500);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0">5</div>
+        <div><strong>Next action generated</strong> — Agent uses outcome to plan next step. Deal advances. Cycle repeats.</div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn" style="margin-top:20px">
+      <strong>Step 4 is the entire value of the platform.</strong> Without it, Vantage is a sophisticated to-do list. With it, it's a learning system that gets sharper with every deal, every rep, every outcome.
+    </div>
+  </section>
+
+  <!-- ── Current capabilities ── -->
+  <section id="current" class="section">
+    <h2>Current Capabilities (Sprint 6 Baseline)</h2>
+    <p>What's shipped and working. All infrastructure is in place for the self-driving loop — the remaining work is closing the feedback gap and refining the experience.</p>
+
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-card-area">Action Queue</div>
+        <ul>
+          <li>Cross-deal action queue (today + overdue)</li>
+          <li>ActionDetailPanel with full reasoning</li>
+          <li>Mark Done / Defer 2d buttons</li>
+          <li>TimelineAction model + gap-fill service (5 rules)</li>
+          <li>Backfill: 798 actions across 376 deals</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <div class="cap-card-area">War Room</div>
+        <ul>
+          <li>Deal narrative + signal theme chips</li>
+          <li>MEDDPICC breakdown (8 components)</li>
+          <li>Risk vectors + 3 Whys</li>
+          <li>Timeline tab (default) — Act Now / Coming Up / History</li>
+          <li>Smart Fields + Plays + Calls + AI Fields + Training (8 tabs)</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <div class="cap-card-area">Agent Pipeline</div>
+        <ul>
+          <li>6-agent pipeline per deal (nightly + on-demand)</li>
+          <li>Fireflies transcripts → action items → TimelineActions</li>
+          <li>Calendar sync → meeting prep actions</li>
+          <li>LinkedIn people signals (Perplexity)</li>
+          <li>Invigilo ICP + product context injected</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <div class="cap-card-area">Integrations</div>
+        <ul>
+          <li>HubSpot OAuth + deal sync (376 deals)</li>
+          <li>HubSpot email + notes + calls + contacts</li>
+          <li>Fireflies webhook + real-time transcript ingest</li>
+          <li>Outlook OAuth + calendar sync + draft send</li>
+          <li>Perplexity news research per deal</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <div class="cap-card-area">Analytics</div>
+        <ul>
+          <li>DAR trend (30/60/90d)</li>
+          <li>LLM cost dashboard</li>
+          <li>Signal type distribution</li>
+          <li>Rep performance table</li>
+          <li>Forecast accuracy (AI vs CRM)</li>
+        </ul>
+      </div>
+      <div class="cap-card">
+        <div class="cap-card-area">Platform</div>
+        <ul>
+          <li>WorkOS auth (Google SSO)</li>
+          <li>Automation rules engine (4 triggers, 3 actions)</li>
+          <li>Outbound webhooks (HMAC-signed, 9 event types)</li>
+          <li>Shareable brief links (JWT 7-day)</li>
+          <li>MCP server (Claude Desktop integration)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GAPS ── -->
+  <h2 style="margin-top:48px">The Gaps — Prioritised by Impact</h2>
+  <p>23 identified gaps across 5 platform areas, grouped into 4 tiers by their impact on the self-driving loop. Total effort: ~22 dev days across 5 sprints.</p>
+
+  <!-- Tier 1 -->
+  <section id="tier1">
+    <div class="gap-tier tier-1">
+      <div class="tier-header">
+        <div class="tier-number">1</div>
+        <div>
+          <div class="tier-title">Must Ship — closes the feedback loop</div>
+          <div class="tier-desc">Platform is a to-do list until these exist. ~5.5 dev days.</div>
+        </div>
+      </div>
+
+      <table class="gap-table">
+        <thead>
+          <tr>
+            <th class="gap-num">#</th>
+            <th>Gap</th>
+            <th class="gap-area">Area</th>
+            <th class="gap-effort">Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gap-num">1</td>
+            <td>
+              <div class="gap-name">Completion notes + outcome → agent feedback</div>
+              <div class="gap-why">When a rep marks an action done, capture what happened (sent email / had call / got response / not relevant) + optional notes. Write to Interaction table. Agent reads this on next run. Without this, the agent re-generates the same actions indefinitely.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-red">Inbox</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">2</td>
+            <td>
+              <div class="gap-name">Auto-next-action on completion</div>
+              <div class="gap-why">When an action is marked done, immediately run gap_fill() for that one deal. The queue refreshes with the next step within seconds. Completion feels like momentum, not a dead end.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-red">Inbox</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">3</td>
+            <td>
+              <div class="gap-name">History tab in inbox</div>
+              <div class="gap-why">Cross-deal activity log. What did I actually do this week? Completed actions grouped by week, per deal, with outcome notes and "→ agent generated [next action]" chain. Also serves as the manager's rep execution view.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-red">Inbox</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">4</td>
+            <td>
+              <div class="gap-name">ICP / product context builder in Settings</div>
+              <div class="gap-why">The researcher and drafter agents are hardcoded with Invigilo's product context, reference stories, and competitors. Any other user of the platform gets emails about SafeKey and Aramco. Settings needs fields: ideal customer profile, pain you solve, top 3 differentiators, main competitors, reference stories. Prerequisite for commercialisation.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-red">Settings</span></td>
+            <td class="gap-effort">2d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">5</td>
+            <td>
+              <div class="gap-name">War Room: 8 tabs → 4 (Act / Intel / History / Tools)</div>
+              <div class="gap-why">The War Room has 9 tabs (Timeline, Drafts, Next Actions, Notes, Smart Fields, Plays, Calls, AI Fields, Training). The rep has no mental model for which tab has what. Consolidate: <strong>Act</strong> (Timeline + Drafts + Next Actions), <strong>Intel</strong> (MEDDPICC + Risk + 3 Whys + Deal narrative), <strong>History</strong> (Timeline events + Calls + Notes), <strong>Tools</strong> (Smart Fields + Plays + AI Fields + Training).</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-red">War Room</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tier 2 -->
+  <section id="tier2">
+    <div class="gap-tier tier-2">
+      <div class="tier-header">
+        <div class="tier-number">2</div>
+        <div>
+          <div class="tier-title">High Value — makes the platform usable at scale</div>
+          <div class="tier-desc">Experience and focus improvements. ~5d total.</div>
+        </div>
+      </div>
+
+      <table class="gap-table">
+        <thead>
+          <tr>
+            <th class="gap-num">#</th>
+            <th>Gap</th>
+            <th class="gap-area">Area</th>
+            <th class="gap-effort">Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gap-num">6</td>
+            <td>
+              <div class="gap-name">Action queue focus — top 7 deals, not 50</div>
+              <div class="gap-why">The backfill created 50 actions due today. A rep cannot execute 50 things. The queue must have a "focus" concept: the 5–7 deals that matter most today, ranked by urgency × deal value × close date proximity. A "View all" toggle shows the rest. Prevents the queue from feeling like a pile.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">Inbox</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">7</td>
+            <td>
+              <div class="gap-name">MEDDPICC gap → create TimelineAction in one click</div>
+              <div class="gap-why">The MEDDPICC panel shows "Economic Buyer: 18%" in red but offers no action. A "Fix this gap →" button should create a targeted TimelineAction instantly. Gap-to-action in one click, without leaving the War Room.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">War Room</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">8</td>
+            <td>
+              <div class="gap-name">Proactive assistant seeding (context-aware pre-seed)</div>
+              <div class="gap-why">Every War Room chat opens with the same generic question. The pre-seed should reflect the actual deal state: if champion is dark, seed with re-engagement framing. If DPA was just signed, seed with next legal step. If close date is in 10 days, seed with "what do I need to close this week?" Three lines of code, high daily value for the rep.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">War Room</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">9</td>
+            <td>
+              <div class="gap-name">Plays → Timeline integration</div>
+              <div class="gap-why">When a play fires and creates a draft, that draft is invisible in the Timeline tab. Play execution should create a TimelineAction so it appears in the Action Queue. Currently plays and timeline are two separate systems — reps have to hunt the Plays tab to discover that a play fired.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">War Room</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">10</td>
+            <td>
+              <div class="gap-name">Workspace health score in inbox header</div>
+              <div class="gap-why">A rep should see immediately if Perplexity isn't connected or voice profile is missing. Today you have to go Settings → Integrations to discover this. A one-line header badge: "Workspace 65% — Perplexity not connected" with a direct link to fix it. Missing keys reduce agent output quality silently.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">Settings</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">11</td>
+            <td>
+              <div class="gap-name">Automation rules execution log</div>
+              <div class="gap-why">Rules fire silently. There's no way to see "this rule triggered 12 times this month and created these 12 drafts." An execution log is table stakes for any automation system — without it the rep can't debug or trust the rules.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">Settings</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">12</td>
+            <td>
+              <div class="gap-name">Onboarding flow (4-step setup wizard)</div>
+              <div class="gap-why">A new workspace opens to an empty inbox with no guidance. Steps: Connect HubSpot → Sync deals → Configure ICP → Run agents on top 10 deals. Each step with a clear CTA and progress. Time-to-first-value is currently measured in hours of configuration; this should be 10 minutes.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-amber">Settings</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tier 3 -->
+  <section id="tier3">
+    <div class="gap-tier tier-3">
+      <div class="tier-header">
+        <div class="tier-number">3</div>
+        <div>
+          <div class="tier-title">Analytics depth — makes the ROI visible</div>
+          <div class="tier-desc">Outcome metrics that justify the platform spend. ~6.5d total.</div>
+        </div>
+      </div>
+
+      <table class="gap-table">
+        <thead>
+          <tr>
+            <th class="gap-num">#</th>
+            <th>Gap</th>
+            <th class="gap-area">Area</th>
+            <th class="gap-effort">Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gap-num">13</td>
+            <td>
+              <div class="gap-name">Reply rate tracking (the real DAR)</div>
+              <div class="gap-why">Of emails the agent drafted, approved, and sent — what % got a reply? This is derivable from HubSpot email engagement data already being synced. Reply rate is the outcome metric DAR is a proxy for. Measure both, report both.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-blue">Analytics</span></td>
+            <td class="gap-effort">1.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">14</td>
+            <td>
+              <div class="gap-name">Deal velocity chart (days per stage vs. avg)</div>
+              <div class="gap-why">How long do deals spend in each stage, compared to historical averages? "Proposal stage: avg 23 days. This deal: 67 days." This is one of the strongest predictors of deal health and is entirely absent from the analytics layer today. Stage history is in HubSpot and already being synced.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-blue">Analytics</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">15</td>
+            <td>
+              <div class="gap-name">Execution rate dashboard (per-rep, per-week)</div>
+              <div class="gap-why">Completed actions / generated actions, per rep, per week. This is the north star metric. If below 30%, the agent is generating too many wrong actions. If above 70%, the platform is running the rep's day. The data is in the timeline_actions table — needs a rollup endpoint and a chart.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-blue">Analytics</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">16</td>
+            <td>
+              <div class="gap-name">Win/Loss capture flow + analytics</div>
+              <div class="gap-why">When a deal closes Won or Lost, capture the reason with a structured prompt (3–4 categories + free text). Over 376 deals, this becomes the most valuable training data the agent will ever have: "We lose 60% of competitive deals where Voxel is mentioned." Currently nothing is captured at deal close.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-blue">War Room</span></td>
+            <td class="gap-effort">1.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">17</td>
+            <td>
+              <div class="gap-name">Pipeline movement analytics</div>
+              <div class="gap-why">How many deals advanced stages this month vs. last? Which stage is the biggest bottleneck? The ForecastSnapshot table already exists and can answer this with a simple aggregation. This is the #1 question in every pipeline review meeting.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-blue">Analytics</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">18</td>
+            <td>
+              <div class="gap-name">Agent ROI metric (cost per deal advanced)</div>
+              <div class="gap-why">We track LLM cost obsessively ($0.22/run) but never connect it to outcomes. "~$2,500/month in LLM costs → 14 deals advanced → $178/deal advanced." This is the number that justifies the platform to Vishnu and eventually to paying customers. Computable from existing cost + velocity data.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-blue">Analytics</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tier 4 -->
+  <section id="tier4">
+    <div class="gap-tier tier-4">
+      <div class="tier-header">
+        <div class="tier-number">4</div>
+        <div>
+          <div class="tier-title">Action surfaces — every view becomes actionable</div>
+          <div class="tier-desc">Makes Watchtower and Pipeline interactive, not passive. ~4d total.</div>
+        </div>
+      </div>
+
+      <table class="gap-table">
+        <thead>
+          <tr>
+            <th class="gap-num">#</th>
+            <th>Gap</th>
+            <th class="gap-area">Area</th>
+            <th class="gap-effort">Effort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="gap-num">19</td>
+            <td>
+              <div class="gap-name">Watchtower: "Act on this" per signal cluster</div>
+              <div class="gap-why">Signal cluster "Competitive: 12 deals" is read-only. There's no way to act from Watchtower — you must click into each War Room individually. An "Act on deals without a counter-action" button would run gap_fill on the relevant subset and surface them in the Action Queue immediately.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-zinc">Watchtower</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">20</td>
+            <td>
+              <div class="gap-name">Watchtower: delta view (what changed this week)</div>
+              <div class="gap-why">Watchtower always shows the current snapshot. For a weekly pipeline review, the question is "what changed?" — which deals' health improved or degraded, which signals fired, which deals moved stages. The data exists in ForecastSnapshot and Signal tables. Needs a date-range toggle and diff calculation.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-zinc">Watchtower</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">21</td>
+            <td>
+              <div class="gap-name">Closed Won / Closed Lost structured flow</div>
+              <div class="gap-why">When a deal closes, nothing special happens. Closed Won should: prompt win reason capture, generate a CS handoff action, log as positive training signal. Closed Lost should: prompt loss reason (competitor / budget / champion / no business case / timing), generate competitive loss analysis, remove from action queue. Currently both are silent.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-zinc">War Room</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">22</td>
+            <td>
+              <div class="gap-name">"Ask Agent" button on ActionDetailPanel</div>
+              <div class="gap-why">When a rep is looking at a complex action ("Identify Economic Buyer for Cemex"), they should be able to ask "Who in this account is likely the EB based on call history?" from the same panel. Currently requires navigating to War Room → chat. Removes a context switch.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-zinc">Inbox</span></td>
+            <td class="gap-effort">0.5d</td>
+          </tr>
+          <tr>
+            <td class="gap-num">23</td>
+            <td>
+              <div class="gap-name">Pipeline tab → stage funnel view</div>
+              <div class="gap-why">The Pipeline tab in Inbox is currently the old 376-account card list, unchanged. Now that the Action Queue is primary, the Pipeline tab should be a lightweight stage funnel: account count per stage, avg health per stage, deals most at risk. The card list is now redundant — the War Room is the per-deal view.</div>
+            </td>
+            <td class="gap-area"><span class="chip chip-zinc">Inbox</span></td>
+            <td class="gap-effort">1d</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Sprint plan ── -->
+  <section id="sprints" class="section">
+    <h2>Sprint Plan</h2>
+    <p>5 sprints, ~22 dev days total. Each sprint has a single clear goal. Sprints are sequential but individual items within each sprint can parallelise.</p>
+
+    <div class="sprint-grid">
+      <div class="sprint-card s7">
+        <div class="sprint-header">
+          <div class="sprint-name">Sprint 7 — Execution Loop</div>
+          <div class="sprint-days">~5 days</div>
+        </div>
+        <div class="sprint-goal">Goal</div>
+        <div class="sprint-goal-text">The action queue becomes a learning system, not a to-do list.</div>
+        <div class="sprint-items">
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#1</strong> Completion notes + outcome capture</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#2</strong> Auto-next-action on completion</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#3</strong> History tab in inbox</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#15 (partial)</strong> Execution rate metric</span></div>
+        </div>
+      </div>
+
+      <div class="sprint-card s8">
+        <div class="sprint-header">
+          <div class="sprint-name">Sprint 8 — UX Debt</div>
+          <div class="sprint-days">~4 days</div>
+        </div>
+        <div class="sprint-goal">Goal</div>
+        <div class="sprint-goal-text">The War Room and inbox are clean, focused, and navigable.</div>
+        <div class="sprint-items">
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#5</strong> War Room 8 tabs → 4</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#6</strong> Action queue focus (top 7)</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#7</strong> MEDDPICC gap → action one-click</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#8</strong> Proactive assistant seeding</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#9</strong> Plays → Timeline integration</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#10</strong> Workspace health score</span></div>
+        </div>
+      </div>
+
+      <div class="sprint-card s9">
+        <div class="sprint-header">
+          <div class="sprint-name">Sprint 9 — Platform Foundation</div>
+          <div class="sprint-days">~4 days</div>
+        </div>
+        <div class="sprint-goal">Goal</div>
+        <div class="sprint-goal-text">The platform works for any sales team, not just Invigilo.</div>
+        <div class="sprint-items">
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#4</strong> ICP / product context builder</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#11</strong> Automation rules execution log</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#12</strong> 4-step onboarding flow</span></div>
+        </div>
+      </div>
+
+      <div class="sprint-card s10">
+        <div class="sprint-header">
+          <div class="sprint-name">Sprint 10 — Analytics</div>
+          <div class="sprint-days">~5 days</div>
+        </div>
+        <div class="sprint-goal">Goal</div>
+        <div class="sprint-goal-text">The platform proves its own ROI in numbers.</div>
+        <div class="sprint-items">
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#13</strong> Reply rate tracking</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#14</strong> Deal velocity chart</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#15</strong> Execution rate dashboard</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#16</strong> Win/Loss capture + analytics</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#17</strong> Pipeline movement analytics</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#18</strong> Agent ROI metric</span></div>
+        </div>
+      </div>
+
+      <div class="sprint-card s11" style="grid-column: 1 / -1">
+        <div class="sprint-header">
+          <div class="sprint-name">Sprint 11 — Action Surfaces</div>
+          <div class="sprint-days">~4 days</div>
+        </div>
+        <div class="sprint-goal">Goal</div>
+        <div class="sprint-goal-text">Every view in the platform is an action surface, not just a dashboard.</div>
+        <div class="sprint-items" style="display:grid;grid-template-columns:1fr 1fr;gap:4px 32px;">
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#19</strong> Watchtower: "Act on this" buttons</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#22</strong> "Ask Agent" from ActionDetailPanel</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#20</strong> Watchtower: delta/weekly view</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#23</strong> Pipeline tab → stage funnel</span></div>
+          <div class="sprint-item"><div class="sprint-item-dot"></div><span><strong>#21</strong> Closed Won / Lost structured flow</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Metrics ── -->
+  <section id="metrics" class="section">
+    <h2>Metrics</h2>
+    <p>These five metrics tell the complete story of platform health. <strong>Execution Rate is the north star.</strong> The others explain why it's moving in either direction.</p>
+
+    <div class="metric-grid">
+      <div class="metric-card metric-primary">
+        <div class="metric-label">Execution Rate ★</div>
+        <div class="metric-value">—</div>
+        <div class="metric-target">Target: &gt;60% by Week 8</div>
+        <p style="font-size:11px;color:#3730a3;margin-top:8px;margin-bottom:0">Completed actions / generated actions. The single number that tells you if the agent is running the rep's day or just adding noise.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Reply Rate</div>
+        <div class="metric-value">—</div>
+        <div class="metric-target">Target: &gt;30%</div>
+        <p style="font-size:11px;color:var(--zinc-500);margin-top:8px;margin-bottom:0">Approved emails that received a reply. The outcome metric DAR has always been a proxy for.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Deal Velocity</div>
+        <div class="metric-value">—</div>
+        <div class="metric-target">vs. stage baseline</div>
+        <p style="font-size:11px;color:var(--zinc-500);margin-top:8px;margin-bottom:0">Avg days in current stage vs. historical average. Detects stalls 2–3 weeks before urgency_score catches them.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Agent ROI</div>
+        <div class="metric-value">—</div>
+        <div class="metric-target">$/deal advanced</div>
+        <p style="font-size:11px;color:var(--zinc-500);margin-top:8px;margin-bottom:0">LLM cost per deal that advanced at least one stage. The business case metric for the platform.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">DAR (secondary)</div>
+        <div class="metric-value">—</div>
+        <div class="metric-target">Target: &gt;60%</div>
+        <p style="font-size:11px;color:var(--zinc-500);margin-top:8px;margin-bottom:0">Kept as a draft quality signal. If DAR is high but Reply Rate is low, the drafts are approved but ineffective.</p>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Win Rate</div>
+        <div class="metric-value">—</div>
+        <div class="metric-target">vs. pre-Vantage baseline</div>
+        <p style="font-size:11px;color:var(--zinc-500);margin-top:8px;margin-bottom:0">Available after Sprint 10 (Win/Loss capture). The 6-month proof point for the platform's commercial value.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Design principles ── -->
+  <section id="principles" class="section">
+    <h2>Design Principles</h2>
+    <p>Three questions to ask of every feature before building. If you can't answer yes to both of the first two, the feature is either passive information or a dead end.</p>
+
+    <div class="principle-grid">
+      <div class="principle-card">
+        <div class="principle-q">Does the rep know what to do next without thinking?</div>
+        <div class="principle-ex">The platform should eliminate decision fatigue, not add to it. Every view should have one obvious primary action. If a rep opens Watchtower and has to decide what to do, the feature isn't done.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-q">Does the agent get smarter from what the rep did?</div>
+        <div class="principle-ex">Every rep action — completion, skip, decline, edit, outcome note — is training data. If an action disappears without leaving a trace the agent can learn from, we've broken the flywheel. No silent state changes.</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-q">Is the rep doing less work than before Vantage?</div>
+        <div class="principle-ex">The test for self-driving. If a feature adds configuration, navigation, or decision-making without removing more of each in return, it's complexity not value. Every screen should save more time than it takes.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:24px">
+      <strong>The 50-action problem is a design smell, not a data problem.</strong> When the queue shows 50 actions today, the agent is treating all 376 deals equally. Urgency, deal value, and close date proximity need to collapse into a composite focus score. The rep sees 7 things. The agent has done its job.
+    </div>
+  </section>
+
+  <!-- footer -->
+  <div style="margin-top:64px;padding-top:24px;border-top:1px solid var(--zinc-100);display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-size:12px;color:var(--zinc-400)">Vantage · Invigilo AI · Internal product plan · May 2026</div>
+    <div style="font-size:12px;color:var(--zinc-400)">Confidential</div>
+  </div>
+
+</main>
+</div>
+
+<script>
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + entry.target.id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-20% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{"ts":"2026-05-26T09:44:39Z","type":"agent_switch","agent":"Vish","from":"user","message":"SalesAgent project kickoff — Per-Account Agent Platform for enterprise sales","context":"requirements"}
+{"ts":"2026-05-26T09:44:55Z","type":"agent_switch","agent":"Vish","from":"Bob","message":"Writing product narrative — enterprise Per-Account Agent Platform","context":"requirements"}
+{"ts":"2026-05-26T09:45:48Z","type":"artifact","agent":"Vish","action":"created","path":"docs/product-narrative.md","message":"Product narrative: Vantage — Per-Account Agent Platform"}
+{"ts":"2026-05-26T09:45:48Z","type":"agent_switch","agent":"John","from":"Vish","message":"Writing PRD — translating MASTER-BUILD-REPORT intelligence into product spec","context":"prd"}
+{"ts":"2026-05-26T09:47:00Z","type":"artifact","agent":"John","action":"created","path":"docs/PRD.md","message":"PRD v1.0 complete — 6 epics, 20 stories, North Star KPI defined"}
+{"ts":"2026-05-26T09:47:00Z","type":"agent_switch","agent":"Winston","from":"John","message":"Designing system architecture — Azure + Next.js + FastAPI + pgvector","context":"architecture"}
+{"ts":"2026-05-26T09:49:23Z","type":"artifact","agent":"Winston","action":"created","path":"docs/architecture.md","message":"Full system architecture — DB schema, API contracts, agent pipeline, scale analysis"}
+{"ts":"2026-05-26T09:49:23Z","type":"agent_switch","agent":"Carol","from":"Winston","message":"Threat model and compliance matrix — ENTERPRISE mode","context":"security"}
+{"ts":"2026-05-26T09:50:23Z","type":"artifact","agent":"Carol","action":"created","path":"docs/security/threat-model.md","message":"STRIDE threat model + SOC2 control matrix + security checklist for every story"}
+{"ts":"2026-05-26T09:50:23Z","type":"ceremony","ceremony":"uc1_checkpoint","sprint":0,"agent":"Vish","message":"UC-1 Project Scope checkpoint — presenting to user"}
+{"ts":"2026-05-26T09:54:41Z","type":"agent_switch","agent":"Bob","from":"Vish","message":"UC-1 approved. Internal usage, HubSpot-first, full feature parity + better. Sprint 1 planning now.","context":"requirements"}
+{"ts":"2026-05-26T09:54:41Z","type":"ceremony","ceremony":"sprint_planning","sprint":1,"agent":"Bob","message":"Sprint 1: Full foundation — scaffold, DB schema, HubSpot sync, 5-agent pipeline, Inbox UI"}
+{"ts":"2026-05-26T09:54:50Z","type":"agent_switch","agent":"Amelia","from":"Bob","message":"Scaffolding Vantage monorepo — Next.js 15 + FastAPI + MCP server","context":"code"}
+{"ts":"2026-05-26T09:56:50Z","type":"agent_switch","agent":"Nova","from":"Amelia","message":"Building 6-agent pipeline: Researcher, RiskScanner, Grounding, Prioritiser, Drafter, StateWriter","context":"code"}
+{"ts":"2026-05-30T18:55:00Z","agent":"Vish","action":"activated","detail":"Product review initiated: Does Vantage make sense and leave no deal unturned for Invigilo sales?","status":"active"}
+{"ts":"2026-05-30T18:55:10Z","agent":"Vish","action":"reading","detail":"Reading CLAUDE.md, product plan, memory state — building product review context","status":"active"}
+{"ts":"2026-05-30T18:55:30Z","agent":"Vish","action":"analyzing","detail":"Running product-market fit analysis, sales workflow coverage, ICP alignment check","status":"active"}
+{"ts":"2026-05-30T18:55:50Z","agent":"Vish","action":"synthesizing","detail":"Synthesizing findings — product-market fit verdict, gaps, and north star alignment","status":"active"}
+{"ts":"2026-05-30T18:56:20Z","agent":"Vish","action":"completed","detail":"Product review complete. Verdict: Right product, right time. Three blockers before 'no deal unturned' can be claimed. See review output.","status":"done"}
+{"ts":"2026-05-30T18:57:00Z","agent":"Vish","action":"go-live-planning","detail":"Compiling ordered go-live action list","status":"active"}
+{"ts":"2026-06-13T04:30:42Z","type":"agent_switch","agent":"Bob","from":"user","message":"Assembling dreamteam for 3-loop codebase audit — Liam (code review), Amelia (condensing), Winston (architecture), Carol (security), Paige (comments/docs), Rex (challenge). Launching parallel swarm.","context":"review"}
+{"ts":"2026-06-13T04:34:50Z","type":"party_mode","agents":["Liam","Amelia","Winston","Thomas","Carol","Paige","Rex","Bob"],"message":"3-loop audit launched — Discovery → L1 Readability → L2 Condensation → L3 Deep Audit → Apply → Rex Challenge. 27 files in scope."}

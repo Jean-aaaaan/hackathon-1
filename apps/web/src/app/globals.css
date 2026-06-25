@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+@layer base {
+  :root {
+    --background:       0 0% 100%;
+    --foreground:       240 6% 10%;
+    --muted:            240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --border:           240 6% 90%;
+    --ring:             239 84% 67%;
+  }
+
+  * { @apply border-border; }
+
+  html { font-size: 15px; }
+
+  body {
+    @apply bg-white text-zinc-900;
+    font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .tabular { font-feature-settings: "tnum"; }
+
+  ::-webkit-scrollbar       { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-zinc-200 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-zinc-300; }
+}
+
+@layer components {
+
+  /* ── Base card ─────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-lg border border-zinc-200;
+    transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  }
+  .card:hover {
+    @apply border-zinc-300;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ── KPI number (Dossier-style bold metrics) ───────────────────────── */
+  .kpi-number {
+    @apply text-4xl font-bold text-zinc-900 tabular-nums tracking-tight leading-none;
+  }
+
+  /* ── Intel callout (cross-portfolio insight panels) ────────────────── */
+  .intel-callout {
+    @apply bg-amber-50 border border-amber-200 rounded-xl p-4;
+  }
+
+  /* Urgency left-stripe variant */
+  .card-urgent          { border-left-width: 3px; }
+  .card-urgent-critical { @apply card-urgent border-l-red-400; }
+  .card-urgent-high     { @apply card-urgent border-l-orange-400; }
+  .card-urgent-medium   { @apply card-urgent border-l-amber-400; }
+  .card-urgent-low      { @apply card-urgent border-l-emerald-300; }
+
+  /* ── Urgency dots ──────────────────────────────────────────────────── */
+  .dot          { @apply w-2 h-2 rounded-full flex-shrink-0 inline-block; }
+  .dot-critical { background: #EF4444; animation: urgency-pulse 2s ease-in-out infinite; }
+  .dot-high     { background: #F97316; }
+  .dot-medium   { background: #F59E0B; }
+  .dot-low      { background: #10B981; }
+
+  /* ── Urgency text ──────────────────────────────────────────────────── */
+  .urgency-critical { @apply text-red-600; }
+  .urgency-high     { @apply text-orange-600; }
+  .urgency-medium   { @apply text-amber-600; }
+  .urgency-low      { @apply text-emerald-600; }
+
+  /* ── Forecast badges ───────────────────────────────────────────────── */
+  .forecast-commit   { @apply bg-emerald-50 text-emerald-700 border border-emerald-200; }
+  .forecast-bestcase { @apply bg-sky-50 text-sky-700 border border-sky-200; }
+  .forecast-pipeline { @apply bg-zinc-100 text-zinc-600 border border-zinc-200; }
+  .forecast-omit     { @apply bg-zinc-100 text-zinc-400 border border-zinc-200; }
+
+  /* ── Pill tabs ─────────────────────────────────────────────────────── */
+  .tab-bar         { @apply flex gap-0.5 bg-zinc-100 p-0.5 rounded-md w-fit; }
+  .tab-pill        { @apply px-3 py-1.5 text-xs font-medium rounded text-zinc-500 transition-colors cursor-pointer; }
+  .tab-pill:hover  { @apply text-zinc-800; }
+  .tab-pill-active { @apply bg-white text-zinc-900 shadow-sm; }
+
+  /* ── Intelligence card (morning brief, hero tiles) ─────────────────── */
+  .intel-card {
+    @apply bg-zinc-50 rounded-lg border border-zinc-200;
+  }
+
+  /* ── Agent thinking dots ───────────────────────────────────────────── */
+  .thinking-dot {
+    @apply w-1 h-1 rounded-full bg-zinc-400 inline-block;
+    animation: thinking-dot 1.4s infinite ease-in-out;
+  }
+  .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  /* ── Command palette overlay ───────────────────────────────────────── */
+  .palette-overlay {
+    @apply fixed inset-0 bg-black/20 backdrop-blur-[2px] z-50;
+  }
+  .palette-box {
+    @apply bg-white rounded-xl border border-zinc-200 shadow-2xl w-full max-w-xl mx-auto mt-[16vh];
+    animation: palette-in 0.1s ease-out;
+  }
+
+  /* ── Primary button ────────────────────────────────────────────────── */
+  .btn-accent {
+    @apply bg-zinc-900 text-white font-medium rounded-md px-4 py-2 text-sm
+           transition-colors cursor-pointer select-none;
+  }
+  .btn-accent:hover  { @apply bg-zinc-800; }
+  .btn-accent:active { @apply bg-zinc-700; }
+
+  /* ── Secondary button ──────────────────────────────────────────────── */
+  .btn-secondary {
+    @apply border border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50
+           rounded-md px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer;
+  }
+
+  /* ── Neutral badge ─────────────────────────────────────────────────── */
+  .badge-neutral {
+    @apply text-xs bg-zinc-100 text-zinc-500 rounded px-2 py-0.5 font-medium;
+  }
+
+  /* ── Gold Data citation chip ───────────────────────────────────────── */
+  .citation-chip {
+    @apply inline-flex items-center gap-1 text-xs bg-amber-50 text-amber-700
+           border border-amber-200 rounded px-1.5 py-0.5 cursor-pointer
+           hover:bg-amber-100 transition-colors;
+  }
+
+  /* ── Section header text ───────────────────────────────────────────── */
+  .section-header {
+    @apply text-[11px] font-medium text-zinc-400 uppercase tracking-wider;
+  }
+
+  /* ── Panel (recessed background) ──────────────────────────────────── */
+  .panel {
+    @apply bg-zinc-50 rounded-lg border border-zinc-100 p-4;
+  }
+
+  /* ── Slide-over drawer ─────────────────────────────────────────────── */
+  .slide-over {
+    @apply fixed right-0 top-0 h-full w-[400px] bg-white border-l border-zinc-200
+           shadow-xl z-40 flex flex-col;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .slide-over-closed { transform: translateX(100%); }
+  .slide-over-open   { transform: translateX(0); }
+
+  /* ── Page section label ────────────────────────────────────────────── */
+  .page-section {
+    @apply text-[11px] font-medium text-zinc-400 uppercase tracking-wider mb-3;
+  }
+
+  /* ── Action list row ───────────────────────────────────────────────── */
+  .action-row {
+    @apply flex items-center gap-3 py-2.5 border-b border-zinc-100 last:border-0;
+  }
+}
+
+/* ── NProgress bar ─────────────────────────────────────────────────────── */
+#nprogress .bar {
+  background: #18181B !important;
+  height: 2px !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 6px #18181B, 0 0 2px #18181B !important;
+}

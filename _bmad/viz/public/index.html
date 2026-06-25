@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMAD Agent Team — Live</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <header id="topbar">
+    <div class="topbar-left">
+      <h1>BMAD Agent Team</h1>
+      <span id="session-label" class="session-label">Live Session</span>
+    </div>
+    <div class="topbar-center">
+      <div id="gate-bar" class="gate-bar">
+        <div class="gate-segment" data-gate="0"><span>G0</span><small>Research</small></div>
+        <div class="gate-segment" data-gate="1"><span>G1</span><small>Story</small></div>
+        <div class="gate-segment" data-gate="2"><span>G2</span><small>Design</small></div>
+        <div class="gate-segment" data-gate="3"><span>G3</span><small>Code</small></div>
+        <div class="gate-segment" data-gate="4"><span>G4</span><small>Tests</small></div>
+        <div class="gate-segment" data-gate="5"><span>G5</span><small>Security</small></div>
+        <div class="gate-segment" data-gate="5b"><span>5b</span><small>Pentest</small></div>
+        <div class="gate-segment" data-gate="6"><span>G6</span><small>UX</small></div>
+        <div class="gate-segment" data-gate="6b"><span>6b</span><small>E2E</small></div>
+        <div class="gate-segment" data-gate="7"><span>G7</span><small>Docs</small></div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div id="connection-status" class="status-dot disconnected" title="Disconnected"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main">
+    <!-- Left Sidebar: Artifacts -->
+    <aside id="sidebar-left" class="sidebar">
+      <h2>Artifacts</h2>
+      <div id="artifact-list" class="sidebar-scroll">
+        <div class="empty-state">No artifacts yet</div>
+      </div>
+    </aside>
+
+    <!-- Center: Room -->
+    <section id="room-container">
+      <div id="room-viewport">
+        <canvas id="room-canvas"></canvas>
+        <!-- Speech bubbles overlay (HTML on top of canvas) -->
+        <div id="speech-overlay"></div>
+        <!-- Party mode banner -->
+        <div id="party-banner" class="party-banner hidden">
+          PARTY MODE
+        </div>
+        <!-- Ceremony banner -->
+        <div id="ceremony-banner" class="ceremony-banner hidden"></div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar: Activity Log -->
+    <aside id="sidebar-right" class="sidebar">
+      <h2>Activity</h2>
+      <div id="activity-log" class="sidebar-scroll">
+        <div class="empty-state">Waiting for agents...</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Scripts -->
+  <script src="agents.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

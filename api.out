@@ -1,0 +1,753 @@
+2026-05-27 16:06:09,888 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-05-27 16:06:09,889 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-05-27 16:06:09,896 INFO sqlalchemy.engine.Engine select current_schema()
+2026-05-27 16:06:09,897 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-05-27 16:06:09,904 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2026-05-27 16:06:09,905 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-05-27 16:06:09,910 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:06:09,911 INFO sqlalchemy.engine.Engine SELECT 1
+2026-05-27 16:06:09,912 INFO sqlalchemy.engine.Engine [generated in 0.00089s] ()
+2026-05-27 16:06:09,917 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-05-27 16:06:09 [info     ] vantage_api_started            environment=development
+2026-05-27 16:06:11,037 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:06:11,038 INFO sqlalchemy.engine.Engine SELECT 1
+2026-05-27 16:06:11,039 INFO sqlalchemy.engine.Engine [cached since 1.128s ago] ()
+2026-05-27 16:06:11,045 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:53293 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55422 - "GET /openapi.json HTTP/1.1" 200 OK
+2026-05-27 16:06:28 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:06:28,166 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:06:28,218 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:06:28,219 INFO sqlalchemy.engine.Engine [generated in 0.00093s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:06:28 [info     ] hubspot_manual_sync_triggered  workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:06:28,232 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:06:28,232 INFO sqlalchemy.engine.Engine [cached since 0.01411s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:06:28 [info     ] hubspot_sync_started           workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:06:31 [info     ] hubspot_deals_fetched          count=376
+2026-05-27 16:06:32 [info     ] hubspot_stage_labels_fetched   count=9 sample=[('1167033008', 'Pre-Qualified Leads'), ('1114078734', 'Qualified Prospect'), ('23155301', 'Discovery')]
+2026-05-27 16:06:32,631 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:06:32,632 INFO sqlalchemy.engine.Engine [generated in 0.00094s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6f1aee30-a06f-4eac-b9bf-9e39738ba30b changed_fields=['stage'] name=Kajima — Sankyu TDH
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=34bbf62a-e070-409a-b900-7fd1eab64124 changed_fields=['stage'] name=Archirodon Neom
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e35c9761-4908-4879-89f0-bf066d5ef0c4 changed_fields=['stage'] name=Suez Group — IMDA
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=39014d23-997f-44e0-91ef-93d0edbefd60 changed_fields=['stage', 'crm_forecast_category'] name=Dole Polomolok
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8a9551b1-c77e-4dca-bde6-617df2ef7b8f changed_fields=['stage', 'crm_forecast_category'] name=Clark Products — Caldic Site 1
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=ff8cbc8b-a449-4359-a32b-ec9822fcb42e changed_fields=['stage', 'crm_forecast_category'] name=EnviroNZ
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=f57da3c9-0e3d-4d25-a48c-3ff7fd992249 changed_fields=['stage', 'crm_forecast_category'] name=Daiwa Living POC
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b224d1f5-b072-46c9-ab0d-35d4b392f740 changed_fields=['stage', 'crm_forecast_category'] name=Singapore Aero Engine Services Private Limited
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8969b23f-1f57-4b26-b389-a3f2878d014b changed_fields=['stage', 'crm_forecast_category'] name=Henkel India (Pilot Deal)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=d23aed04-6aa4-4571-b44c-c9cb79b3eb9a changed_fields=['stage', 'crm_forecast_category'] name=Saipem — PN11
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=788a0b06-b728-44c8-9165-fdee15dbc025 changed_fields=['stage', 'crm_forecast_category'] name=Wakecap — Jafurah
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=26a5428a-a110-41be-ad6c-4dd299ab2050 changed_fields=['stage', 'crm_forecast_category'] name=JEL — Sakra Cogen
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=54bbb97a-db73-495d-b2a2-587324e79610 changed_fields=['stage', 'crm_forecast_category'] name=Oxen — Master Contract
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=75d53f8a-8014-43b7-b3f1-3a626d655689 changed_fields=['stage', 'crm_forecast_category'] name=Keppel Seghers — IWMF
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e40ef138-1c4a-4604-ada2-12027d45a300 changed_fields=['stage', 'crm_forecast_category'] name=Kulicke & Soffa — K&S
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8042c6f6-ffaa-41b0-80f9-dcf6274cddad changed_fields=['stage', 'crm_forecast_category'] name=Wakecap — Juaymah
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c76317d9-67c6-4069-a64a-bd3154157353 changed_fields=['stage', 'crm_forecast_category'] name=Wakecap — Riyas
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=747cef65-c088-4d8d-890b-688e2fe7d0ff changed_fields=['stage', 'crm_forecast_category'] name=LWH and LBD Group
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=ddd141e4-deeb-4fbc-aa3b-0b2ba3fa25e7 changed_fields=['stage', 'crm_forecast_category'] name=GovTech — VA Trial
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=12d7fb40-e143-4c72-a15d-88a13bd8918e changed_fields=['stage', 'crm_forecast_category'] name=United E&P Pte Ltd
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=24005cfe-bf49-4ad5-9677-bf0ba997bc68 changed_fields=['stage', 'crm_forecast_category'] name=Sembcorp POC
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=753a0a33-0774-4d02-8b58-cf73cbb277c4 changed_fields=['stage', 'crm_forecast_category'] name=Sembcorp Solar
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=32b3e5a2-3047-403f-8e90-3eded4147ce6 changed_fields=['stage', 'crm_forecast_category'] name=Keong Hong — Tengah C5
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=39800547-1c19-48f9-8ebb-bdca6e21f05c changed_fields=['stage', 'crm_forecast_category'] name=SuperBend
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=9d3751a0-0ea4-41c3-9a92-7dbdc9b68484 changed_fields=['stage', 'crm_forecast_category'] name=Softech (manufacturing project)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=d0589379-acf6-46ed-9d97-28a8e9c72ebd changed_fields=['stage', 'crm_forecast_category'] name=JGC Inbound
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=38231a58-83e3-4cfb-b1b6-fef92b78e61b changed_fields=['stage', 'crm_forecast_category'] name=Saipem 10k
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=98691c66-83c1-40a6-b1a5-ee081582a0e6 changed_fields=['stage', 'crm_forecast_category'] name=AST
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=1e39af38-b029-44e1-b0a0-60364437ebef changed_fields=['stage', 'crm_forecast_category'] name=Gulf Drilling International
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b48a63db-69af-4923-a455-49014b3d83fa changed_fields=['stage', 'crm_forecast_category'] name=PUB — Marina Barrage
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=9839226d-85dc-4ced-9433-bec73d8f972a changed_fields=['stage', 'crm_forecast_category'] name=Saipem — Scarabeo 9
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=d08c253c-d8c1-4d84-a561-43f9759f24bd changed_fields=['stage', 'crm_forecast_category'] name=Teambuild — SKN4C29
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b1abec3c-4264-4d28-b733-bb2f1858b65b changed_fields=['stage', 'crm_forecast_category'] name=Teambuild — JWN4C22
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=60f3cd9d-f947-48b3-9285-db632f6aa862 changed_fields=['stage', 'crm_forecast_category'] name=Teambuild — BMC54
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c11289b3-ae34-4c53-9aaa-511cffcc0b7c changed_fields=['stage', 'crm_forecast_category'] name=Mindef Project (Fonda Global)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=0d70b16c-cd7b-4a3e-8e1c-db429be48b4d changed_fields=['stage', 'crm_forecast_category'] name=Hong Lam Marine
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=2dece075-e834-4182-b0a6-9d6acda62117 changed_fields=['stage', 'crm_forecast_category'] name=KentPLC Saudi
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=3df13398-7ead-44db-839f-1f8b68b20445 changed_fields=['stage', 'crm_forecast_category'] name=Saipem — Berri Extension
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b2d800b9-9afa-471e-8b55-4e440e74cd19 changed_fields=['stage', 'crm_forecast_category'] name=Saipem Star Yard
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=657bbd5e-741e-4048-bd44-abd5c86fdab7 changed_fields=['stage', 'crm_forecast_category'] name=Saipem — PN13
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=3e776e9c-fd82-4295-9041-94a51b36584c changed_fields=['stage', 'crm_forecast_category'] name=Saipem 10k Extension
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e0b816fd-b5bc-4065-96e4-b8d9ebbab01b changed_fields=['stage', 'crm_forecast_category'] name=Lim Wen Heng — TN9C10-12
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=38bfc82b-813d-45d6-a3a1-5fd267a73846 changed_fields=['stage', 'crm_forecast_category'] name=Teambuild — Tengah C1B
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=315c1bed-c327-4839-b689-f1ff8dc28c5c changed_fields=['stage', 'crm_forecast_category'] name=Caldic Napier
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=528095e2-5813-4f2f-827e-09911d97dcca changed_fields=['stage', 'crm_forecast_category'] name=Sicim-Nesma — Shoaibh
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=08c4f35f-8b80-4e93-86e8-cc701f730aaf changed_fields=['stage', 'crm_forecast_category'] name=Guan Ho — Construction
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=d14c6d42-ce69-41f5-9e24-7e40706b9890 changed_fields=['stage', 'crm_forecast_category'] name=Saipem 7000
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8d3ceba7-69d0-4b77-9297-c1dfec0fcafe changed_fields=['stage', 'crm_forecast_category'] name=NMDC — Site 1
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=72c0681d-7547-4e5d-9afa-c0648b3f6811 changed_fields=['stage', 'crm_forecast_category'] name=Al Barghash — Brownfield
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e047af5c-b86b-435e-9253-f22e85cc4f89 changed_fields=['stage', 'crm_forecast_category'] name=Teambuild — Tengah C1A
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6c7199a7-c237-4c3b-b5d7-50616a61ebbc changed_fields=['stage', 'crm_forecast_category'] name=Broadcom Depot Road
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=06721328-eb31-456c-98f3-f65685ed9bc3 changed_fields=['stage', 'crm_forecast_category'] name=Sicim-Nesma — Taif
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=a3dc7db1-c399-4f9a-9593-f1a35ac8302c changed_fields=['stage', 'crm_forecast_category'] name=Broadcom Senoko Road
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c5bffdc9-a46b-45d7-a50f-263701ea6d8a changed_fields=['stage', 'crm_forecast_category'] name=HEC Electrical — Jelapang
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=afbc3c96-3e8b-4012-aadb-a7ccbc56bfe5 changed_fields=['stage', 'crm_forecast_category'] name=Lendlease — Shaw Tower
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=734ed836-de8b-4617-9bf3-f9101edd4ba7 changed_fields=['stage', 'crm_forecast_category'] name=APX — Demo
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=159ea228-cc75-4708-a89e-281c68273c5a changed_fields=['stage', 'crm_forecast_category'] name=Barry Callebaut — Senoko
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=1ae827e5-57ee-4c1e-b79d-1e746573a9fa changed_fields=['stage', 'crm_forecast_category'] name=Total Energie (POC)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=89272d89-1292-4b76-9b3a-c8e932d37797 changed_fields=['stage', 'crm_forecast_category'] name=Page Europa (SI Saudi Aramco requirement)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e358ef42-8b35-47f9-9904-fb83e9a322ee changed_fields=['stage', 'crm_forecast_category'] name=Fincantieri Marine Group LLC
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=a35db9a3-82ec-4271-9b16-101728ca4fb4 changed_fields=['stage', 'crm_forecast_category'] name=Multiplex Global
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=61864abf-896d-40cc-88a8-93f57d42aea8 changed_fields=['stage', 'crm_forecast_category'] name=Gilbane POC
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=4a5db153-31b2-47ad-80c1-4f46c7b928a2 changed_fields=['stage', 'crm_forecast_category'] name=Singtel (Lendlease Obayashi)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c4378b27-0fe7-4fb8-9720-c2fc4cc28e05 changed_fields=['stage', 'crm_forecast_category'] name=HMGICS Pilot
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=39270800-86d8-4fc9-9258-8b75b54bb57d changed_fields=['stage', 'crm_forecast_category'] name=Coca Cola (China Bottlers)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=78f779e9-31c9-4413-8b11-9a2b2264220b changed_fields=['stage', 'crm_forecast_category'] name=HS Global (JX Intro)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=edeb3a79-27fd-4bc6-b684-ead821e79b8a changed_fields=['stage', 'crm_forecast_category'] name=Disney Parks and Resorts
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e875caa5-ebc9-4ac0-bb70-94a55c97126f changed_fields=['stage', 'crm_forecast_category'] name=Pacc Offshore
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e38fd226-422f-4fbf-baa0-2af0454d472d changed_fields=['stage', 'crm_forecast_category'] name=JGC Indonesia
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=de7d77be-7391-48ea-afa5-fac71b02e038 changed_fields=['stage', 'crm_forecast_category'] name=Fertilizer.org
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=2e189477-8cf7-48ae-be1d-9dbc48d37547 changed_fields=['stage', 'crm_forecast_category'] name=Visy Australia
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b7fc71d1-40d6-451b-885d-b9e88696ce16 changed_fields=['stage', 'crm_forecast_category'] name=Senoko Energy
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=33419402-6c2d-4009-9abf-f8c91efc7c7f changed_fields=['stage', 'crm_forecast_category'] name=Noratel International (Pvt) Ltd (Partner EITSL)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b8ae076d-2040-4cb7-af5d-74544eb26665 changed_fields=['stage', 'crm_forecast_category'] name=Coca Cola China
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8d7f63d9-61e3-4df4-b9fb-e299f96d867f changed_fields=['stage', 'crm_forecast_category'] name=ACS(I)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c166bac5-abc0-4694-81aa-b73c585aea5b changed_fields=['stage', 'crm_forecast_category'] name=Exceed Tech
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=18d7a634-1383-46ab-bfce-b216b9a2c0e9 changed_fields=['stage', 'crm_forecast_category'] name=Samling Timber
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=be0049ba-4c62-49bb-9c06-1d92e27ad1ee changed_fields=['stage', 'crm_forecast_category'] name=VA (Motorola)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=86601f6e-bf91-49f7-8066-d794992e2ed7 changed_fields=['stage', 'crm_forecast_category'] name=PT Waskita Beton Precast Tbk (UNIPI Project Site)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=3aa89fd1-b3a4-4d48-8ea1-d1a9fa600cc3 changed_fields=['stage', 'crm_forecast_category'] name=Total Safety
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=dcbd1075-488e-4535-84e0-7838db13bc4c changed_fields=['stage', 'crm_forecast_category'] name=Kyocera
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=2e52be56-9bfb-4d18-99c8-719a5b71c83a changed_fields=['stage', 'crm_forecast_category'] name=Straits Construction — JEC19
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=db8e72c5-5b36-4d0b-94b0-c32c3b02c0dc changed_fields=['stage', 'crm_forecast_category'] name=Dell (Partnership)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=35d87dd0-f28d-4fd9-ad59-a21f5e3f0486 changed_fields=['stage', 'crm_forecast_category'] name=Metropolis
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=618df2d4-4228-4e6c-b92a-d808a0d44e94 changed_fields=['stage', 'crm_forecast_category'] name=ST Engineering
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=136622e4-7425-4bd3-a568-35c145df5d24 changed_fields=['stage', 'crm_forecast_category'] name=HOPE Technik Pte Ltd
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=d28323bf-7833-44d8-8aa2-87b4d8c1e7a9 changed_fields=['stage', 'crm_forecast_category'] name=Tecnimont
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=0c29f2ca-0d7d-425c-9caf-92648a15b9a4 changed_fields=['stage', 'crm_forecast_category'] name=Pizza Hut Vietnam
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=46a8d2b7-ef5a-4a76-a389-b5afd503fcc6 changed_fields=['stage', 'crm_forecast_category'] name=Heineken Vietnam
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=471ebd35-4ddf-4c00-a0cf-e23d030a2f08 changed_fields=['stage', 'crm_forecast_category'] name=CMC
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=3791d75f-3ee9-442a-9557-e155d65f203b changed_fields=['stage', 'crm_forecast_category'] name=Intersnack
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=adb4072a-526b-441c-9f7f-71b178bd9d51 changed_fields=['stage', 'crm_forecast_category'] name=OPV
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=86c13999-5eaf-45c1-ae88-b6dc56ab2614 changed_fields=['stage', 'crm_forecast_category'] name=Thermtrol
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=01393127-0cda-4d7f-aabc-5f846d0176f2 changed_fields=['stage', 'crm_forecast_category'] name=The Caterers
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=f7b0fb9c-9a46-4813-96b4-ba6f8753fd79 changed_fields=['stage', 'crm_forecast_category'] name=Capitaland
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=128b07ae-6dbe-4fd2-84a8-acf97d05ca23 changed_fields=['stage', 'crm_forecast_category'] name=Kizuna
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6fa4e2d4-1126-4807-93e7-cd201bb4c0db changed_fields=['stage', 'crm_forecast_category'] name=IMT
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6f013017-7c8d-45cb-bf75-62980420f918 changed_fields=['stage', 'crm_forecast_category'] name=Coca Cola India
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=0f93e8fb-3db9-4a40-ae20-a30aa51c7304 changed_fields=['stage', 'crm_forecast_category'] name=Wasco — Engineering
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=0b11dd4e-37eb-4486-af9e-e58ef6b54162 changed_fields=['stage', 'crm_forecast_category'] name=Bega Foods
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8ea04ba4-115c-4136-a2e8-2672b96f138c changed_fields=['stage', 'crm_forecast_category'] name=Total Safety
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c004a2e2-0716-4f58-b80b-5d413d8cf5ce changed_fields=['stage', 'crm_forecast_category'] name=Ventia (Damien's lead)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=244d3655-4bf2-4c8a-b345-20898bba1817 changed_fields=['stage', 'crm_forecast_category'] name=Tee Yih Jia (Partnership from NetGlobal)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=666bf29d-9c70-4697-abba-1a2766151c9c changed_fields=['stage', 'crm_forecast_category'] name=Lamprell (Partnership from GlobaIOT Duba)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=7d93236d-fd41-4a4f-a160-85006c38a574 changed_fields=['stage', 'crm_forecast_category'] name=MIP Engineering
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e5d1de31-744d-4bd1-85c1-8245222916a2 changed_fields=['stage', 'crm_forecast_category'] name=CBNA Bouygues Construction
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=937e75a4-592b-40bc-bed7-f5e141ae0167 changed_fields=['stage', 'crm_forecast_category'] name=Tyco Electronics
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=df533e37-f587-4946-b00e-458965769ce6 changed_fields=['stage', 'crm_forecast_category'] name=Pepsi Singapore
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=fcdd5eaf-9d73-45b8-a336-1e1b827d5431 changed_fields=['stage', 'crm_forecast_category'] name=Princeton Digital Group
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b11ba699-f827-48a2-95c4-3e7cc597c73a changed_fields=['stage', 'crm_forecast_category'] name=ASM Singapore
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c7e5e9f3-306f-45ac-89ae-dd2ed1b3fa24 changed_fields=['stage', 'crm_forecast_category'] name=Hanwha Offshore Singapore
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6b530a84-c394-45a9-ba27-393e93d40b25 changed_fields=['stage', 'crm_forecast_category'] name=Vita Singapore
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=053f9a14-9b21-4241-b799-9bfc5ca4206b changed_fields=['stage', 'crm_forecast_category'] name=Oracle
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=0e532209-2db7-4e98-9b59-0e069b1de2ac changed_fields=['stage', 'crm_forecast_category'] name=Resorts World Sentosa
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=13b04747-5ca7-4bdc-b0c9-26976b09a75d changed_fields=['stage', 'crm_forecast_category'] name=Israel Construction Technology Council
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=38b72565-052c-4df5-ae28-66298fe4d281 changed_fields=['stage', 'crm_forecast_category'] name=SMRT Buses Singapore
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=cfb82f88-a49d-495e-8209-0ea2b58d27d7 changed_fields=['stage', 'crm_forecast_category'] name=Singapore Refining Company
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8c5235c3-8b6f-4f13-8e81-5739bead5f8a changed_fields=['stage', 'crm_forecast_category'] name=Nexans Global
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=f93f0928-d4de-48a9-beab-2275f526c6e4 changed_fields=['stage', 'crm_forecast_category'] name=Matthey India
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=7e4fbf97-12a0-48fe-b98a-fc7ff792ab16 changed_fields=['stage', 'crm_forecast_category'] name=NOV Inc (Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=1501fec9-5391-4e43-8c6e-2ebdf74ecb89 changed_fields=['stage', 'crm_forecast_category'] name=Singapore Polytechnic (Global Foundaries)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b06133dc-8584-4ed3-9de9-5c151ff02b8d changed_fields=['stage', 'crm_forecast_category'] name=Sulzer
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6a953ac0-c335-455c-a65c-e4a75932ddf3 changed_fields=['stage', 'crm_forecast_category'] name=Maaden (Total Safety)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=dc559d56-0145-4482-b0ae-2f6e41fa2dca changed_fields=['stage', 'crm_forecast_category'] name=Sigmaline
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=2d6b5eed-8223-4175-93fe-43b671d473fa changed_fields=['stage', 'crm_forecast_category'] name=Vopak
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=9254ec18-a455-42a9-854d-6a2ed6b19ff6 changed_fields=['stage', 'crm_forecast_category'] name=Bedok BTO Project ( Bimage)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=acb99511-5ea2-4a54-921c-a2b683aa89b4 changed_fields=['stage', 'crm_forecast_category'] name=Keppel Construction ( Bimage)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=0dca4ca9-87db-464e-afca-100e0b232cdc changed_fields=['stage', 'crm_forecast_category'] name=Penguin
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=71190bae-a798-4ff5-aefe-3b7bcf1c1071 changed_fields=['stage', 'crm_forecast_category'] name=Mindef CSSCOM
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=55d8871e-5c44-412c-b66c-bf0767f5b5e1 changed_fields=['stage', 'crm_forecast_category'] name=Exxon Mobil Rotterdam Harbour (Total Safety)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b92ee414-210a-446d-9f6c-60312a67b0f7 changed_fields=['stage', 'crm_forecast_category'] name=QingJian Engineering & Construction Pte. Ltd.
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b721cd1e-1d66-468c-8581-7d092bd91d77 changed_fields=['stage', 'crm_forecast_category'] name=SNIM Mauritania (Moctar)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=fae8eb94-7b4f-4892-968d-5998f05b563f changed_fields=['stage', 'crm_forecast_category'] name=SGS Pilot Project
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=bfe1299c-e872-41b2-8c69-a4a44d2e1b29 changed_fields=['stage', 'crm_forecast_category'] name=SGS (Partnership)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=051beb58-c540-4fc1-bf4b-78af3d96f622 changed_fields=['stage', 'crm_forecast_category'] name=NEA — Botanic Gardens
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=698ac5f6-f45e-498b-a7e2-94a429abd203 changed_fields=['stage', 'crm_forecast_category'] name=Shell Aviation
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=91dd1c21-789a-44ae-9de8-3eb0509599e6 changed_fields=['stage', 'crm_forecast_category'] name=Moctar (Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=7800c4af-be9d-4cc0-bfce-6ff8ba49056b changed_fields=['stage', 'crm_forecast_category'] name=TCN Mauritania (Moctar)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=dede1b35-074c-4df6-a555-dd2467fb8516 changed_fields=['stage', 'crm_forecast_category'] name=Asian Trucker (Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=60e97f36-fdae-4d20-b1eb-726ba027f6d9 changed_fields=['stage', 'crm_forecast_category'] name=Globaiot UAE
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=206e6db5-5f99-4469-a661-c45c99fa2745 changed_fields=['stage', 'crm_forecast_category'] name=BTAL Saudi Solutions
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b0826a4c-56aa-4365-be92-f44b62620cab changed_fields=['stage', 'crm_forecast_category'] name=Dell Smart Cities Team
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6343ae79-47bc-4593-a833-b9f5238d4eac changed_fields=['stage', 'crm_forecast_category'] name=Oxen system technologies
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=ffb6d2f4-fb9a-478b-9665-054c8227432b changed_fields=['stage', 'crm_forecast_category'] name=EITSL
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=43364a28-9d4d-48a1-9fe3-1fb02afc39b7 changed_fields=['stage', 'crm_forecast_category'] name=Motorola Solutions
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c8111819-2945-4c85-9acd-2c9114e5e11e changed_fields=['stage', 'crm_forecast_category'] name=CELOTTI WORKFORCE
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=bc98f3c8-2c47-4f08-a954-6edccbbf176c changed_fields=['stage', 'crm_forecast_category'] name=Swish Solutions
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=9a1eedbe-1ccf-4a9e-8c38-c39af916af21 changed_fields=['stage', 'crm_forecast_category'] name=Dualroots (Jubail)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6dbda3ef-c35f-4242-acca-6c7feb35fc4f changed_fields=['stage', 'crm_forecast_category'] name=Aramco (Dualroots Site 1)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8bab02fe-59fa-4530-aac2-686b50911d27 changed_fields=['stage', 'crm_forecast_category'] name=Rio Tinto
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=046f6067-9d91-4c2d-aaa0-92803c7ba1db changed_fields=['stage', 'crm_forecast_category'] name=McCain
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=70223b58-02be-4698-b1c9-26a2a226b795 changed_fields=['stage', 'crm_forecast_category'] name=Esbaar
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e44d5553-cc03-45f5-b0dc-66b1f9d7a015 changed_fields=['stage', 'crm_forecast_category'] name=Vale Base Metals (Indonesia)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=3f3f544b-22be-4b5a-bea9-85999beb23b6 changed_fields=['stage', 'crm_forecast_category'] name=Aramco (Dualroots Site 2)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=235874b2-4448-4fc6-b018-e0a1bd38ec93 changed_fields=['stage', 'crm_forecast_category'] name=Assure Safety
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c9a3ddba-c80e-4fd8-8392-0d5c9fef3ed5 changed_fields=['stage', 'crm_forecast_category'] name=Quanta Services
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=10ee5576-79fd-4854-a90f-5c3199990b2a changed_fields=['stage', 'crm_forecast_category'] name=Halliburton (North Africa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=72559585-9dc1-457a-a16f-82f96c296df0 changed_fields=['stage', 'crm_forecast_category'] name=Takenaka
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=41ce3ef1-dfc2-4189-93ad-2cffbae8ce00 changed_fields=['stage', 'crm_forecast_category'] name=Thales AU
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=66552c30-2c1b-4f8c-8da0-aaab61328f93 changed_fields=['stage', 'crm_forecast_category'] name=Cemex
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=250cec36-a85b-429c-bd4b-63c29c0607c4 changed_fields=['stage', 'crm_forecast_category'] name=Sime Darby
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8eaabeac-7072-4eff-adc0-676847227cc1 changed_fields=['stage', 'crm_forecast_category'] name=Yokogawa
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=54e28c6f-8bfc-45ff-b5d6-13132c46ffa2 changed_fields=['stage', 'crm_forecast_category'] name=OSK Construction
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=8ded553f-dfb5-47c3-8e03-b6daae0f4556 changed_fields=['stage', 'crm_forecast_category'] name=Saudi Net Link (SNL)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=2bd6eb37-c672-4db0-b849-615044fd136b changed_fields=['stage', 'crm_forecast_category'] name=Saipem (Mexico)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=48926c57-faa4-4b7f-8388-6c1b639bc0df changed_fields=['stage', 'crm_forecast_category'] name=Hakan Gonca (Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=564a0e30-2a21-4eb8-9499-cdb2f2f448ce changed_fields=['stage', 'crm_forecast_category'] name=KITO
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=50cacc1b-090e-4c2e-b6fd-6b2717689e5e changed_fields=['stage', 'crm_forecast_category'] name=WHS Consultants NZ
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=cd58dfe2-57b3-4d8b-96e6-4932c36fe621 changed_fields=['stage', 'crm_forecast_category'] name=Johnson Controls (JCI)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=446f184f-6a22-4933-a27d-5b3d2915dcd2 changed_fields=['stage', 'crm_forecast_category'] name=Bachy Soletanche — APX
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=efd26f2c-ead0-4bc7-9450-ec05562d1cb1 changed_fields=['stage', 'crm_forecast_category'] name=APX Technologies
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6493bf99-f25e-4cf6-87f2-67726b042916 changed_fields=['stage', 'crm_forecast_category'] name= Freyssinet PSC Malaysia
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=d11c5856-7771-45eb-bd28-2e7c4a4d430b changed_fields=['stage', 'crm_forecast_category'] name=Terrenus Energy
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=25e0bcd7-7dda-47bb-b371-e020a5aa0278 changed_fields=['stage', 'crm_forecast_category'] name=High Tech XL
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=6f051959-f4c9-4c70-9ea3-7a86995e4bd4 changed_fields=['stage', 'crm_forecast_category'] name=Cimtas Machining
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e06f2be7-c4ff-487e-9d4e-ebfc9a88a166 changed_fields=['stage', 'crm_forecast_category'] name=Kenyon
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=9ae000c5-f865-4f02-9bbe-4d96cd4c9c27 changed_fields=['stage', 'crm_forecast_category'] name=Medeira (IMDA)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=15a8ebe0-891e-48b3-a6e3-841229da3002 changed_fields=['stage', 'crm_forecast_category'] name=Hanhwa
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=1c9a0fa2-b4b7-4a09-bbdb-31865c5b1938 changed_fields=['stage', 'crm_forecast_category'] name=Repsol
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b72589a8-922b-4218-8f56-4258afb94f74 changed_fields=['stage', 'crm_forecast_category'] name=MOL Group (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=a35d80f2-e769-4e17-b087-60e4410351f4 changed_fields=['stage', 'crm_forecast_category'] name=Fluor (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=ea2610c4-d09b-4394-8b99-dac79ef4304c changed_fields=['stage', 'crm_forecast_category'] name=Technip Energie (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=7764ea4b-6bd8-45b2-b917-3fe63f7032f3 changed_fields=['stage', 'crm_forecast_category'] name=Cloudworx (Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=c3514e10-b41e-4fc6-87fe-f7b2c768b66f changed_fields=['stage', 'crm_forecast_category'] name=Benchmark OHS Consulting (Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=5d279792-54ac-4e36-8e84-5700feae7456 changed_fields=['stage', 'crm_forecast_category'] name=NETZSCH Group (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=500e6450-b046-4cd2-81b7-32747627ec40 changed_fields=['stage', 'crm_forecast_category'] name=4D Labs (Conference)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=9612649f-8932-4504-bda3-3bd4e050d03a changed_fields=['stage', 'crm_forecast_category'] name=Mega Industrial Control Systems Trade. Ltd. Sti. (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=b082667e-b8bb-4fa7-94cf-fa640bd29007 changed_fields=['stage', 'crm_forecast_category'] name=Kuwait Oil Company (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=e0f1e5d8-edeb-4845-a9b2-77473e67b88c changed_fields=['stage', 'crm_forecast_category'] name=Socar (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=a695a4f7-3015-400b-a928-d70cdccaf53c changed_fields=['stage', 'crm_forecast_category'] name=Wood PLC (Aramco)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=14bd71cb-17db-43af-8df7-3fbcefb72849 changed_fields=['stage', 'crm_forecast_category'] name=Zip Water
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=daab2c1b-e0c8-4c27-a4a7-cc351c9cb0b6 changed_fields=['stage', 'crm_forecast_category'] name=Wood - Test Deal
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=a97e56dd-6936-4d1b-a600-31d156c96b71 changed_fields=['stage', 'crm_forecast_category'] name=Sanad - New Deal
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=dfbbb57a-62f0-4ae4-b5b8-8e7c39710f67 changed_fields=['stage', 'crm_forecast_category'] name=Wood PLC (Aramco)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=3b54022a-61c2-4a9c-90d5-c62ab7828815 changed_fields=['stage', 'crm_forecast_category'] name=KBR
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=a9c1c2b8-6f78-415c-8812-ad5ede9eacc5 changed_fields=['stage', 'crm_forecast_category'] name=Sherpa Consulting (AU/SG Partner)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=f1ee829e-baf5-4624-8a0c-c1f9d58c762c changed_fields=['stage', 'crm_forecast_category'] name=Mega Endüstri Kontrol Sistemleri (Automa)
+2026-05-27 16:06:32 [debug    ] account_updated                account_id=62fdcbd6-8919-45db-aacb-5943264ff07f changed_fields=['stage', 'crm_forecast_category'] name=Kuwait Oil (Automa)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=4e23159a-9abe-439f-b740-c305694cafbe changed_fields=['stage', 'crm_forecast_category'] name=Australia Prospect 1 (From Benchmark OHS + Secure Agility)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0a9975f1-93d0-4e0c-8115-0fcd64796028 changed_fields=['stage', 'crm_forecast_category'] name=Freyssinet PSC Malaysia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=3b233a2b-6c66-49d1-85e1-90467964b148 changed_fields=['stage', 'crm_forecast_category'] name=Italgas
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f26bf6b1-421f-4c21-8e1e-80d46c0d834b changed_fields=['stage', 'crm_forecast_category'] name=Dove Chemical Services (IMDA)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=1ba32e64-ab5c-439b-9d90-fb922fa62f9a changed_fields=['stage', 'crm_forecast_category'] name=CIL — Chemical Industries
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=248f8d36-62da-4286-a77d-dc7d78b3c93c changed_fields=['stage', 'crm_forecast_category'] name=Katoen Natie
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e54f306b-c1cd-463b-a746-66303be91d53 changed_fields=['stage', 'crm_forecast_category'] name=Halliburton (Singapore)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a45e02aa-0c45-427a-96e6-fc4074be19a0 changed_fields=['stage', 'crm_forecast_category'] name=Velasea (Partner)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=7f6e4a65-2c93-4ec1-af0c-cd95b7fa3946 changed_fields=['stage', 'crm_forecast_category'] name=Leviat
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ba7704f2-f502-4d00-828e-675c1b52f626 changed_fields=['stage', 'crm_forecast_category'] name=SMRT Corporation Ltd
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8b74809e-b390-4aee-8f6c-2bdea1cd45c4 changed_fields=['stage', 'crm_forecast_category'] name=Tech Horizon Japan
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=96d749e6-9fda-42af-9602-cf64fd056059 changed_fields=['stage', 'crm_forecast_category'] name=IPD Group - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6c451d3e-9622-4527-b753-399e8c36233f changed_fields=['stage', 'crm_forecast_category'] name=CTI Logistics Limited POC
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6a825238-322f-4967-9e3f-50344f61e590 changed_fields=['stage', 'crm_forecast_category'] name=OCN (Nagoya)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=45d2d00b-a18c-4129-9173-6b9f1d422f55 changed_fields=['stage', 'crm_forecast_category'] name=Halliburton (Singapore Deal 2 with Innovation team)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d100b1dc-9a6a-4cab-9ba9-1ad257df1142 changed_fields=['stage', 'crm_forecast_category'] name=Halliburton (Iraq)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a15c4e74-9459-4e0b-8871-9ff6f19b7336 changed_fields=['stage', 'crm_forecast_category'] name=ERS Global (Partner AU)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b6bc87c8-acf8-4d7d-8bd9-2843aa38555b changed_fields=['stage', 'crm_forecast_category'] name=Viasat - Oman
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=1e119e3e-03e9-4fd8-af26-9637152da848 changed_fields=['stage', 'crm_forecast_category'] name=IEH - Partner
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a37e8cf9-ae5b-4810-8695-fcf89dec6f61 changed_fields=['stage', 'crm_forecast_category'] name=National Safety Council of Australia - Partner
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a91e56cf-caac-4c73-9440-a9a8568a1a11 changed_fields=['stage', 'crm_forecast_category'] name=Containers Printers
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=28918f73-fe6e-4519-9245-0d6a21047740 changed_fields=['stage', 'crm_forecast_category'] name=hexacon - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b8215dd3-77c5-4146-86fb-73e01f9f9763 changed_fields=['stage', 'crm_forecast_category'] name=Royal Canadian Mint - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0cc18f0c-2f5f-4e7d-b6d2-08e9e9d73867 changed_fields=['stage', 'crm_forecast_category'] name=ETISCOPE - Partnership
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e7cf492a-51ec-4776-ba2d-b1eb09d01585 changed_fields=['stage', 'crm_forecast_category'] name=Surbana Jurong Private Limited
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b5a993c8-200d-481c-99c7-74f0b88741c4 changed_fields=['stage', 'crm_forecast_category'] name=Singapore Institute of Technology (Lab monitoring)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=71ad06f3-3200-4514-90b6-058c5c4c2fed changed_fields=['stage', 'crm_forecast_category'] name=Antamina - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=30619cd5-1340-412f-b0f6-43ea883ab3ab changed_fields=['stage', 'crm_forecast_category'] name=Cemex UAE Pilot
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=9b89aa02-834a-4d4d-9323-273d6e8cc94a changed_fields=['stage', 'crm_forecast_category'] name=Puretech - VSS + AI
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b809700d-c503-4d88-b637-6665ed585631 changed_fields=['stage', 'crm_forecast_category'] name=Maxion Wheels - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=db1b5381-ea19-421e-a8fa-7c4b513af201 changed_fields=['stage', 'crm_forecast_category'] name=Assail Drilling - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=47700e7f-8e6c-42e3-add9-acd6d181445e changed_fields=['stage', 'crm_forecast_category'] name=India Glycols - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8752043b-8772-4a35-8e4c-64ee485f3448 changed_fields=['stage', 'crm_forecast_category'] name=Shell - Zone Management AI from HQ
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=957cf222-cb93-4d2d-8eba-29b798c17e90 changed_fields=['stage', 'crm_forecast_category'] name=Liebherr
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=fac9d33b-e89f-4876-b2fe-32cb5d31d6cb changed_fields=['stage', 'crm_forecast_category'] name=MOL Pakistan
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e5b1ff64-5b93-408d-9180-6d3776957c09 changed_fields=['stage', 'crm_forecast_category'] name=TenderD ~ McDermott Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=56217581-a166-4f39-bc8f-e64b771ab82e changed_fields=['stage', 'crm_forecast_category'] name=Peab
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=4ee8f0a3-a5cd-4c5a-980c-5860b1d9ead8 changed_fields=['stage', 'crm_forecast_category'] name=KTC Group - Amoy Quee Camp
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8190b9b8-f30f-43b9-9157-a3cd0da0e9cf changed_fields=['stage', 'crm_forecast_category'] name=ADES Group - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=42c13ea1-df00-4839-aa4d-220920bd323b changed_fields=['stage', 'crm_forecast_category'] name=Tata Projects - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=cd9c109b-ce5b-42c2-9707-3a0e73fbe343 changed_fields=['stage', 'crm_forecast_category'] name=SLB North Africa - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a0ae529c-9c8b-4cab-bbea-b6d98f052a5c changed_fields=['stage', 'crm_forecast_category'] name=Air Products & Chemicals - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f8b5fa92-e48c-4782-bc58-12ff8a13c5be changed_fields=['stage', 'crm_forecast_category'] name=Motec
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=aca35bb5-7eeb-4a2c-b168-0f9a0109b485 changed_fields=['stage', 'crm_forecast_category'] name=Anagata BEFA Estate
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6108a3cc-ec3d-4fd3-b013-9000c4cdaaef changed_fields=['stage', 'crm_forecast_category'] name=Sembcorp Solar
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=9a6b2791-d257-49ee-9ab0-dae16ea48dea changed_fields=['stage', 'crm_forecast_category'] name=National University of Singapore - UCI
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=3de21b63-44e0-4919-9d95-5b0088ca1d92 changed_fields=['stage', 'crm_forecast_category'] name=ENZAR Operation & Maintenance Co. Ltd.
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=36a8a454-85bd-4b89-9005-654caf5fa661 changed_fields=['stage', 'crm_forecast_category'] name=N109 LTA VA
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=81c2cd3e-2248-43c6-ac6d-c636b6f927fe changed_fields=['stage', 'crm_forecast_category'] name=Kalpataru Drone AI Northern Tech
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=63b910c5-3af1-4802-af55-5b13b7642446 changed_fields=['stage', 'crm_forecast_category'] name=N102 LTA VA
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=72824a77-395e-41c4-b60f-2aa25b7b4883 changed_fields=['stage', 'crm_forecast_category'] name=Fulton Hogan AU - Pilot
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=c75d6ea6-b44d-4cae-b7d3-3e8452ad8b2e changed_fields=['stage', 'crm_forecast_category'] name=Shelf Drilling - Key Manhattan Rig
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=cfa980ea-fc71-4784-a884-3e1406ea2f4b changed_fields=['stage', 'crm_forecast_category'] name=NMDC - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=865be36b-9cba-4911-8bb3-9955d57592ed changed_fields=['stage', 'crm_forecast_category'] name=Dashcam AI - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=58b219cb-4300-49d4-a05e-edde0c157fda changed_fields=['stage', 'crm_forecast_category'] name=Komatsu Australia - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f53893bb-c8ac-4837-b508-e709932bb3fe changed_fields=['stage', 'crm_forecast_category'] name=Indian Oil
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e73a9cf9-6409-4671-aae5-c8382dbcf681 changed_fields=['stage', 'crm_forecast_category'] name=AlMahhar - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6dc4d2fa-7732-4230-89fa-aa0e51ded2f7 changed_fields=['stage', 'crm_forecast_category'] name=Prooftech
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=60875bd2-62e9-461c-96d1-9eb830ba6a17 changed_fields=['stage', 'crm_forecast_category'] name=Oilserv - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=fd094815-82f9-4457-a537-85a62457566e changed_fields=['stage', 'crm_forecast_category'] name=Fenner Conveyers (Melbourne)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b9bfbd95-adfb-4207-93ce-85c2c48b7593 changed_fields=['stage', 'crm_forecast_category'] name=Tatweer Abu Dhabi Municipality - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e50ffc93-3c86-4178-9f25-d82a252358cd changed_fields=['stage', 'crm_forecast_category'] name=El Seif - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=143a255e-6e8d-4752-81ad-4b5ca31c2f2e changed_fields=['stage', 'crm_forecast_category'] name=MPA
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=27986a6f-553b-4d34-a496-0e15be8d01ad changed_fields=['stage', 'crm_forecast_category'] name=Marlink - BTELCO - Baker Hughes
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=de35d7ac-539b-47e2-9a34-682f80352352 changed_fields=['stage', 'crm_forecast_category'] name=Akura — 10 Site Deployment
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ff36b759-9952-4019-8f04-d33f14edc6c4 changed_fields=['stage', 'crm_forecast_category'] name=SH Integrated
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=4e5da4a5-55a6-4b7a-acd7-89d87f3abde5 changed_fields=['stage', 'crm_forecast_category'] name=Najmat Alkawn Technology
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=46759c2f-4e12-4e4e-b0d1-c00b86cf26d8 changed_fields=['stage', 'crm_forecast_category'] name=Toyota Australia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=df632877-13b8-41c8-8daa-1d8fcad7013e changed_fields=['stage', 'crm_forecast_category'] name=Saipem — PN 7
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8149d9e0-d66f-4988-8d5f-589ec65c1ced changed_fields=['stage', 'crm_forecast_category'] name=LWH — Jurong West N1C34
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=04ba69f7-7fd9-42fa-9585-1bc38ba3f1f9 changed_fields=['stage', 'crm_forecast_category'] name=Sinohydro — CR207
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f867e704-f907-4bf2-9c78-68cf878b4208 changed_fields=['stage', 'crm_forecast_category'] name=Nippon Steel TEXENG, Co., Ltd.
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=47d22770-1538-4dbf-a69b-ff16092edac5 changed_fields=['stage', 'crm_forecast_category'] name=HPE
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=68d3c452-77e0-4d58-a824-f15fdd0e4569 changed_fields=['stage', 'crm_forecast_category'] name=APB
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=66dd1465-2468-4a50-b725-e7d74fcb265b changed_fields=['stage', 'crm_forecast_category'] name=Zero Touch
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=18508e3b-6a84-4791-b50f-98bbb2aed7e3 changed_fields=['stage', 'crm_forecast_category'] name=SP Group  CCTV Analytics
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=52d05448-d230-410f-b3ca-93ebe90049e0 changed_fields=['stage', 'crm_forecast_category'] name=Saipem — LTA 138
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=5486381c-4c89-4035-8be4-a283fd73dd62 changed_fields=['stage', 'crm_forecast_category'] name=Changi Airport
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=49c91892-a43f-406f-8237-2c1f291f71ca changed_fields=['stage', 'crm_forecast_category'] name=UPS
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=91a0b12d-377c-41a0-9f43-3d57f5d57dc3 changed_fields=['stage', 'crm_forecast_category'] name=Kwan Yong
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=bda7e221-2536-437a-801b-bafb2d26234f changed_fields=['stage', 'crm_forecast_category'] name=Konica Minolta — Deal 2 (BSA)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d18602ca-81e0-477f-97a6-e57bbfbd03df changed_fields=['stage', 'crm_forecast_category'] name=DHL — DHL ESC (Solid Resources)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=73f0bd25-c3ab-4f50-92e9-95945ffc154b changed_fields=['stage', 'crm_forecast_category'] name=Africa Sales Company (ASCO)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=05b0d059-8648-427e-a627-cd6ec7822706 changed_fields=['stage', 'crm_forecast_category'] name=Daifuku Mechatronics Singapore
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=91a80d2a-d644-46bb-8d40-aa0598b0a9d5 changed_fields=['stage', 'crm_forecast_category'] name=Amcor Specialty Cartons
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d25ba33e-afa3-4203-94f7-e63ae4e419d9 changed_fields=['stage', 'crm_forecast_category'] name=Oza Mining & Operations
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=7ded0b90-9bbd-4dc9-8148-9303eb034853 changed_fields=['stage', 'crm_forecast_category'] name=LTA — CR211
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ac1230ed-68e6-40b1-801a-e7eabbb5ffcb changed_fields=['stage', 'crm_forecast_category'] name=Konica Minolta — Collins
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ec1401cd-c535-4ecc-8a41-139d0dc01ba2 changed_fields=['stage'] name=Tyco Electronics — TE PoC
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=2e09d931-5189-4e8c-ae06-ac63f7d2db50 changed_fields=['stage', 'crm_forecast_category'] name=Lamprell Energy
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=98bb0920-87fb-4d02-ac4b-f599f8ede491 changed_fields=['stage'] name=NorthernTech — MGS3 Ahak
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=2fdc852d-a8e1-4b12-8f4d-bc2a5fe03ec1 changed_fields=['stage'] name=KeyRisk USA
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0ea5b48c-492c-42c9-8d2a-3a87b4116e70 changed_fields=['stage'] name=IMVISION
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=1f7ee49b-7c20-4612-b45f-26f25231e0e7 changed_fields=['stage', 'crm_forecast_category'] name=Trescon Australia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=38a6150a-7c2f-4b1d-bef4-24218c4151dd changed_fields=['stage'] name=ENI
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=42cb4540-ea21-4df1-b1ca-885125bd505f changed_fields=['stage', 'crm_forecast_category'] name=Eaton Singapore
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=5aba366d-a17b-4a3f-855e-08cd2cbdd274 changed_fields=['stage'] name=Palmer Asia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=1b5b2d70-ed36-4604-bc6a-ca8835545f28 changed_fields=['stage', 'crm_forecast_category'] name=Al Yamama Company
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=7de0685c-f5be-4c98-bff3-7a7077bbaa59 changed_fields=['stage', 'crm_forecast_category'] name=LRBGA - SP Substation Eunos
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=4e770832-b7dc-4e9e-a949-94a6ecde5d07 changed_fields=['stage', 'crm_forecast_category'] name=Zheng Keng — Serangoon Polyclinic
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=5ed64107-492b-4198-8bb6-cf9dde30eb61 changed_fields=['stage', 'crm_forecast_category'] name=Atheeb Intergraph — Gas Arabia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ae0e26a3-c9c3-4248-8cfe-acf3e2d66e1c changed_fields=['stage', 'crm_forecast_category'] name=Tekfen — Construction
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d51b087f-16f0-4f4f-936a-714af707aab0 changed_fields=['stage', 'crm_forecast_category'] name=Nesma Sicim JV — MGS3 PMO
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ed0b9a3e-13ec-480a-8be1-2371d05d52b5 changed_fields=['stage', 'crm_forecast_category'] name=Synera Digital
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=41f0dd92-bfaa-4904-9fa1-851bd27ab7f9 changed_fields=['stage', 'crm_forecast_category'] name=Larsen & Toubro (L&T)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=78c44d23-fc64-43a9-aaea-f461e44b980a changed_fields=['stage', 'crm_forecast_category'] name=L&T Heavy Engineering
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8ef38937-2988-47d9-995f-88a4f0305369 changed_fields=['stage', 'crm_forecast_category'] name=Kaidun (Kaidunex)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=5ba0d1b1-49aa-45dd-b5b7-32c2844a5c9f changed_fields=['stage', 'crm_forecast_category'] name=Advario
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=678531d5-fd7f-46c4-8754-8d37267da78e changed_fields=['stage', 'crm_forecast_category'] name=PSA BDP
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ca0894b6-dfb5-4f80-8ee1-16f8f0fc4022 changed_fields=['stage'] name=CPC
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=cfd52891-eba2-4ca4-8402-377852455068 changed_fields=['stage'] name=Marine Company
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=89017a99-af78-4b0b-b0c8-5cfd74ebb096 changed_fields=['stage'] name=Grindrod
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0306f39c-3183-44e8-b925-242877349a48 changed_fields=['stage'] name=Saipem — Karimun Yard
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b2aa73ef-c5c6-483a-b55d-d7788571a2db changed_fields=['stage', 'crm_forecast_category'] name=Broadway Consults
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=7ee4efd4-8e8c-4fee-9850-e9a7b3ac1552 changed_fields=['stage'] name=SCSK
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b830794a-01d4-45f2-b75f-78ed5e7f5e18 changed_fields=['stage'] name=Thales Saudi Arabia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=9d6d417e-0c42-45ad-bd4a-7f4ed07d44df changed_fields=['stage'] name=LBD Engineering — Project AO
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0bbafbe7-8804-4ad7-a76e-5d8285aa664c changed_fields=['stage'] name=Micron — Lum Chang & L&K JV
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=33e97704-d587-4a43-9e1b-68e0a2cfbc88 changed_fields=['stage'] name=AITI (Agency for Integrated Care or similar Brunei government entity)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=73d8d19e-270a-46ee-821b-598d8e087809 changed_fields=['stage'] name=Vopak Terminals Singapore Pte Ltd
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=03a5a641-6429-41fe-8c75-25c5bf649ef1 changed_fields=['stage'] name=Vico EP (Contract Project CH)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=88f71b15-fae7-4859-9eba-5c835038e558 changed_fields=['stage'] name=Saipem — PN 4
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=66e78a67-fb41-4c92-988f-1376e6b90fe6 changed_fields=['stage'] name=ATT Securitech — NParks
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=dc7d0a22-9fb6-427b-8ed2-e9126bd96fb0 changed_fields=['stage'] name=JGC — Japan
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e66bf37e-6a8a-4cd3-9ff7-d91777169233 changed_fields=['stage'] name=PDO (Petroleum Development Oman)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ec1205bf-d113-4621-bf87-45efe78e4c71 changed_fields=['stage', 'crm_forecast_category'] name=AKTIO
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=71ca8c46-70e5-491d-b739-382ef9a5f7db changed_fields=['stage', 'crm_forecast_category'] name=Wowza
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=65b64a24-cf2b-42bc-8afb-8617eab8a611 changed_fields=['stage'] name=CCECC
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=2ed97427-830a-4139-83ce-29fab9708976 changed_fields=['stage'] name=Saipem — JSD 6.000
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d50819d7-2d67-4e60-a5e7-3009b1b037a6 changed_fields=['stage'] name=Nesma Sicim JV — MGS3 Extension
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=709425f2-8f42-410d-aff5-a63c0b30295c changed_fields=['stage'] name=KTC — CR206
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d27ca7d4-4f18-4df4-b9df-d2e5d43f5a63 changed_fields=['stage'] name=Al Barghash — MBTC
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f38ad819-6142-4ace-9a40-e9c5bbc2f2c3 changed_fields=['stage', 'crm_forecast_category'] name=Boskalis
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8c7c7dab-96c7-4d64-847d-a8cdc044b308 changed_fields=['stage'] name=Zheng Keng — Clementi (ZK)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0a2a17e1-93e7-42bc-9146-098a6ee7e932 changed_fields=['stage'] name=Zheng Keng — Marsiling
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6ed8b9c5-5d26-4fb7-bb6b-ee1ca176a911 changed_fields=['stage'] name=DHL — Asia Pacific Innovation Center (Solid Resources)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a5e70d8a-da8c-4ccf-b170-02649895c6e5 changed_fields=['stage', 'crm_forecast_category'] name=Zyrus Co
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=386c1572-4017-4916-9039-29f6dff5eaa7 changed_fields=['stage', 'crm_forecast_category'] name=National Environment Agency (NEA)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6fb56e93-4ae1-458d-9f29-56c92e9c0140 changed_fields=['stage'] name=H P Construction & Engineering Pte Ltd
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=faf96a95-f7aa-403e-847a-babfb003b25d changed_fields=['stage'] name=AQSSE (Abdelhadi Abdullah Al-Qahtani & Sons Group / Sinopec Shanghai Engineering & Cont)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b92a8244-3523-47b1-958e-a3dd8c8e4c27 changed_fields=['stage', 'crm_forecast_category'] name=Sibanye-Stillwater - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=10314bde-bc0f-438a-875a-c6a80490f3fe changed_fields=['stage', 'crm_forecast_category'] name=Abu Dhabi Municipality - Tenderd
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=15941fd6-2f7b-4107-9d3b-4828667fc910 changed_fields=['stage'] name=SAT MENA Oman Deal 1
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0e2500a1-857c-49b3-9145-ad1cf69131f3 changed_fields=['stage'] name=Elegancia Group - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=49d48143-881c-4454-a751-92143f14179b changed_fields=['stage'] name=Progressive Builder
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=63900e56-2efa-47bf-a373-5b69ccf69ab1 changed_fields=['stage'] name=Exxon Mobil Singapore
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b3624ef3-2e4c-49f7-bcb0-b58dfd8d015e changed_fields=['stage'] name=Douglas OHI - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0df04391-cb83-4fc1-af85-27a8a4c6c421 changed_fields=['stage'] name=Allos Brazil - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=be77d21e-7f5c-41cf-8c7a-973802fa5a13 changed_fields=['stage'] name=Singapore Post - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f523d698-bb42-4b62-ac34-f5d255b55dec changed_fields=['stage'] name=Allseas - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e7bfd67d-6ea1-4256-ad6f-04a03e2d892b changed_fields=['stage'] name=HEC - Development of nursing home
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=1bce5de4-0c30-480d-8249-2453f7536f3d changed_fields=['stage'] name=Nam Long Vietnam Group - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=63086914-17de-48f2-aa73-9a1c493cc783 changed_fields=['stage'] name=Shimano Deal 1 (safety and security)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=3d0aea3a-5b5a-4a13-93db-9abf7fe23149 changed_fields=['stage'] name=LTA DE160 TMS - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=673b99a0-c59a-48b5-a734-5e3cff8d3935 changed_fields=['stage'] name=Penrith City Council Swimming pool drowning AI - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0a678473-b8a2-4e8e-befa-d6cbbe6da738 changed_fields=['stage'] name=Sydney Metro - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6fb1b6e0-7fd0-4f55-866e-75be6d6bde57 changed_fields=['stage'] name=Fonterra - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=25c8d58f-4570-4dbe-824a-415cd70d5069 changed_fields=['stage'] name=SBS Singapore (Orange Deal)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=0ad1e1dc-9bd2-48e5-8d1d-dcb801e91a69 changed_fields=['stage'] name=Aries Group (New Deal)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=d18e472c-e6e3-41a3-ade4-08578fd474a9 changed_fields=['stage'] name=Ministry of Oil Iraq UR Products
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=1165a897-3963-40ba-b9d8-948a3f55d94a changed_fields=['stage'] name=Visy - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=57e188bb-fc7d-4fec-9668-65982268e0e2 changed_fields=['stage'] name=Ssangyong N111 LTA VA
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f5aa81a2-32b4-46b5-b87a-25593db5552f changed_fields=['stage'] name=Mayora Group
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=db8a6016-a17d-4798-b0c2-e405a5d4f737 changed_fields=['stage'] name=Galp - New Deal (Innovation Challenge)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=20695f55-257f-4801-888d-c05cfc4d3251 changed_fields=['stage'] name=Sydney Trains
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=ad3a9d81-55a7-4252-a1e4-19df38222e5a changed_fields=['stage'] name=Endurance Mining
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=add322a2-2668-4495-9b54-1b273586bfea changed_fields=['stage'] name=ERC Egypt - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=b9cbef04-2aec-4e9a-822f-d9bf8b35b77d changed_fields=['stage'] name=KSIA - NEW Deal (Plug and Play)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=a41caadf-442e-4e35-92dc-c65476f0e340 changed_fields=['stage'] name=Reece POC
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=c5175e34-e5a4-497d-906a-e0bfa86d7bab changed_fields=['stage', 'crm_forecast_category'] name=Youssef from NUS - Test New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=82939b78-ad13-4a32-8c1b-84f8d30eb07e changed_fields=['stage'] name=Shell Crux Australia
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=52f1d8b4-c70e-4611-86e8-8a39972e9341 changed_fields=['stage'] name=Veolia (Singapore)
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=8fe358f5-f5da-4e35-8097-01d2f93dcf72 changed_fields=['stage'] name=Accionia Drone Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=f8f21d5f-0b74-47fd-b42d-8c7d6f4b1810 changed_fields=['stage'] name=LTA N113 & N115
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=e09dc588-d1c2-4fb5-88b5-7feffb1c0f9b changed_fields=['stage'] name=N108 - New Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=35519c67-b564-4e87-a374-5fe93d230c8b changed_fields=['stage'] name=Tyco Electronics Security AI
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=6b5db735-11b3-44fe-99b0-d428578f69d2 changed_fields=['stage'] name=Makino Deal
+2026-05-27 16:06:33 [debug    ] account_updated                account_id=3a3d1986-2ab0-4d4c-9281-764e22ab0c57 changed_fields=['stage'] name=Alcon Singapore
+2026-05-27 16:06:33,231 INFO sqlalchemy.engine.Engine UPDATE accounts SET stage=$1::VARCHAR, state=$2::JSONB, updated_at=now() WHERE accounts.id = $3::UUID
+2026-05-27 16:06:33,232 INFO sqlalchemy.engine.Engine [generated in 0.03417s] [('Closed lost', '{"pov": {"risks": ["No champion identified or validated", "Deal stage unknown - no qualification visible", "No close date or deal amount established" ... (6311 characters truncated) ... [], "grounding_confidence": 1.0, "crm_forecast_category": "Pipeline", "account_type": "prospect", "contact_ids": ["105548528250"], "company_ids": []}', UUID('01393127-0cda-4d7f-aabc-5f846d0176f2')), ('Won', '{"pov": {}, "signals": [], "gold_data": {}, "next_actions": [], "stakeholders": [], "episodic_memory": {"summary": "", "episodes": []}, "crm_forecast_category": "Pipeline", "account_type": "customer", "contact_ids": [], "company_ids": []}', UUID('0306f39c-3183-44e8-b925-242877349a48')), ('Proposal', '{"pov": {}, "signals": [], "gold_data": {}, "next_actions": [], "stakeholders": [], "episodic_memory": {"summary": "", "episodes": []}, "crm_forecast ... (86 characters truncated) ... 301", "460798494451", "479467162347", "491305800388"], "company_ids": ["314753268443", "314753268443"], "last_contacted": "2026-04-30T09:07:01.855Z"}', UUID('03a5a641-6429-41fe-8c75-25c5bf649ef1')), ('To Nurture', '{"pov": {"risks": ["No stakeholders identified or engaged", "No sales stage defined", "No deal amount or close date established", "No recent activity ... (4918 characters truncated) ... ied_signals": [], "grounding_confidence": 1.0, "crm_forecast_category": "Pipeline", "account_type": "prospect", "contact_ids": [], "company_ids": []}', UUID('046f6067-9d91-4c2d-aaa0-92803c7ba1db')), ('Won', '{"pov": {"risks": ["No identified champion or primary stakeholder", "Deal stage and value unknown", "No engagement history to assess champion health" ... (5130 characters truncated) ... ied_signals": [], "grounding_confidence": 1.0, "crm_forecast_category": "Pipeline", "account_type": "customer", "contact_ids": [], "company_ids": []}', UUID('04ba69f7-7fd9-42fa-9585-1bc38ba3f1f9')), ('Won', '{"pov": {"risks": ["No identified champion or decision-maker", "Deal structure undefined (stage, amount, close date not established)", "Minimal engag ... (5349 characters truncated) ... gnals": [], "grounding_confidence": 0.0, "crm_forecast_category": "Pipeline", "account_type": "customer", "contact_ids": ["4658"], "company_ids": []}', UUID('051beb58-c540-4fc1-bf4b-78af3d96f622')), ('Partners', '{"pov": {"risks": ["No champion identified or engaged", "Deal stage and close date not established", "Insufficient CRM detail for actionable intellig ... (4833 characters truncated) ... onfidence": 0.0, "crm_forecast_category": "Pipeline", "account_type": "prospect", "contact_ids": ["137922389275", "137922491747"], "company_ids": []}', UUID('053f9a14-9b21-4241-b799-9bfc5ca4206b')), ('To Nurture', '{"pov": {"risks": ["Insufficient account intelligence to assess risk profile", "No identified champion or stakeholder engagement", "Deal fundamentals ... (5568 characters truncated) ... _confidence": 1.0, "crm_forecast_category": "Pipeline", "account_type": "prospect", "contact_ids": [], "company_ids": ["36048918415", "36048918415"]}', UUID('05b0d059-8648-427e-a627-cd6ec7822706'))  ... displaying 10 of 376 total bound parameter sets ...  ('Won', '{"pov": {"risks": ["No stakeholders identified or engaged", "Missing deal context from recent HubSpot activities", "No call transcripts or customer i ... (10000 characters truncated) ... ounding_confidence": 1.0, "crm_forecast_category": "Pipeline", "account_type": "customer", "contact_ids": ["7635", "21075283057"], "company_ids": []}', UUID('ff8cbc8b-a449-4359-a32b-ec9822fcb42e')), ('Partners', '{"pov": {"risks": ["No champion identified or validated", "Deal structure undefined (amount, close date, stage)", "Zero engagement history - account  ... (9453 characters truncated) ... ied_signals": [], "grounding_confidence": 1.0, "crm_forecast_category": "Pipeline", "account_type": "prospect", "contact_ids": [], "company_ids": []}', UUID('ffb6d2f4-fb9a-478b-9665-054c8227432b'))]
+2026-05-27 16:06:33,466 INFO sqlalchemy.engine.Engine INSERT INTO audit_log (id, workspace_id, user_id, action, resource_type, resource_id, changes, actor_id) VALUES ($1::UUID, $2::UUID, $3::UUID, $4::VARCHAR, $5::VARCHAR, $6::VARCHAR, $7::JSONB, $8::VARCHAR), ($9::UUID, $10::UUID, $11::UUID, $12::VARCH ... 43442 characters truncated ... :VARCHAR, $3006::VARCHAR, $3007::JSONB, $3008::VARCHAR) RETURNING audit_log.created_at, audit_log.id
+2026-05-27 16:06:33,467 INFO sqlalchemy.engine.Engine [generated in 0.01341s (insertmanyvalues) 1/1 (ordered)] (UUID('1f507f99-ca7f-410e-a784-e7d371a32306'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '6f1aee30-a06f-4eac-b9bf-9e39738ba30b', '{"stage": {"before": "closedwon", "after": "Won"}}', 'hubspot_sync', UUID('980bacbe-603c-4486-a7d7-000830a82f93'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '34bbf62a-e070-409a-b900-7fd1eab64124', '{"stage": {"before": "closedlost", "after": "Closed lost"}}', 'hubspot_sync', UUID('f85408c7-673b-428f-a29f-850d1b4ec4d3'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', 'e35c9761-4908-4879-89f0-bf066d5ef0c4', '{"stage": {"before": "closedlost", "after": "Closed lost"}}', 'hubspot_sync', UUID('b9f7ece5-b258-4895-8d40-35c6fd414fa2'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '39014d23-997f-44e0-91ef-93d0edbefd60', '{"stage": {"before": "closedwon", "after": "Won"}, "crm_forecast_category": {"before": null, "after": "Pipeline"}}', 'hubspot_sync', UUID('76ba31c0-0ccd-4bca-800a-6abafa85f622'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '8a9551b1-c77e-4dca-bde6-617df2ef7b8f', '{"stage": {"before": "closedwon", "after": "Won"}, "crm_forecast_category": {"before": null, "after": "Pipeline"}}', 'hubspot_sync', UUID('49ccccb5-bd7e-4f33-abb0-ca4b7acbac57'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', 'ff8cbc8b-a449-4359-a32b-ec9822fcb42e', '{"stage": {"before": "closedwon", "after": "Won"}, "crm_forecast_category": {"before": null, "after": "Pipeline"}}', 'hubspot_sync', UUID('a8744ec7-294a-468b-ae7f-3639825e41b7'), UUID('00000000-0000-0000-0000-000000000001') ... 2908 parameters truncated ... '{"stage": {"before": "23155301", "after": "Discovery"}}', 'hubspot_sync', UUID('f7085d07-8d34-421e-8012-3d0a3a4d6bf9'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '8fe358f5-f5da-4e35-8097-01d2f93dcf72', '{"stage": {"before": "23155301", "after": "Discovery"}}', 'hubspot_sync', UUID('fdcdaa5b-4b6e-48a0-be00-59a89adb09b7'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', 'f8f21d5f-0b74-47fd-b42d-8c7d6f4b1810', '{"stage": {"before": "21258674", "after": "Proposal"}}', 'hubspot_sync', UUID('5d7946ab-7a44-46b8-8b10-1f1abd8a137c'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', 'e09dc588-d1c2-4fb5-88b5-7feffb1c0f9b', '{"stage": {"before": "1167033008", "after": "Pre-Qualified Leads"}}', 'hubspot_sync', UUID('6fbeb300-57df-4a31-b3b1-f0c3a1835d4c'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '35519c67-b564-4e87-a374-5fe93d230c8b', '{"stage": {"before": "21258674", "after": "Proposal"}}', 'hubspot_sync', UUID('9a52dddf-627a-4cf9-b782-ab1c64afda7e'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '6b5db735-11b3-44fe-99b0-d428578f69d2', '{"stage": {"before": "21258674", "after": "Proposal"}}', 'hubspot_sync', UUID('87276443-c76b-4c00-9bdc-7b2196e60942'), UUID('00000000-0000-0000-0000-000000000001'), None, 'crm_sync_update', 'account', '3a3d1986-2ab0-4d4c-9281-764e22ab0c57', '{"stage": {"before": "21258674", "after": "Proposal"}}', 'hubspot_sync')
+2026-05-27 16:06:33,621 INFO sqlalchemy.engine.Engine COMMIT
+2026-05-27 16:06:33 [info     ] hubspot_sync_complete          created=0 errors=0 unchanged=0 updated=376 workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:06:33 [info     ] hubspot_manual_sync_complete   created=0 errors=0 unchanged=0 updated=376 workspace_id=00000000-0000-0000-0000-000000000001
+INFO:     127.0.0.1:55423 - "POST /v1/workspace/integrations/hubspot/sync HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62711 - "OPTIONS /v1/drafts?status=pending&limit=1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63903 - "OPTIONS /auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62711 - "OPTIONS /v1/accounts?page=1&limit=20&sort_by=urgency_score&sort_dir=desc HTTP/1.1" 200 OK
+2026-05-27 16:07:53 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:07:53 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:07:53 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+INFO:     127.0.0.1:64953 - "GET /auth/me HTTP/1.1" 200 OK
+2026-05-27 16:07:53,784 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:07:53,806 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT drafts.id AS id, drafts.account_id AS account_id, drafts.workspace_id AS workspace_id, drafts.type AS type, drafts.content AS content, drafts.content_html AS content_html, drafts.target_contact AS target_contact, drafts.subject_line AS subject_line, drafts.sources_cited AS sources_cited, drafts.gold_data_used AS gold_data_used, drafts.status AS status, drafts.content_modified AS content_modified, drafts.reviewer_id AS reviewer_id, drafts.reviewed_by AS reviewed_by, drafts.reviewer_notes AS reviewer_notes, drafts.final_content AS final_content, drafts.reviewed_at AS reviewed_at, drafts.hubspot_email_id AS hubspot_email_id, drafts.pushed_to_crm AS pushed_to_crm, drafts.crm_draft_id AS crm_draft_id, drafts.crm_pushed_at AS crm_pushed_at, drafts.pushed_at AS pushed_at, drafts.agent_run_id AS agent_run_id, drafts.created_at AS created_at, drafts.expires_at AS expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR) AS anon_1
+2026-05-27 16:07:53,815 INFO sqlalchemy.engine.Engine [generated in 0.00878s] ('00000000-0000-0000-0000-000000000001', 'pending')
+2026-05-27 16:07:54,285 INFO sqlalchemy.engine.Engine SELECT drafts.id, drafts.account_id, drafts.workspace_id, drafts.type, drafts.content, drafts.content_html, drafts.target_contact, drafts.subject_line, drafts.sources_cited, drafts.gold_data_used, drafts.status, drafts.content_modified, drafts.reviewer_id, drafts.reviewed_by, drafts.reviewer_notes, drafts.final_content, drafts.reviewed_at, drafts.hubspot_email_id, drafts.pushed_to_crm, drafts.crm_draft_id, drafts.crm_pushed_at, drafts.pushed_at, drafts.agent_run_id, drafts.created_at, drafts.expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR ORDER BY accounts.urgency_score DESC NULLS LAST, drafts.created_at DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-05-27 16:07:54,288 INFO sqlalchemy.engine.Engine [generated in 0.00260s] ('00000000-0000-0000-0000-000000000001', 'pending', 1, 0)
+2026-05-27 16:07:54,295 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:07:54,302 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT accounts.id AS id, accounts.workspace_id AS workspace_id, accounts.hubspot_deal_id AS hubspot_deal_id, accounts.hubspot_company_id AS hubspot_company_id, accounts.hubspot_last_modified AS hubspot_last_modified, accounts.name AS name, accounts.stage AS stage, accounts.deal_amount AS deal_amount, accounts.close_date AS close_date, accounts.owner_rep_id AS owner_rep_id, accounts.owner_user_id AS owner_user_id, accounts.state AS state, accounts.health_score AS health_score, accounts.urgency_score AS urgency_score, accounts.pov_forecast_cat AS pov_forecast_cat, accounts.pov_confidence AS pov_confidence, accounts.last_agent_run_at AS last_agent_run_at, accounts.agent_run_count AS agent_run_count, accounts.embedding AS embedding, accounts.created_at AS created_at, accounts.updated_at AS updated_at, accounts.deleted_at AS deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL) AS anon_1
+2026-05-27 16:07:54,304 INFO sqlalchemy.engine.Engine [generated in 0.00225s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:07:54,341 INFO sqlalchemy.engine.Engine SELECT accounts.id AS accounts_id, accounts.workspace_id AS accounts_workspace_id, accounts.hubspot_deal_id AS accounts_hubspot_deal_id, accounts.hubspot_company_id AS accounts_hubspot_company_id, accounts.hubspot_last_modified AS accounts_hubspot_last_modified, accounts.name AS accounts_name, accounts.stage AS accounts_stage, accounts.deal_amount AS accounts_deal_amount, accounts.close_date AS accounts_close_date, accounts.owner_rep_id AS accounts_owner_rep_id, accounts.owner_user_id AS accounts_owner_user_id, accounts.state AS accounts_state, accounts.health_score AS accounts_health_score, accounts.urgency_score AS accounts_urgency_score, accounts.pov_forecast_cat AS accounts_pov_forecast_cat, accounts.pov_confidence AS accounts_pov_confidence, accounts.last_agent_run_at AS accounts_last_agent_run_at, accounts.agent_run_count AS accounts_agent_run_count, accounts.embedding AS accounts_embedding, accounts.created_at AS accounts_created_at, accounts.updated_at AS accounts_updated_at, accounts.deleted_at AS accounts_deleted_at 
+FROM accounts 
+WHERE accounts.id IN ($1::UUID)
+2026-05-27 16:07:54,343 INFO sqlalchemy.engine.Engine [generated in 0.00279s] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:07:54,360 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL ORDER BY accounts.urgency_score DESC NULLS LAST 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 16:07:54,362 INFO sqlalchemy.engine.Engine [generated in 0.00309s] ('00000000-0000-0000-0000-000000000001', 20, 0)
+2026-05-27 16:07:54,369 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:56829 - "GET /v1/drafts?status=pending&limit=1 HTTP/1.1" 200 OK
+2026-05-27 16:07:54,445 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID, $2::UUID, $3::UUID, $4::UUID, $5::UUID, $6::UUID, $7::UUID, $8::UUID, $9::UUID, $10::UUID, $11::UUID, $12::UUID, $13::UUID, $14::UUID, $15::UUID, $16::UUID, $17::UUID, $18::UUID, $19::UUID, $20::UUID)
+2026-05-27 16:07:54,446 INFO sqlalchemy.engine.Engine [generated in 0.00212s] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'), UUID('143a255e-6e8d-4752-81ad-4b5ca31c2f2e'), UUID('3e776e9c-fd82-4295-9041-94a51b36584c'), UUID('206e6db5-5f99-4469-a661-c45c99fa2745'), UUID('3aa89fd1-b3a4-4d48-8ea1-d1a9fa600cc3'), UUID('3df13398-7ead-44db-839f-1f8b68b20445'), UUID('01393127-0cda-4d7f-aabc-5f846d0176f2'), UUID('159ea228-cc75-4708-a89e-281c68273c5a'), UUID('128b07ae-6dbe-4fd2-84a8-acf97d05ca23'), UUID('10314bde-bc0f-438a-875a-c6a80490f3fe'), UUID('2dece075-e834-4182-b0a6-9d6acda62117'), UUID('2d6b5eed-8223-4175-93fe-43b671d473fa'), UUID('1e39af38-b029-44e1-b0a0-60364437ebef'), UUID('26a5428a-a110-41be-ad6c-4dd299ab2050'), UUID('0cc18f0c-2f5f-4e7d-b6d2-08e9e9d73867'), UUID('24005cfe-bf49-4ad5-9677-bf0ba997bc68'), UUID('1ae827e5-57ee-4c1e-b79d-1e746573a9fa'), UUID('2e52be56-9bfb-4d18-99c8-719a5b71c83a'), UUID('72559585-9dc1-457a-a16f-82f96c296df0'), UUID('0f93e8fb-3db9-4a40-ae20-a30aa51c7304'))
+2026-05-27 16:07:54,475 INFO sqlalchemy.engine.Engine SELECT DISTINCT accounts.stage 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND accounts.stage IS NOT NULL ORDER BY accounts.stage
+2026-05-27 16:07:54,477 INFO sqlalchemy.engine.Engine [generated in 0.00198s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:07:54,494 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:49708 - "GET /v1/accounts?page=1&limit=20&sort_by=urgency_score&sort_dir=desc HTTP/1.1" 200 OK
+2026-05-27 16:07:59 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:07:59 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:07:59 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:07:59,275 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:07:59,280 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.id = $1::UUID AND accounts.workspace_id = $2::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:07:59,281 INFO sqlalchemy.engine.Engine [generated in 0.00077s] ('b11ba699-f827-48a2-95c4-3e7cc597c73a', '00000000-0000-0000-0000-000000000001')
+2026-05-27 16:07:59,285 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:07:59,286 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.id = $1::UUID AND accounts.workspace_id = $2::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:07:59,287 INFO sqlalchemy.engine.Engine [cached since 0.00666s ago] ('b11ba699-f827-48a2-95c4-3e7cc597c73a', '00000000-0000-0000-0000-000000000001')
+2026-05-27 16:07:59,366 INFO sqlalchemy.engine.Engine SELECT signals.account_id AS signals_account_id, signals.id AS signals_id, signals.workspace_id AS signals_workspace_id, signals.type AS signals_type, signals.urgency AS signals_urgency, signals.urgency_score AS signals_urgency_score, signals.detail AS signals_detail, signals.source AS signals_source, signals.source_url AS signals_source_url, signals.confidence AS signals_confidence, signals.gold_sources AS signals_gold_sources, signals.gold_resolution AS signals_gold_resolution, signals.gold_confidence AS signals_gold_confidence, signals.processed AS signals_processed, signals.processed_at AS signals_processed_at, signals.pushed_to_inbox AS signals_pushed_to_inbox, signals.notification_sent AS signals_notification_sent, signals.acknowledged AS signals_acknowledged, signals.acknowledged_by AS signals_acknowledged_by, signals.agent_run_id AS signals_agent_run_id, signals.detected_at AS signals_detected_at, signals.created_at AS signals_created_at 
+FROM signals 
+WHERE signals.account_id IN ($1::UUID)
+2026-05-27 16:07:59,368 INFO sqlalchemy.engine.Engine [generated in 0.00192s] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:07:59,370 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:07:59,376 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT drafts.id AS id, drafts.account_id AS account_id, drafts.workspace_id AS workspace_id, drafts.type AS type, drafts.content AS content, drafts.content_html AS content_html, drafts.target_contact AS target_contact, drafts.subject_line AS subject_line, drafts.sources_cited AS sources_cited, drafts.gold_data_used AS gold_data_used, drafts.status AS status, drafts.content_modified AS content_modified, drafts.reviewer_id AS reviewer_id, drafts.reviewed_by AS reviewed_by, drafts.reviewer_notes AS reviewer_notes, drafts.final_content AS final_content, drafts.reviewed_at AS reviewed_at, drafts.hubspot_email_id AS hubspot_email_id, drafts.pushed_to_crm AS pushed_to_crm, drafts.crm_draft_id AS crm_draft_id, drafts.crm_pushed_at AS crm_pushed_at, drafts.pushed_at AS pushed_at, drafts.agent_run_id AS agent_run_id, drafts.created_at AS created_at, drafts.expires_at AS expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR AND drafts.account_id = $3::UUID) AS anon_1
+2026-05-27 16:07:59,376 INFO sqlalchemy.engine.Engine [generated in 0.00082s] ('00000000-0000-0000-0000-000000000001', 'pending', 'b11ba699-f827-48a2-95c4-3e7cc597c73a')
+2026-05-27 16:07:59,378 INFO sqlalchemy.engine.Engine SELECT signals.account_id AS signals_account_id, signals.id AS signals_id, signals.workspace_id AS signals_workspace_id, signals.type AS signals_type, signals.urgency AS signals_urgency, signals.urgency_score AS signals_urgency_score, signals.detail AS signals_detail, signals.source AS signals_source, signals.source_url AS signals_source_url, signals.confidence AS signals_confidence, signals.gold_sources AS signals_gold_sources, signals.gold_resolution AS signals_gold_resolution, signals.gold_confidence AS signals_gold_confidence, signals.processed AS signals_processed, signals.processed_at AS signals_processed_at, signals.pushed_to_inbox AS signals_pushed_to_inbox, signals.notification_sent AS signals_notification_sent, signals.acknowledged AS signals_acknowledged, signals.acknowledged_by AS signals_acknowledged_by, signals.agent_run_id AS signals_agent_run_id, signals.detected_at AS signals_detected_at, signals.created_at AS signals_created_at 
+FROM signals 
+WHERE signals.account_id IN ($1::UUID)
+2026-05-27 16:07:59,379 INFO sqlalchemy.engine.Engine [cached since 0.01275s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:07:59,388 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID)
+2026-05-27 16:07:59,388 INFO sqlalchemy.engine.Engine [generated in 0.00087s] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:07:59,391 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID)
+2026-05-27 16:07:59,393 INFO sqlalchemy.engine.Engine [cached since 0.00565s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:07:59,398 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-05-27 16:07:59,402 INFO sqlalchemy.engine.Engine SELECT drafts.id, drafts.account_id, drafts.workspace_id, drafts.type, drafts.content, drafts.content_html, drafts.target_contact, drafts.subject_line, drafts.sources_cited, drafts.gold_data_used, drafts.status, drafts.content_modified, drafts.reviewer_id, drafts.reviewed_by, drafts.reviewer_notes, drafts.final_content, drafts.reviewed_at, drafts.hubspot_email_id, drafts.pushed_to_crm, drafts.crm_draft_id, drafts.crm_pushed_at, drafts.pushed_at, drafts.agent_run_id, drafts.created_at, drafts.expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR AND drafts.account_id = $3::UUID ORDER BY accounts.urgency_score DESC NULLS LAST, drafts.created_at DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER
+2026-05-27 16:07:59,403 INFO sqlalchemy.engine.Engine [generated in 0.00085s] ('00000000-0000-0000-0000-000000000001', 'pending', 'b11ba699-f827-48a2-95c4-3e7cc597c73a', 20, 0)
+2026-05-27 16:07:59,405 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:49708 - "GET /v1/accounts/b11ba699-f827-48a2-95c4-3e7cc597c73a/pov HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56829 - "GET /v1/accounts/b11ba699-f827-48a2-95c4-3e7cc597c73a/next-actions HTTP/1.1" 200 OK
+2026-05-27 16:07:59,414 INFO sqlalchemy.engine.Engine SELECT accounts.id AS accounts_id, accounts.workspace_id AS accounts_workspace_id, accounts.hubspot_deal_id AS accounts_hubspot_deal_id, accounts.hubspot_company_id AS accounts_hubspot_company_id, accounts.hubspot_last_modified AS accounts_hubspot_last_modified, accounts.name AS accounts_name, accounts.stage AS accounts_stage, accounts.deal_amount AS accounts_deal_amount, accounts.close_date AS accounts_close_date, accounts.owner_rep_id AS accounts_owner_rep_id, accounts.owner_user_id AS accounts_owner_user_id, accounts.state AS accounts_state, accounts.health_score AS accounts_health_score, accounts.urgency_score AS accounts_urgency_score, accounts.pov_forecast_cat AS accounts_pov_forecast_cat, accounts.pov_confidence AS accounts_pov_confidence, accounts.last_agent_run_at AS accounts_last_agent_run_at, accounts.agent_run_count AS accounts_agent_run_count, accounts.embedding AS accounts_embedding, accounts.created_at AS accounts_created_at, accounts.updated_at AS accounts_updated_at, accounts.deleted_at AS accounts_deleted_at 
+FROM accounts 
+WHERE accounts.id IN ($1::UUID)
+2026-05-27 16:07:59,414 INFO sqlalchemy.engine.Engine [cached since 5.074s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:07:59,443 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:53874 - "GET /v1/drafts?account_id=b11ba699-f827-48a2-95c4-3e7cc597c73a&status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50837 - "OPTIONS /v1/workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61508 - "OPTIONS /v1/workspace/usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50837 - "OPTIONS /v1/workspace/team HTTP/1.1" 200 OK
+2026-05-27 16:08:11 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:11 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:11 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:11,104 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:11,105 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:08:11,105 INFO sqlalchemy.engine.Engine [cached since 102.9s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:11,107 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:11,108 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:08:11,109 INFO sqlalchemy.engine.Engine [generated in 0.00060s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:11,110 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:11,114 INFO sqlalchemy.engine.Engine SELECT workspace_users.id, workspace_users.workspace_id, workspace_users.workos_user_id, workspace_users.email, workspace_users.name, workspace_users.role, workspace_users.hubspot_owner_id, workspace_users.created_at 
+FROM workspace_users 
+WHERE workspace_users.workspace_id = $1::UUID
+2026-05-27 16:08:11,114 INFO sqlalchemy.engine.Engine [generated in 0.00071s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:11,118 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-05-27 16:08:11,121 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND accounts.last_agent_run_at IS NOT NULL
+2026-05-27 16:08:11,122 INFO sqlalchemy.engine.Engine [generated in 0.00060s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:11,123 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:58359 - "GET /v1/workspace HTTP/1.1" 200 OK
+2026-05-27 16:08:11,128 INFO sqlalchemy.engine.Engine SELECT count(drafts.id) AS count_1 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID
+2026-05-27 16:08:11,128 INFO sqlalchemy.engine.Engine [generated in 0.00065s] ('00000000-0000-0000-0000-000000000001',)
+INFO:     127.0.0.1:64140 - "GET /v1/workspace/team HTTP/1.1" 200 OK
+2026-05-27 16:08:11,137 INFO sqlalchemy.engine.Engine SELECT count(drafts.id) AS count_1 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND drafts.status IN ($2::VARCHAR, $3::VARCHAR)
+2026-05-27 16:08:11,138 INFO sqlalchemy.engine.Engine [generated in 0.00155s] ('00000000-0000-0000-0000-000000000001', 'approved', 'approved_modified')
+2026-05-27 16:08:11,144 INFO sqlalchemy.engine.Engine 
+            SELECT
+                COALESCE(SUM(total_cost_usd), 0) AS total_cost,
+                COALESCE(SUM(total_prompt_tokens), 0) AS prompt_tokens,
+                COALESCE(SUM(total_completion_tokens), 0) AS completion_tokens,
+                COUNT(*) AS run_count
+            FROM agent_runs
+            WHERE workspace_id = $1
+              AND created_at >= NOW() - INTERVAL '30 days'
+        
+2026-05-27 16:08:11,145 INFO sqlalchemy.engine.Engine [generated in 0.00077s] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:11,150 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:59488 - "GET /v1/workspace/usage HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50837 - "OPTIONS /v1/workspace/integrations/hubspot/sync HTTP/1.1" 200 OK
+2026-05-27 16:08:13 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:13,304 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:13,307 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:08:13,307 INFO sqlalchemy.engine.Engine [cached since 105.1s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:13 [info     ] hubspot_manual_sync_triggered  workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:08:13,313 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:08:13,313 INFO sqlalchemy.engine.Engine [cached since 105.1s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:13 [info     ] hubspot_sync_started           workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:08:16 [info     ] hubspot_deals_fetched          count=376
+2026-05-27 16:08:17 [info     ] hubspot_stage_labels_fetched   count=9 sample=[('1167033008', 'Pre-Qualified Leads'), ('1114078734', 'Qualified Prospect'), ('23155301', 'Discovery')]
+2026-05-27 16:08:17,401 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:08:17,402 INFO sqlalchemy.engine.Engine [cached since 104.8s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:17,477 INFO sqlalchemy.engine.Engine COMMIT
+2026-05-27 16:08:17 [info     ] hubspot_sync_complete          created=0 errors=0 unchanged=376 updated=0 workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:08:17 [info     ] hubspot_manual_sync_complete   created=0 errors=0 unchanged=376 updated=0 workspace_id=00000000-0000-0000-0000-000000000001
+INFO:     127.0.0.1:59488 - "POST /v1/workspace/integrations/hubspot/sync HTTP/1.1" 200 OK
+2026-05-27 16:08:45 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:45,960 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:45,962 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:08:45,963 INFO sqlalchemy.engine.Engine [cached since 137.7s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:45 [info     ] hubspot_manual_sync_triggered  workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:08:45,972 INFO sqlalchemy.engine.Engine SELECT workspaces.id, workspaces.name, workspaces.slug, workspaces.hubspot_portal_id, workspaces.hubspot_access_token, workspaces.hubspot_refresh_token, workspaces.hubspot_token_expires_at, workspaces.gong_workspace_id, workspaces.gong_api_key, workspaces.gong_access_token, workspaces.perplexity_api_key, workspaces.slack_webhook_url, workspaces.teams_webhook_url, workspaces.stripe_customer_id, workspaces.plan, workspaces.settings, workspaces.created_at, workspaces.updated_at, workspaces.deleted_at 
+FROM workspaces 
+WHERE workspaces.id = $1::UUID
+2026-05-27 16:08:45,973 INFO sqlalchemy.engine.Engine [cached since 137.8s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:45 [info     ] hubspot_sync_started           workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:08:49 [info     ] hubspot_deals_fetched          count=376
+2026-05-27 16:08:50 [info     ] hubspot_stage_labels_fetched   count=9 sample=[('1167033008', 'Pre-Qualified Leads'), ('1114078734', 'Qualified Prospect'), ('23155301', 'Discovery')]
+2026-05-27 16:08:50,384 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:08:50,384 INFO sqlalchemy.engine.Engine [cached since 137.8s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:50,452 INFO sqlalchemy.engine.Engine COMMIT
+2026-05-27 16:08:50 [info     ] hubspot_sync_complete          created=0 errors=0 unchanged=376 updated=0 workspace_id=00000000-0000-0000-0000-000000000001
+2026-05-27 16:08:50 [info     ] hubspot_manual_sync_complete   created=0 errors=0 unchanged=376 updated=0 workspace_id=00000000-0000-0000-0000-000000000001
+INFO:     127.0.0.1:57099 - "POST /v1/workspace/integrations/hubspot/sync HTTP/1.1" 200 OK
+2026-05-27 16:08:54 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:54,408 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:54,410 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT drafts.id AS id, drafts.account_id AS account_id, drafts.workspace_id AS workspace_id, drafts.type AS type, drafts.content AS content, drafts.content_html AS content_html, drafts.target_contact AS target_contact, drafts.subject_line AS subject_line, drafts.sources_cited AS sources_cited, drafts.gold_data_used AS gold_data_used, drafts.status AS status, drafts.content_modified AS content_modified, drafts.reviewer_id AS reviewer_id, drafts.reviewed_by AS reviewed_by, drafts.reviewer_notes AS reviewer_notes, drafts.final_content AS final_content, drafts.reviewed_at AS reviewed_at, drafts.hubspot_email_id AS hubspot_email_id, drafts.pushed_to_crm AS pushed_to_crm, drafts.crm_draft_id AS crm_draft_id, drafts.crm_pushed_at AS crm_pushed_at, drafts.pushed_at AS pushed_at, drafts.agent_run_id AS agent_run_id, drafts.created_at AS created_at, drafts.expires_at AS expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR) AS anon_1
+2026-05-27 16:08:54,410 INFO sqlalchemy.engine.Engine [cached since 60.6s ago] ('00000000-0000-0000-0000-000000000001', 'pending')
+2026-05-27 16:08:54,420 INFO sqlalchemy.engine.Engine SELECT drafts.id, drafts.account_id, drafts.workspace_id, drafts.type, drafts.content, drafts.content_html, drafts.target_contact, drafts.subject_line, drafts.sources_cited, drafts.gold_data_used, drafts.status, drafts.content_modified, drafts.reviewer_id, drafts.reviewed_by, drafts.reviewer_notes, drafts.final_content, drafts.reviewed_at, drafts.hubspot_email_id, drafts.pushed_to_crm, drafts.crm_draft_id, drafts.crm_pushed_at, drafts.pushed_at, drafts.agent_run_id, drafts.created_at, drafts.expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR ORDER BY accounts.urgency_score DESC NULLS LAST, drafts.created_at DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-05-27 16:08:54,420 INFO sqlalchemy.engine.Engine [generated in 0.00060s] ('00000000-0000-0000-0000-000000000001', 'pending', 1, 0)
+2026-05-27 16:08:54,425 INFO sqlalchemy.engine.Engine SELECT accounts.id AS accounts_id, accounts.workspace_id AS accounts_workspace_id, accounts.hubspot_deal_id AS accounts_hubspot_deal_id, accounts.hubspot_company_id AS accounts_hubspot_company_id, accounts.hubspot_last_modified AS accounts_hubspot_last_modified, accounts.name AS accounts_name, accounts.stage AS accounts_stage, accounts.deal_amount AS accounts_deal_amount, accounts.close_date AS accounts_close_date, accounts.owner_rep_id AS accounts_owner_rep_id, accounts.owner_user_id AS accounts_owner_user_id, accounts.state AS accounts_state, accounts.health_score AS accounts_health_score, accounts.urgency_score AS accounts_urgency_score, accounts.pov_forecast_cat AS accounts_pov_forecast_cat, accounts.pov_confidence AS accounts_pov_confidence, accounts.last_agent_run_at AS accounts_last_agent_run_at, accounts.agent_run_count AS accounts_agent_run_count, accounts.embedding AS accounts_embedding, accounts.created_at AS accounts_created_at, accounts.updated_at AS accounts_updated_at, accounts.deleted_at AS accounts_deleted_at 
+FROM accounts 
+WHERE accounts.id IN ($1::UUID)
+2026-05-27 16:08:54,426 INFO sqlalchemy.engine.Engine [cached since 60.09s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:08:54,430 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:57099 - "GET /v1/drafts?status=pending&limit=1 HTTP/1.1" 200 OK
+2026-05-27 16:08:55 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:55,514 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:55,515 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT accounts.id AS id, accounts.workspace_id AS workspace_id, accounts.hubspot_deal_id AS hubspot_deal_id, accounts.hubspot_company_id AS hubspot_company_id, accounts.hubspot_last_modified AS hubspot_last_modified, accounts.name AS name, accounts.stage AS stage, accounts.deal_amount AS deal_amount, accounts.close_date AS close_date, accounts.owner_rep_id AS owner_rep_id, accounts.owner_user_id AS owner_user_id, accounts.state AS state, accounts.health_score AS health_score, accounts.urgency_score AS urgency_score, accounts.pov_forecast_cat AS pov_forecast_cat, accounts.pov_confidence AS pov_confidence, accounts.last_agent_run_at AS last_agent_run_at, accounts.agent_run_count AS agent_run_count, accounts.embedding AS embedding, accounts.created_at AS created_at, accounts.updated_at AS updated_at, accounts.deleted_at AS deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL) AS anon_1
+2026-05-27 16:08:55,516 INFO sqlalchemy.engine.Engine [cached since 61.21s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:55,528 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL ORDER BY accounts.urgency_score DESC NULLS LAST 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 16:08:55,529 INFO sqlalchemy.engine.Engine [generated in 0.00097s] ('00000000-0000-0000-0000-000000000001', 20, 0)
+2026-05-27 16:08:55,544 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID, $2::UUID, $3::UUID, $4::UUID, $5::UUID, $6::UUID, $7::UUID, $8::UUID, $9::UUID, $10::UUID, $11::UUID, $12::UUID, $13::UUID, $14::UUID, $15::UUID, $16::UUID, $17::UUID, $18::UUID, $19::UUID, $20::UUID)
+2026-05-27 16:08:55,545 INFO sqlalchemy.engine.Engine [cached since 61.1s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'), UUID('143a255e-6e8d-4752-81ad-4b5ca31c2f2e'), UUID('3e776e9c-fd82-4295-9041-94a51b36584c'), UUID('206e6db5-5f99-4469-a661-c45c99fa2745'), UUID('3aa89fd1-b3a4-4d48-8ea1-d1a9fa600cc3'), UUID('3df13398-7ead-44db-839f-1f8b68b20445'), UUID('01393127-0cda-4d7f-aabc-5f846d0176f2'), UUID('159ea228-cc75-4708-a89e-281c68273c5a'), UUID('128b07ae-6dbe-4fd2-84a8-acf97d05ca23'), UUID('10314bde-bc0f-438a-875a-c6a80490f3fe'), UUID('2dece075-e834-4182-b0a6-9d6acda62117'), UUID('2d6b5eed-8223-4175-93fe-43b671d473fa'), UUID('1e39af38-b029-44e1-b0a0-60364437ebef'), UUID('26a5428a-a110-41be-ad6c-4dd299ab2050'), UUID('0cc18f0c-2f5f-4e7d-b6d2-08e9e9d73867'), UUID('24005cfe-bf49-4ad5-9677-bf0ba997bc68'), UUID('1ae827e5-57ee-4c1e-b79d-1e746573a9fa'), UUID('2e52be56-9bfb-4d18-99c8-719a5b71c83a'), UUID('72559585-9dc1-457a-a16f-82f96c296df0'), UUID('0f93e8fb-3db9-4a40-ae20-a30aa51c7304'))
+2026-05-27 16:08:55,556 INFO sqlalchemy.engine.Engine SELECT DISTINCT accounts.stage 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND accounts.stage IS NOT NULL ORDER BY accounts.stage
+2026-05-27 16:08:55,557 INFO sqlalchemy.engine.Engine [cached since 61.08s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:55,566 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:57099 - "GET /v1/accounts?page=1&limit=20&sort_by=urgency_score&sort_dir=desc HTTP/1.1" 200 OK
+2026-05-27 16:08:57 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+INFO:     127.0.0.1:57099 - "GET /auth/me HTTP/1.1" 200 OK
+2026-05-27 16:08:57 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:57,740 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:57,742 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT drafts.id AS id, drafts.account_id AS account_id, drafts.workspace_id AS workspace_id, drafts.type AS type, drafts.content AS content, drafts.content_html AS content_html, drafts.target_contact AS target_contact, drafts.subject_line AS subject_line, drafts.sources_cited AS sources_cited, drafts.gold_data_used AS gold_data_used, drafts.status AS status, drafts.content_modified AS content_modified, drafts.reviewer_id AS reviewer_id, drafts.reviewed_by AS reviewed_by, drafts.reviewer_notes AS reviewer_notes, drafts.final_content AS final_content, drafts.reviewed_at AS reviewed_at, drafts.hubspot_email_id AS hubspot_email_id, drafts.pushed_to_crm AS pushed_to_crm, drafts.crm_draft_id AS crm_draft_id, drafts.crm_pushed_at AS crm_pushed_at, drafts.pushed_at AS pushed_at, drafts.agent_run_id AS agent_run_id, drafts.created_at AS created_at, drafts.expires_at AS expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR) AS anon_1
+2026-05-27 16:08:57,743 INFO sqlalchemy.engine.Engine [cached since 63.94s ago] ('00000000-0000-0000-0000-000000000001', 'pending')
+2026-05-27 16:08:57,753 INFO sqlalchemy.engine.Engine SELECT drafts.id, drafts.account_id, drafts.workspace_id, drafts.type, drafts.content, drafts.content_html, drafts.target_contact, drafts.subject_line, drafts.sources_cited, drafts.gold_data_used, drafts.status, drafts.content_modified, drafts.reviewer_id, drafts.reviewed_by, drafts.reviewer_notes, drafts.final_content, drafts.reviewed_at, drafts.hubspot_email_id, drafts.pushed_to_crm, drafts.crm_draft_id, drafts.crm_pushed_at, drafts.pushed_at, drafts.agent_run_id, drafts.created_at, drafts.expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR ORDER BY accounts.urgency_score DESC NULLS LAST, drafts.created_at DESC 
+ LIMIT $3::INTEGER OFFSET $4::INTEGER
+2026-05-27 16:08:57,755 INFO sqlalchemy.engine.Engine [cached since 3.335s ago] ('00000000-0000-0000-0000-000000000001', 'pending', 1, 0)
+2026-05-27 16:08:57,763 INFO sqlalchemy.engine.Engine SELECT accounts.id AS accounts_id, accounts.workspace_id AS accounts_workspace_id, accounts.hubspot_deal_id AS accounts_hubspot_deal_id, accounts.hubspot_company_id AS accounts_hubspot_company_id, accounts.hubspot_last_modified AS accounts_hubspot_last_modified, accounts.name AS accounts_name, accounts.stage AS accounts_stage, accounts.deal_amount AS accounts_deal_amount, accounts.close_date AS accounts_close_date, accounts.owner_rep_id AS accounts_owner_rep_id, accounts.owner_user_id AS accounts_owner_user_id, accounts.state AS accounts_state, accounts.health_score AS accounts_health_score, accounts.urgency_score AS accounts_urgency_score, accounts.pov_forecast_cat AS accounts_pov_forecast_cat, accounts.pov_confidence AS accounts_pov_confidence, accounts.last_agent_run_at AS accounts_last_agent_run_at, accounts.agent_run_count AS accounts_agent_run_count, accounts.embedding AS accounts_embedding, accounts.created_at AS accounts_created_at, accounts.updated_at AS accounts_updated_at, accounts.deleted_at AS accounts_deleted_at 
+FROM accounts 
+WHERE accounts.id IN ($1::UUID)
+2026-05-27 16:08:57,764 INFO sqlalchemy.engine.Engine [cached since 63.42s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:08:57,770 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:57099 - "GET /v1/drafts?status=pending&limit=1 HTTP/1.1" 200 OK
+2026-05-27 16:08:57 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:08:57,788 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:08:57,789 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT accounts.id AS id, accounts.workspace_id AS workspace_id, accounts.hubspot_deal_id AS hubspot_deal_id, accounts.hubspot_company_id AS hubspot_company_id, accounts.hubspot_last_modified AS hubspot_last_modified, accounts.name AS name, accounts.stage AS stage, accounts.deal_amount AS deal_amount, accounts.close_date AS close_date, accounts.owner_rep_id AS owner_rep_id, accounts.owner_user_id AS owner_user_id, accounts.state AS state, accounts.health_score AS health_score, accounts.urgency_score AS urgency_score, accounts.pov_forecast_cat AS pov_forecast_cat, accounts.pov_confidence AS pov_confidence, accounts.last_agent_run_at AS last_agent_run_at, accounts.agent_run_count AS agent_run_count, accounts.embedding AS embedding, accounts.created_at AS created_at, accounts.updated_at AS updated_at, accounts.deleted_at AS deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL) AS anon_1
+2026-05-27 16:08:57,790 INFO sqlalchemy.engine.Engine [cached since 63.49s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:57,797 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL ORDER BY accounts.urgency_score DESC NULLS LAST 
+ LIMIT $2::INTEGER OFFSET $3::INTEGER
+2026-05-27 16:08:57,798 INFO sqlalchemy.engine.Engine [cached since 2.27s ago] ('00000000-0000-0000-0000-000000000001', 20, 0)
+2026-05-27 16:08:57,819 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID, $2::UUID, $3::UUID, $4::UUID, $5::UUID, $6::UUID, $7::UUID, $8::UUID, $9::UUID, $10::UUID, $11::UUID, $12::UUID, $13::UUID, $14::UUID, $15::UUID, $16::UUID, $17::UUID, $18::UUID, $19::UUID, $20::UUID)
+2026-05-27 16:08:57,820 INFO sqlalchemy.engine.Engine [cached since 63.38s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'), UUID('143a255e-6e8d-4752-81ad-4b5ca31c2f2e'), UUID('3e776e9c-fd82-4295-9041-94a51b36584c'), UUID('206e6db5-5f99-4469-a661-c45c99fa2745'), UUID('3aa89fd1-b3a4-4d48-8ea1-d1a9fa600cc3'), UUID('3df13398-7ead-44db-839f-1f8b68b20445'), UUID('01393127-0cda-4d7f-aabc-5f846d0176f2'), UUID('159ea228-cc75-4708-a89e-281c68273c5a'), UUID('128b07ae-6dbe-4fd2-84a8-acf97d05ca23'), UUID('10314bde-bc0f-438a-875a-c6a80490f3fe'), UUID('2dece075-e834-4182-b0a6-9d6acda62117'), UUID('2d6b5eed-8223-4175-93fe-43b671d473fa'), UUID('1e39af38-b029-44e1-b0a0-60364437ebef'), UUID('26a5428a-a110-41be-ad6c-4dd299ab2050'), UUID('0cc18f0c-2f5f-4e7d-b6d2-08e9e9d73867'), UUID('24005cfe-bf49-4ad5-9677-bf0ba997bc68'), UUID('1ae827e5-57ee-4c1e-b79d-1e746573a9fa'), UUID('2e52be56-9bfb-4d18-99c8-719a5b71c83a'), UUID('72559585-9dc1-457a-a16f-82f96c296df0'), UUID('0f93e8fb-3db9-4a40-ae20-a30aa51c7304'))
+2026-05-27 16:08:57,843 INFO sqlalchemy.engine.Engine SELECT DISTINCT accounts.stage 
+FROM accounts 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND accounts.stage IS NOT NULL ORDER BY accounts.stage
+2026-05-27 16:08:57,849 INFO sqlalchemy.engine.Engine [cached since 63.37s ago] ('00000000-0000-0000-0000-000000000001',)
+2026-05-27 16:08:57,857 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:57099 - "GET /v1/accounts?page=1&limit=20&sort_by=urgency_score&sort_dir=desc HTTP/1.1" 200 OK
+2026-05-27 16:09:02 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:09:02 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:09:02 [info     ] dev_bypass_auth                note=DEBUG mode — bypassing WorkOS
+2026-05-27 16:09:02,517 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:09:02,518 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.id = $1::UUID AND accounts.workspace_id = $2::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:09:02,519 INFO sqlalchemy.engine.Engine [cached since 63.24s ago] ('b11ba699-f827-48a2-95c4-3e7cc597c73a', '00000000-0000-0000-0000-000000000001')
+2026-05-27 16:09:02,520 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:09:02,521 INFO sqlalchemy.engine.Engine SELECT count(*) AS count_1 
+FROM (SELECT drafts.id AS id, drafts.account_id AS account_id, drafts.workspace_id AS workspace_id, drafts.type AS type, drafts.content AS content, drafts.content_html AS content_html, drafts.target_contact AS target_contact, drafts.subject_line AS subject_line, drafts.sources_cited AS sources_cited, drafts.gold_data_used AS gold_data_used, drafts.status AS status, drafts.content_modified AS content_modified, drafts.reviewer_id AS reviewer_id, drafts.reviewed_by AS reviewed_by, drafts.reviewer_notes AS reviewer_notes, drafts.final_content AS final_content, drafts.reviewed_at AS reviewed_at, drafts.hubspot_email_id AS hubspot_email_id, drafts.pushed_to_crm AS pushed_to_crm, drafts.crm_draft_id AS crm_draft_id, drafts.crm_pushed_at AS crm_pushed_at, drafts.pushed_at AS pushed_at, drafts.agent_run_id AS agent_run_id, drafts.created_at AS created_at, drafts.expires_at AS expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR AND drafts.account_id = $3::UUID) AS anon_1
+2026-05-27 16:09:02,522 INFO sqlalchemy.engine.Engine [cached since 63.15s ago] ('00000000-0000-0000-0000-000000000001', 'pending', 'b11ba699-f827-48a2-95c4-3e7cc597c73a')
+2026-05-27 16:09:02,525 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:09:02,527 INFO sqlalchemy.engine.Engine SELECT accounts.id, accounts.workspace_id, accounts.hubspot_deal_id, accounts.hubspot_company_id, accounts.hubspot_last_modified, accounts.name, accounts.stage, accounts.deal_amount, accounts.close_date, accounts.owner_rep_id, accounts.owner_user_id, accounts.state, accounts.health_score, accounts.urgency_score, accounts.pov_forecast_cat, accounts.pov_confidence, accounts.last_agent_run_at, accounts.agent_run_count, accounts.embedding, accounts.created_at, accounts.updated_at, accounts.deleted_at 
+FROM accounts 
+WHERE accounts.id = $1::UUID AND accounts.workspace_id = $2::UUID AND accounts.deleted_at IS NULL
+2026-05-27 16:09:02,527 INFO sqlalchemy.engine.Engine [cached since 63.25s ago] ('b11ba699-f827-48a2-95c4-3e7cc597c73a', '00000000-0000-0000-0000-000000000001')
+2026-05-27 16:09:02,530 INFO sqlalchemy.engine.Engine SELECT signals.account_id AS signals_account_id, signals.id AS signals_id, signals.workspace_id AS signals_workspace_id, signals.type AS signals_type, signals.urgency AS signals_urgency, signals.urgency_score AS signals_urgency_score, signals.detail AS signals_detail, signals.source AS signals_source, signals.source_url AS signals_source_url, signals.confidence AS signals_confidence, signals.gold_sources AS signals_gold_sources, signals.gold_resolution AS signals_gold_resolution, signals.gold_confidence AS signals_gold_confidence, signals.processed AS signals_processed, signals.processed_at AS signals_processed_at, signals.pushed_to_inbox AS signals_pushed_to_inbox, signals.notification_sent AS signals_notification_sent, signals.acknowledged AS signals_acknowledged, signals.acknowledged_by AS signals_acknowledged_by, signals.agent_run_id AS signals_agent_run_id, signals.detected_at AS signals_detected_at, signals.created_at AS signals_created_at 
+FROM signals 
+WHERE signals.account_id IN ($1::UUID)
+2026-05-27 16:09:02,531 INFO sqlalchemy.engine.Engine [cached since 63.17s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:09:02,535 INFO sqlalchemy.engine.Engine SELECT drafts.id, drafts.account_id, drafts.workspace_id, drafts.type, drafts.content, drafts.content_html, drafts.target_contact, drafts.subject_line, drafts.sources_cited, drafts.gold_data_used, drafts.status, drafts.content_modified, drafts.reviewer_id, drafts.reviewed_by, drafts.reviewer_notes, drafts.final_content, drafts.reviewed_at, drafts.hubspot_email_id, drafts.pushed_to_crm, drafts.crm_draft_id, drafts.crm_pushed_at, drafts.pushed_at, drafts.agent_run_id, drafts.created_at, drafts.expires_at 
+FROM drafts JOIN accounts ON drafts.account_id = accounts.id 
+WHERE accounts.workspace_id = $1::UUID AND accounts.deleted_at IS NULL AND drafts.status = $2::VARCHAR AND drafts.account_id = $3::UUID ORDER BY accounts.urgency_score DESC NULLS LAST, drafts.created_at DESC 
+ LIMIT $4::INTEGER OFFSET $5::INTEGER
+2026-05-27 16:09:02,536 INFO sqlalchemy.engine.Engine [generated in 0.00099s] ('00000000-0000-0000-0000-000000000001', 'pending', 'b11ba699-f827-48a2-95c4-3e7cc597c73a', 20, 0)
+2026-05-27 16:09:02,538 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID)
+2026-05-27 16:09:02,539 INFO sqlalchemy.engine.Engine [cached since 63.15s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:09:02,542 INFO sqlalchemy.engine.Engine SELECT accounts.id AS accounts_id, accounts.workspace_id AS accounts_workspace_id, accounts.hubspot_deal_id AS accounts_hubspot_deal_id, accounts.hubspot_company_id AS accounts_hubspot_company_id, accounts.hubspot_last_modified AS accounts_hubspot_last_modified, accounts.name AS accounts_name, accounts.stage AS accounts_stage, accounts.deal_amount AS accounts_deal_amount, accounts.close_date AS accounts_close_date, accounts.owner_rep_id AS accounts_owner_rep_id, accounts.owner_user_id AS accounts_owner_user_id, accounts.state AS accounts_state, accounts.health_score AS accounts_health_score, accounts.urgency_score AS accounts_urgency_score, accounts.pov_forecast_cat AS accounts_pov_forecast_cat, accounts.pov_confidence AS accounts_pov_confidence, accounts.last_agent_run_at AS accounts_last_agent_run_at, accounts.agent_run_count AS accounts_agent_run_count, accounts.embedding AS accounts_embedding, accounts.created_at AS accounts_created_at, accounts.updated_at AS accounts_updated_at, accounts.deleted_at AS accounts_deleted_at 
+FROM accounts 
+WHERE accounts.id IN ($1::UUID)
+2026-05-27 16:09:02,543 INFO sqlalchemy.engine.Engine [cached since 68.2s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:09:02,545 INFO sqlalchemy.engine.Engine SELECT signals.account_id AS signals_account_id, signals.id AS signals_id, signals.workspace_id AS signals_workspace_id, signals.type AS signals_type, signals.urgency AS signals_urgency, signals.urgency_score AS signals_urgency_score, signals.detail AS signals_detail, signals.source AS signals_source, signals.source_url AS signals_source_url, signals.confidence AS signals_confidence, signals.gold_sources AS signals_gold_sources, signals.gold_resolution AS signals_gold_resolution, signals.gold_confidence AS signals_gold_confidence, signals.processed AS signals_processed, signals.processed_at AS signals_processed_at, signals.pushed_to_inbox AS signals_pushed_to_inbox, signals.notification_sent AS signals_notification_sent, signals.acknowledged AS signals_acknowledged, signals.acknowledged_by AS signals_acknowledged_by, signals.agent_run_id AS signals_agent_run_id, signals.detected_at AS signals_detected_at, signals.created_at AS signals_created_at 
+FROM signals 
+WHERE signals.account_id IN ($1::UUID)
+2026-05-27 16:09:02,546 INFO sqlalchemy.engine.Engine [cached since 63.18s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+2026-05-27 16:09:02,551 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-05-27 16:09:02,553 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-05-27 16:09:02,556 INFO sqlalchemy.engine.Engine SELECT drafts.account_id AS drafts_account_id, drafts.id AS drafts_id, drafts.workspace_id AS drafts_workspace_id, drafts.type AS drafts_type, drafts.content AS drafts_content, drafts.content_html AS drafts_content_html, drafts.target_contact AS drafts_target_contact, drafts.subject_line AS drafts_subject_line, drafts.sources_cited AS drafts_sources_cited, drafts.gold_data_used AS drafts_gold_data_used, drafts.status AS drafts_status, drafts.content_modified AS drafts_content_modified, drafts.reviewer_id AS drafts_reviewer_id, drafts.reviewed_by AS drafts_reviewed_by, drafts.reviewer_notes AS drafts_reviewer_notes, drafts.final_content AS drafts_final_content, drafts.reviewed_at AS drafts_reviewed_at, drafts.hubspot_email_id AS drafts_hubspot_email_id, drafts.pushed_to_crm AS drafts_pushed_to_crm, drafts.crm_draft_id AS drafts_crm_draft_id, drafts.crm_pushed_at AS drafts_crm_pushed_at, drafts.pushed_at AS drafts_pushed_at, drafts.agent_run_id AS drafts_agent_run_id, drafts.created_at AS drafts_created_at, drafts.expires_at AS drafts_expires_at 
+FROM drafts 
+WHERE drafts.account_id IN ($1::UUID)
+2026-05-27 16:09:02,557 INFO sqlalchemy.engine.Engine [cached since 63.17s ago] (UUID('b11ba699-f827-48a2-95c4-3e7cc597c73a'),)
+INFO:     127.0.0.1:64949 - "GET /v1/drafts?account_id=b11ba699-f827-48a2-95c4-3e7cc597c73a&status=pending HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57099 - "GET /v1/accounts/b11ba699-f827-48a2-95c4-3e7cc597c73a/pov HTTP/1.1" 200 OK
+2026-05-27 16:09:02,564 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:52343 - "GET /v1/accounts/b11ba699-f827-48a2-95c4-3e7cc597c73a/next-actions HTTP/1.1" 200 OK
+2026-05-27 16:12:49 [info     ] vantage_api_shutdown
+2026-05-27 16:13:05,088 INFO sqlalchemy.engine.Engine select pg_catalog.version()
+2026-05-27 16:13:05,089 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-05-27 16:13:05,095 INFO sqlalchemy.engine.Engine select current_schema()
+2026-05-27 16:13:05,096 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-05-27 16:13:05,102 INFO sqlalchemy.engine.Engine show standard_conforming_strings
+2026-05-27 16:13:05,102 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-05-27 16:13:05,108 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-05-27 16:13:05,109 INFO sqlalchemy.engine.Engine SELECT 1
+2026-05-27 16:13:05,110 INFO sqlalchemy.engine.Engine [generated in 0.00067s] ()
+2026-05-27 16:13:05,116 INFO sqlalchemy.engine.Engine ROLLBACK
+2026-05-27 16:13:05 [info     ] vantage_api_started            environment=development

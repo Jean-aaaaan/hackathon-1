@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vantage — AI Sales Agent Platform</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --brand:     #4f46e5;
+  --brand-lt:  #eef2ff;
+  --brand-md:  #818cf8;
+  --brand-dk:  #3730a3;
+  --zinc-900:  #18181b;
+  --zinc-800:  #27272a;
+  --zinc-700:  #3f3f46;
+  --zinc-500:  #71717a;
+  --zinc-400:  #a1a1aa;
+  --zinc-300:  #d4d4d8;
+  --zinc-200:  #e4e4e7;
+  --zinc-100:  #f4f4f5;
+  --zinc-50:   #fafafa;
+  --red:       #ef4444;
+  --red-lt:    #fef2f2;
+  --amber:     #f59e0b;
+  --amber-lt:  #fffbeb;
+  --green:     #22c55e;
+  --green-lt:  #f0fdf4;
+  --blue:      #3b82f6;
+  --blue-lt:   #eff6ff;
+  --orange:    #f97316;
+  --orange-lt: #fff7ed;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  background: #fff;
+  color: var(--zinc-900);
+  font-size: 14px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.layout { display: flex; max-width: 1200px; margin: 0 auto; min-height: 100vh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 240px; flex-shrink: 0;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  padding: 36px 0 40px;
+  border-right: 1px solid var(--zinc-200);
+  background: #fff;
+}
+.sidebar-logo {
+  display: flex; align-items: center; gap: 9px;
+  padding: 0 24px; margin-bottom: 8px;
+}
+.sidebar-logo-mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0;
+}
+.sidebar-logo-text { font-size: 15px; font-weight: 800; letter-spacing: -.3px; }
+.sidebar-tag {
+  margin: 0 24px 28px;
+  font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--brand); background: var(--brand-lt); border-radius: 4px;
+  padding: 3px 8px; display: inline-block;
+}
+.sidebar-section {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--zinc-400); padding: 4px 24px 6px; margin-top: 16px;
+}
+.sidebar-link {
+  display: block; padding: 7px 24px;
+  font-size: 13px; color: var(--zinc-600, #52525b);
+  text-decoration: none; border-left: 2px solid transparent;
+  transition: all .15s;
+}
+.sidebar-link:hover { color: var(--brand); background: var(--brand-lt); }
+.sidebar-link.active { color: var(--brand); border-left-color: var(--brand); background: var(--brand-lt); font-weight: 600; }
+
+/* ── Main ── */
+.main { flex: 1; min-width: 0; padding: 56px 64px 120px; }
+
+/* ── Typography ── */
+h1 { font-size: 36px; font-weight: 800; letter-spacing: -.03em; line-height: 1.15; }
+h2 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; margin-bottom: 8px; }
+h3 { font-size: 18px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 6px; }
+h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+p { color: var(--zinc-700); }
+
+.section { padding-top: 72px; padding-bottom: 8px; }
+.section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--brand); margin-bottom: 12px;
+}
+.section-intro { font-size: 15px; color: var(--zinc-600, #52525b); max-width: 620px; margin-top: 10px; line-height: 1.7; }
+
+hr.divider { border: none; border-top: 1px solid var(--zinc-200); margin: 64px 0 0; }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(135deg, var(--brand-lt) 0%, #fff 60%);
+  border: 1px solid var(--zinc-200); border-radius: 16px;
+  padding: 48px; margin-bottom: 0;
+}
+.hero h1 { margin-bottom: 14px; }
+.hero p { font-size: 16px; color: var(--zinc-600, #52525b); max-width: 560px; line-height: 1.7; }
+.hero-stats {
+  display: flex; gap: 32px; margin-top: 36px; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat-num { font-size: 28px; font-weight: 800; color: var(--brand); letter-spacing: -.5px; }
+.hero-stat-label { font-size: 11px; color: var(--zinc-500); margin-top: 2px; }
+
+/* ── Problem ── */
+.problem-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 28px; }
+.problem-card {
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 24px;
+  background: var(--zinc-50);
+}
+.problem-card-num {
+  font-size: 28px; font-weight: 900; color: var(--zinc-200);
+  margin-bottom: 12px; line-height: 1;
+}
+.problem-card h4 { font-size: 14px; margin-bottom: 6px; }
+.problem-card p { font-size: 13px; color: var(--zinc-500); line-height: 1.6; }
+
+/* ── Agent pipeline ── */
+.pipeline-row {
+  display: flex; flex-direction: column; gap: 2px; margin-top: 28px;
+}
+.agent-card {
+  border: 1px solid var(--zinc-200); border-radius: 12px;
+  overflow: hidden; background: #fff;
+  transition: border-color .15s;
+}
+.agent-card:hover { border-color: var(--brand-md); }
+.agent-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 24px; cursor: pointer;
+  background: #fff;
+}
+.agent-num {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--brand-lt); color: var(--brand);
+  font-size: 13px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.agent-icon { font-size: 22px; flex-shrink: 0; }
+.agent-title { font-size: 15px; font-weight: 700; flex: 1; }
+.agent-model {
+  font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px;
+}
+.agent-model.haiku { background: #ecfdf5; color: #059669; }
+.agent-model.sonnet { background: var(--brand-lt); color: var(--brand); }
+.agent-cost { font-size: 12px; color: var(--zinc-400); white-space: nowrap; }
+.agent-body {
+  padding: 0 24px 22px; border-top: 1px solid var(--zinc-100);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.agent-body-section h5 { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--zinc-400); margin-bottom: 10px; margin-top: 18px; }
+.agent-output-list { display: flex; flex-direction: column; gap: 6px; }
+.agent-output-item {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 12px; color: var(--zinc-600, #52525b); line-height: 1.5;
+}
+.agent-output-item::before { content: "→"; color: var(--brand-md); flex-shrink: 0; font-weight: 700; }
+.agent-why { font-size: 13px; color: var(--zinc-600, #52525b); line-height: 1.65; margin-top: 18px; }
+
+.pipeline-arrow { text-align: center; font-size: 18px; color: var(--zinc-300); padding: 4px 0; }
+
+/* ── MEDDPICC ── */
+.meddpicc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 28px; }
+.meddpicc-card {
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 20px;
+  background: var(--zinc-50);
+  transition: border-color .15s, background .15s;
+}
+.meddpicc-card:hover { border-color: var(--brand-md); background: var(--brand-lt); }
+.meddpicc-letter {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--brand); color: #fff;
+  font-size: 16px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.meddpicc-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+.meddpicc-card p { font-size: 12px; color: var(--zinc-500); line-height: 1.55; }
+.meddpicc-weight {
+  display: inline-block; margin-top: 10px;
+  font-size: 10px; font-weight: 700;
+  background: var(--brand-lt); color: var(--brand);
+  padding: 2px 8px; border-radius: 20px;
+}
+
+/* ── 3 Whys ── */
+.whys-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 28px; }
+.why-card {
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 28px;
+  position: relative; overflow: hidden;
+}
+.why-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.why-change::before { background: var(--orange); }
+.why-now::before { background: var(--red); }
+.why-us::before { background: var(--brand); }
+.why-label {
+  font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.why-change .why-label { color: var(--orange); }
+.why-now .why-label { color: var(--red); }
+.why-us .why-label { color: var(--brand); }
+.why-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+.why-card p { font-size: 13px; color: var(--zinc-500); line-height: 1.65; }
+.why-card .why-question {
+  margin-top: 14px; padding: 12px 14px;
+  background: var(--zinc-50); border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: var(--zinc-700);
+  font-style: italic;
+}
+
+/* ── Risk vectors ── */
+.risk-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-top: 28px; }
+.risk-card {
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 20px;
+  background: var(--zinc-50); text-align: center;
+}
+.risk-icon { font-size: 24px; margin-bottom: 10px; }
+.risk-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.risk-levels { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+.risk-level {
+  font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+  text-align: left;
+}
+.risk-level.critical { background: var(--red-lt); color: var(--red); }
+.risk-level.high { background: var(--orange-lt); color: var(--orange); }
+.risk-level.medium { background: var(--amber-lt); color: var(--amber); }
+.risk-level.low { background: var(--green-lt); color: var(--green); }
+
+/* ── Grounding / Gold Data ── */
+.gold-flow {
+  display: flex; align-items: stretch; gap: 12px; margin-top: 28px;
+  flex-wrap: wrap;
+}
+.gold-step {
+  flex: 1; min-width: 140px;
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 20px;
+  background: var(--zinc-50); position: relative;
+}
+.gold-step-num {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--brand); color: #fff;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.gold-step h4 { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.gold-step p { font-size: 12px; color: var(--zinc-500); line-height: 1.55; }
+.gold-arrow { align-self: center; font-size: 20px; color: var(--zinc-300); flex-shrink: 0; }
+
+/* ── Safety gates ── */
+.gates-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-top: 28px; }
+.gate {
+  display: flex; gap: 14px; align-items: flex-start;
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 20px;
+}
+.gate-check {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--green-lt); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.gate h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.gate p { font-size: 12px; color: var(--zinc-500); line-height: 1.55; }
+.gate code {
+  display: inline-block; font-family: "SF Mono", Consolas, monospace;
+  font-size: 11px; background: var(--zinc-100); color: var(--brand);
+  padding: 1px 6px; border-radius: 4px; margin-top: 6px;
+}
+
+/* ── Integrations ── */
+.integrations-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 28px; }
+.integration {
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 18px;
+  background: var(--zinc-50);
+}
+.integration-icon { font-size: 24px; margin-bottom: 10px; }
+.integration h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.integration p { font-size: 12px; color: var(--zinc-500); line-height: 1.5; }
+
+/* ── Differentiators ── */
+.vs-table { width: 100%; border-collapse: collapse; margin-top: 28px; font-size: 13px; }
+.vs-table th {
+  padding: 12px 16px; text-align: left;
+  background: var(--zinc-50); border: 1px solid var(--zinc-200);
+  font-size: 12px; font-weight: 700; color: var(--zinc-500);
+}
+.vs-table th.vantage { background: var(--brand-lt); color: var(--brand); }
+.vs-table td {
+  padding: 12px 16px; border: 1px solid var(--zinc-200); vertical-align: top;
+  color: var(--zinc-700); line-height: 1.5;
+}
+.vs-table tr:nth-child(even) td { background: var(--zinc-50); }
+.check { color: var(--green); font-weight: 700; }
+.cross { color: var(--red); }
+.partial { color: var(--amber); }
+
+/* ── ICP Scoring ── */
+.icp-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 28px; }
+.icp-card {
+  border: 1px solid var(--zinc-200); border-radius: 12px; padding: 22px;
+}
+.icp-card h4 { font-size: 14px; margin-bottom: 10px; }
+.icp-item {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 12px; color: var(--zinc-600, #52525b); line-height: 1.5;
+  padding: 5px 0; border-bottom: 1px solid var(--zinc-100);
+}
+.icp-item:last-child { border-bottom: none; }
+.icp-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+
+/* ── Example output ── */
+.example-box {
+  border: 1px solid var(--zinc-200); border-radius: 12px; overflow: hidden; margin-top: 28px;
+}
+.example-header {
+  padding: 14px 20px; background: var(--zinc-50);
+  border-bottom: 1px solid var(--zinc-200);
+  display: flex; align-items: center; gap: 10px;
+}
+.example-header h4 { flex: 1; font-size: 13px; font-weight: 700; }
+.badge {
+  font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px;
+}
+.badge.critical { background: var(--red-lt); color: var(--red); }
+.badge.high { background: var(--orange-lt); color: var(--orange); }
+.badge.medium { background: var(--amber-lt); color: var(--amber); }
+.badge.good { background: var(--green-lt); color: var(--green); }
+.example-body { padding: 20px; }
+.example-narrative {
+  font-size: 13px; color: var(--zinc-700); line-height: 1.7;
+  padding: 14px 16px; background: var(--zinc-50);
+  border-left: 3px solid var(--brand); border-radius: 0 8px 8px 0;
+  margin-bottom: 16px; font-style: italic;
+}
+.signal-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--zinc-100); font-size: 12px;
+}
+.signal-row:last-child { border-bottom: none; }
+.sig-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 4px; flex-shrink: 0; margin-top: 1px;
+}
+.sig-badge.critical { background: var(--red-lt); color: var(--red); }
+.sig-badge.high { background: var(--orange-lt); color: var(--orange); }
+.sig-badge.medium { background: var(--amber-lt); color: var(--amber); }
+.signal-row p { color: var(--zinc-600, #52525b); line-height: 1.5; }
+.signal-row strong { color: var(--zinc-900); }
+
+.email-preview {
+  border: 1px solid var(--zinc-200); border-radius: 10px; overflow: hidden; margin-top: 16px;
+}
+.email-preview-header {
+  padding: 12px 16px; background: var(--zinc-50); border-bottom: 1px solid var(--zinc-200);
+  font-size: 12px; color: var(--zinc-500);
+}
+.email-preview-header strong { color: var(--zinc-900); }
+.email-preview-body {
+  padding: 16px; font-size: 12px; color: var(--zinc-700); line-height: 1.75;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { padding: 32px 20px 80px; }
+  .meddpicc-grid { grid-template-columns: repeat(2,1fr); }
+  .risk-grid { grid-template-columns: repeat(3,1fr); }
+  .whys-grid, .problem-grid { grid-template-columns: 1fr; }
+  .integrations-grid { grid-template-columns: repeat(2,1fr); }
+  .agent-body { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-mark">V</div>
+    <span class="sidebar-logo-text">Vantage</span>
+  </div>
+  <div class="sidebar-tag">AI Sales Platform</div>
+
+  <div class="sidebar-section">Overview</div>
+  <a href="#what" class="sidebar-link active">What is Vantage?</a>
+  <a href="#problem" class="sidebar-link">The Problem</a>
+  <a href="#pipeline" class="sidebar-link">The Pipeline</a>
+
+  <div class="sidebar-section">The Agents</div>
+  <a href="#researcher" class="sidebar-link">1 · Researcher</a>
+  <a href="#risk-scanner" class="sidebar-link">2 · Risk Scanner</a>
+  <a href="#grounding" class="sidebar-link">3 · Grounding</a>
+  <a href="#prioritiser" class="sidebar-link">4 · Prioritiser</a>
+  <a href="#drafter" class="sidebar-link">5 · Drafter</a>
+  <a href="#smart-fields" class="sidebar-link">6 · Smart Fields</a>
+
+  <div class="sidebar-section">Frameworks</div>
+  <a href="#meddpicc" class="sidebar-link">MEDDPICC</a>
+  <a href="#three-whys" class="sidebar-link">3 Whys</a>
+  <a href="#risk-vectors" class="sidebar-link">5 Risk Vectors</a>
+  <a href="#gold-data" class="sidebar-link">Gold Data Layer</a>
+  <a href="#icp" class="sidebar-link">ICP Scoring</a>
+
+  <div class="sidebar-section">Product</div>
+  <a href="#safety-gates" class="sidebar-link">Safety Gates</a>
+  <a href="#integrations" class="sidebar-link">Integrations</a>
+  <a href="#vs" class="sidebar-link">vs Actively AI</a>
+  <a href="#output" class="sidebar-link">Live Output</a>
+</nav>
+
+<!-- Main -->
+<main class="main">
+
+<!-- What is Vantage -->
+<section id="what">
+  <div class="hero">
+    <div class="section-label">Vantage · AI Sales Agent Platform</div>
+    <h1>One AI agent per deal.<br>Running 24/7.</h1>
+    <p>
+      Vantage is a per-account AI sales intelligence platform for enterprise B2B sales teams.
+      It connects to your CRM, reads every email, note, and call transcript, and runs a
+      6-agent AI pipeline every night — scoring deals against MEDDPICC, detecting risks,
+      and drafting follow-up emails in the rep's own voice.
+    </p>
+    <p style="margin-top:12px;">
+      The result: every rep starts their day knowing exactly which deals need attention,
+      why, and with a ready-to-send email that cites every fact back to a source.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-label">AI agents per deal per night</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">$0.22</div>
+        <div class="hero-stat-label">Cost per deal per run</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">30+</div>
+        <div class="hero-stat-label">Signal types detected</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">11</div>
+        <div class="hero-stat-label">Draft email types</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- The Problem -->
+<section id="problem" class="section">
+  <div class="section-label">The Problem</div>
+  <h2>Enterprise sales teams are flying blind at scale.</h2>
+  <p class="section-intro">
+    A 10-rep team managing 300 deals across 9-month sales cycles cannot give every deal
+    the attention it needs. Deals go cold. Champions go dark. Close dates slip unnoticed.
+    By the time anyone flags a problem, it's too late.
+  </p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-card-num">01</div>
+      <h4>Champion attrition is invisible</h4>
+      <p>The person driving your deal internally goes quiet for 3 weeks. No one notices until a competitor has already had two calls.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-card-num">02</div>
+      <h4>MEDDPICC gaps aren't tracked</h4>
+      <p>Reps know the framework but applying it consistently across hundreds of deals is impossible manually. Economic buyer is missing on 60% of late-stage deals.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-card-num">03</div>
+      <h4>Follow-up timing is guesswork</h4>
+      <p>The right email sent the day a champion returns from leave is 10× more effective than the same email sent a week late. Reps never know when that moment is.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- The Pipeline -->
+<section id="pipeline" class="section">
+  <div class="section-label">Architecture</div>
+  <h2>The 6-agent pipeline.</h2>
+  <p class="section-intro">
+    At 2am (or on-demand), Vantage runs a sequential 6-agent pipeline against every
+    active deal. Each agent has one job. Outputs flow downstream — researcher feeds
+    grounding, grounding feeds prioritiser, prioritiser feeds drafter. The result is
+    a fully updated Account State Object (ASO) per deal, ready in the inbox by morning.
+  </p>
+
+  <div class="pipeline-row">
+
+    <!-- Researcher -->
+    <div class="agent-card" id="researcher">
+      <div class="agent-header">
+        <div class="agent-num">1</div>
+        <span class="agent-icon">🔍</span>
+        <span class="agent-title">ResearcherAgent</span>
+        <span class="agent-model haiku">Claude Haiku 4.5</span>
+        <span class="agent-cost">~$0.02/deal</span>
+      </div>
+      <div class="agent-body">
+        <div class="agent-body-section">
+          <h5>What it reads</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">All HubSpot notes, emails, engagements — full history, no date cap</div>
+            <div class="agent-output-item">Fireflies call transcripts — participants, speaker stats, action items</div>
+            <div class="agent-output-item">Perplexity web research — company news, leadership changes</div>
+            <div class="agent-output-item">Current account state — stakeholders, signals, memory</div>
+          </div>
+        </div>
+        <div class="agent-body-section">
+          <h5>What it outputs</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">New signals (30+ types) with sources and confidence scores</div>
+            <div class="agent-output-item">Stakeholder role classifications (Champion vs EB vs Decision Maker)</div>
+            <div class="agent-output-item">MEDDPICC observations extracted from signal sources</div>
+            <div class="agent-output-item">Deal velocity signals: days in stage, close date slips, engagement trend</div>
+            <div class="agent-output-item">ICP fit score (0–1) with matching factors and gaps</div>
+            <div class="agent-output-item">Champion identification from Fireflies participant lists by job title</div>
+          </div>
+        </div>
+        <div class="agent-body-section" style="grid-column:1/-1;">
+          <h5>Why it matters</h5>
+          <p class="agent-why">
+            The Researcher is the intelligence layer. It ingests everything that has happened on
+            a deal — every email thread, every call, every HubSpot note — and translates it into
+            structured signals. It knows the difference between a champion and a contact. It
+            identifies when a champion goes dark based on the actual last engagement date, not
+            the CRM "last contacted" field which reps often forget to update.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-arrow">↓</div>
+
+    <!-- Risk Scanner -->
+    <div class="agent-card" id="risk-scanner">
+      <div class="agent-header">
+        <div class="agent-num">2</div>
+        <span class="agent-icon">⚠️</span>
+        <span class="agent-title">RiskScannerAgent</span>
+        <span class="agent-model haiku">Claude Haiku 4.5</span>
+        <span class="agent-cost">~$0.02/deal</span>
+      </div>
+      <div class="agent-body">
+        <div class="agent-body-section">
+          <h5>What it scores</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">Health score (0–1) — multi-factor model with 7 weighted components</div>
+            <div class="agent-output-item">MEDDPICC — all 8 components scored 0–1, gaps called out specifically</div>
+            <div class="agent-output-item">5 Risk Vectors — champion / competition / timeline / economic / stakeholder</div>
+            <div class="agent-output-item">3 Whys assessment — why change / why now / why us</div>
+            <div class="agent-output-item">Deal momentum — accelerating / neutral / stalling / declining</div>
+          </div>
+        </div>
+        <div class="agent-body-section">
+          <h5>What it outputs</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">AI forecast category — Pipeline / Best Case / Commit / Omit</div>
+            <div class="agent-output-item">Win probability (0–1) — deterministic formula, auditable</div>
+            <div class="agent-output-item">Deal narrative — 3-sentence story naming people and dates</div>
+            <div class="agent-output-item">Top risk summary — one sentence for morning brief</div>
+            <div class="agent-output-item">Close date integrity — solid / soft / at_risk / unknown</div>
+          </div>
+        </div>
+        <div class="agent-body-section" style="grid-column:1/-1;">
+          <h5>Why it matters</h5>
+          <p class="agent-why">
+            The Risk Scanner is where the product earns its value in pipeline reviews.
+            It applies MEDDPICC consistently across every deal, every night — something no rep
+            can do manually for 200+ accounts. The AI forecast often <em>differs</em> from the CRM
+            forecast category. That divergence is the signal. When CRM says "Commit" but the
+            AI says "Omit" because the economic buyer hasn't been in a single call, that's the
+            conversation a VP needs to have before the forecast call.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-arrow">↓</div>
+
+    <!-- Grounding -->
+    <div class="agent-card" id="grounding">
+      <div class="agent-header">
+        <div class="agent-num">3</div>
+        <span class="agent-icon">✅</span>
+        <span class="agent-title">GroundingAgent</span>
+        <span class="agent-model haiku">Claude Haiku 4.5</span>
+        <span class="agent-cost">~$0.01/deal</span>
+      </div>
+      <div class="agent-body">
+        <div class="agent-body-section">
+          <h5>What it does</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">Takes every signal from the Researcher and verifies it against its cited source</div>
+            <div class="agent-output-item">Resolves conflicting facts (e.g. two close dates from different sources)</div>
+            <div class="agent-output-item">Assigns confidence scores to verified facts with full audit trail</div>
+            <div class="agent-output-item">Separates verified signals from unverified claims</div>
+          </div>
+        </div>
+        <div class="agent-body-section">
+          <h5>What it outputs</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">Verified signal list — only facts with confirmed source citations</div>
+            <div class="agent-output-item">Gold Data Layer — fully auditable resolved facts per deal</div>
+            <div class="agent-output-item">Overall grounding confidence score</div>
+            <div class="agent-output-item">Unverified claims — flagged but not discarded</div>
+          </div>
+        </div>
+        <div class="agent-body-section" style="grid-column:1/-1;">
+          <h5>Why it matters</h5>
+          <p class="agent-why">
+            Grounding is Vantage's key differentiator vs every competitor. Actively AI has
+            a grounding feature in beta behind a feature flag. Vantage ships it to every
+            customer from day one. Every signal in a Vantage draft can be traced to a
+            specific HubSpot note, email, or call transcript. Reps can click through and
+            see exactly why the AI said what it said. This is the difference between
+            "trust the AI" and "verify the AI."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-arrow">↓</div>
+
+    <!-- Prioritiser -->
+    <div class="agent-card" id="prioritiser">
+      <div class="agent-header">
+        <div class="agent-num">4</div>
+        <span class="agent-icon">🎯</span>
+        <span class="agent-title">PrioritiserAgent</span>
+        <span class="agent-model sonnet">Claude Sonnet 4.6</span>
+        <span class="agent-cost">~$0.04/deal</span>
+      </div>
+      <div class="agent-body">
+        <div class="agent-body-section">
+          <h5>What it does</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">Takes verified signals and risk output and builds an action plan</div>
+            <div class="agent-output-item">Ranks actions by urgency score, considering rep bandwidth</div>
+            <div class="agent-output-item">Maps each action to the MEDDPICC gap it addresses</div>
+            <div class="agent-output-item">Flags whether the deal is ready for pipeline review</div>
+          </div>
+        </div>
+        <div class="agent-body-section">
+          <h5>What it outputs</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">Ranked next actions — specific, MEDDPICC-grounded</div>
+            <div class="agent-output-item">Urgency score (0–1) for the account overall</div>
+            <div class="agent-output-item">AI deal amount and close date (vs CRM — divergence is a signal)</div>
+            <div class="agent-output-item">Top risk summary — one sentence, used in morning brief</div>
+            <div class="agent-output-item">Pipeline review readiness flag</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-arrow">↓</div>
+
+    <!-- Drafter -->
+    <div class="agent-card" id="drafter">
+      <div class="agent-header">
+        <div class="agent-num">5</div>
+        <span class="agent-icon">✍️</span>
+        <span class="agent-title">DrafterAgent</span>
+        <span class="agent-model sonnet">Claude Sonnet 4.6</span>
+        <span class="agent-cost">~$0.10/deal</span>
+      </div>
+      <div class="agent-body">
+        <div class="agent-body-section">
+          <h5>11 draft types</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">email_followup — standard follow-up after a touchpoint</div>
+            <div class="agent-output-item">champion_reengagement — warm re-engagement when champion is dark</div>
+            <div class="agent-output-item">executive_alignment — exec-to-exec, 4–6 sentences</div>
+            <div class="agent-output-item">roi_business_case — quantified ROI justification</div>
+            <div class="agent-output-item">meeting_brief — pre-call intelligence brief</div>
+            <div class="agent-output-item">competitive_displacement — champion talking points</div>
+            <div class="agent-output-item">close_plan_proposal — mutual action plan email</div>
+            <div class="agent-output-item">outreach_sequence — 3-email cold/warm sequence</div>
+            <div class="agent-output-item">renewal_brief — renewal call preparation</div>
+            <div class="agent-output-item">expansion_pitch — upsell/cross-sell (customer accounts)</div>
+            <div class="agent-output-item">nurture_cadence — soft touchpoint, no pressure</div>
+          </div>
+        </div>
+        <div class="agent-body-section">
+          <h5>Voice fidelity</h5>
+          <p class="agent-why" style="margin-top:0;">
+            The Drafter writes in the rep's voice — not a generic AI tone. It is trained on
+            the rep's actual sent emails (via Outlook or HubSpot) to extract their writing
+            patterns: typical openers, CTA phrasing, sentence length, words they avoid.
+            Every draft cites every fact it uses to a verified source.
+          </p>
+          <p class="agent-why" style="margin-top:10px;">
+            Drafts are not sent automatically. They arrive in the Agent Inbox for rep review.
+            Declined drafts with a reason category become training signals that improve
+            future output.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-arrow">↓</div>
+
+    <!-- Smart Fields -->
+    <div class="agent-card" id="smart-fields">
+      <div class="agent-header">
+        <div class="agent-num">6</div>
+        <span class="agent-icon">🧠</span>
+        <span class="agent-title">SmartFieldsAgent</span>
+        <span class="agent-model haiku">Claude Haiku 4.5</span>
+        <span class="agent-cost">~$0.01/deal</span>
+      </div>
+      <div class="agent-body">
+        <div class="agent-body-section">
+          <h5>What it does</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">Reviews the full pipeline output and suggests CRM field updates</div>
+            <div class="agent-output-item">Only proposes updates it can justify from verified evidence</div>
+            <div class="agent-output-item">Reps approve or dismiss individually</div>
+          </div>
+        </div>
+        <div class="agent-body-section">
+          <h5>Supported fields</h5>
+          <div class="agent-output-list">
+            <div class="agent-output-item">hs_forecast_category — AI POV vs CRM stage</div>
+            <div class="agent-output-item">closedate — when AI close date diverges from CRM</div>
+            <div class="agent-output-item">description — deal summary updated from latest signals</div>
+            <div class="agent-output-item">notes_next_activity_date — based on recommended next action</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- MEDDPICC -->
+<section id="meddpicc" class="section">
+  <div class="section-label">Framework · MEDDPICC</div>
+  <h2>MEDDPICC — applied to every deal, every night.</h2>
+  <p class="section-intro">
+    MEDDPICC is the gold-standard enterprise deal qualification framework.
+    Vantage scores all 8 components on a 0–1 scale based on confirmed evidence from
+    CRM data, emails, and call transcripts — not rep estimates.
+    Economic Buyer and Champion are weighted 2× in the overall score because they
+    are the two most predictive components of deal close.
+  </p>
+  <div class="meddpicc-grid">
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">M</div>
+      <h4>Metrics</h4>
+      <p>Quantified business impact agreed with the buyer. ROI, cost savings, revenue impact. 0 = no business case. 1 = fully agreed with EB sign-off.</p>
+      <span class="meddpicc-weight">Weight: 1×</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">E</div>
+      <h4>Economic Buyer</h4>
+      <p>The person who controls the budget and can say YES alone. Not just identified — engaged. 0.5 = identified, 1.0 = actively engaged in the deal.</p>
+      <span class="meddpicc-weight">Weight: 2× (critical)</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">D</div>
+      <h4>Decision Criteria</h4>
+      <p>The formal evaluation criteria the buyer will use to choose. Scorecard, RFP requirements, or stated success metrics. 0 = unknown.</p>
+      <span class="meddpicc-weight">Weight: 1×</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">D</div>
+      <h4>Decision Process</h4>
+      <p>Who approves, in what order, on what timeline. Full procurement and sign-off chain mapped. 0 = unknown. 1 = fully mapped with named owners.</p>
+      <span class="meddpicc-weight">Weight: 1×</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">P</div>
+      <h4>Implicate Pain</h4>
+      <p>The buyer's business pain quantified and linked to the cost of inaction. "Why change?" answered with evidence, not assumption.</p>
+      <span class="meddpicc-weight">Weight: 1×</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">I</div>
+      <h4>Champion</h4>
+      <p>An internal advocate who believes in you, has credibility, and sells internally on your behalf. Identified vs validated vs actively enabling.</p>
+      <span class="meddpicc-weight">Weight: 2× (critical)</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">C</div>
+      <h4>Competition</h4>
+      <p>Competitive landscape fully known and actively positioned against. Sole evaluation vs parallel POC vs competitor preferred by EB.</p>
+      <span class="meddpicc-weight">Weight: 1×</span>
+    </div>
+    <div class="meddpicc-card">
+      <div class="meddpicc-letter">C</div>
+      <h4>Paper Process</h4>
+      <p>Legal, security review, procurement, and contract signing steps mapped with timelines. Often takes 30–90 days — not accounting for it is the #1 close date slip cause.</p>
+      <span class="meddpicc-weight">Weight: 1×</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- 3 Whys -->
+<section id="three-whys" class="section">
+  <div class="section-label">Framework · 3 Whys</div>
+  <h2>The 3 Whys — urgency qualification.</h2>
+  <p class="section-intro">
+    MEDDPICC tells you if a deal is qualified. The 3 Whys tell you if it has natural urgency.
+    All three must be present for a deal to close on its stated timeline without external pressure.
+    If any is missing, there is a specific action the rep must take.
+  </p>
+  <div class="whys-grid">
+    <div class="why-card why-change">
+      <div class="why-label">Why Change</div>
+      <h3>Why leave the status quo?</h3>
+      <p>
+        Does the buyer have a compelling reason to change from how they do things today?
+        Not "it would be nice to have" — a documented cost, failure, or risk that makes
+        the status quo unsustainable.
+      </p>
+      <div class="why-question">"What happens to the business if they don't buy anything this year?"</div>
+    </div>
+    <div class="why-card why-now">
+      <div class="why-label">Why Now</div>
+      <h3>Why this quarter?</h3>
+      <p>
+        Is there a timing trigger that creates urgency <em>now</em>? Contract renewal,
+        regulatory deadline, board mandate, budget cycle end, safety incident, or
+        new leadership with a new mandate.
+      </p>
+      <div class="why-question">"What event or deadline makes this decision urgent in the next 90 days?"</div>
+    </div>
+    <div class="why-card why-us">
+      <div class="why-label">Why Us</div>
+      <h3>Why specifically your product?</h3>
+      <p>
+        Does the buyer understand your specific differentiation vs alternatives?
+        Not just "we like you" — confirmed through a POC win criteria, a competitive
+        displacement story, or an explicit statement of preference.
+      </p>
+      <div class="why-question">"What would they lose by choosing a competitor over you?"</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- 5 Risk Vectors -->
+<section id="risk-vectors" class="section">
+  <div class="section-label">Framework · 5 Risk Vectors</div>
+  <h2>5 independent risk dimensions per deal.</h2>
+  <p class="section-intro">
+    Each risk vector is assessed independently on a four-level scale.
+    A deal can have a healthy champion but a critical economic risk.
+    Viewing them separately prevents a strong signal in one area masking a
+    deal-killing gap in another.
+  </p>
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-icon">🤝</div>
+      <h4>Champion</h4>
+      <div class="risk-levels">
+        <div class="risk-level low">Low — strong, active, enabling</div>
+        <div class="risk-level medium">Medium — engaged but unvalidated</div>
+        <div class="risk-level high">High — dark 7+ days</div>
+        <div class="risk-level critical">Critical — departed or none</div>
+      </div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-icon">⚔️</div>
+      <h4>Competition</h4>
+      <div class="risk-levels">
+        <div class="risk-level low">Low — sole evaluation</div>
+        <div class="risk-level medium">Medium — mentioned, unclear</div>
+        <div class="risk-level high">High — active parallel POC</div>
+        <div class="risk-level critical">Critical — competitor preferred by EB</div>
+      </div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-icon">📅</div>
+      <h4>Timeline</h4>
+      <div class="risk-levels">
+        <div class="risk-level low">Low — first date, MAP current</div>
+        <div class="risk-level medium">Medium — 1 slip or stale MAP</div>
+        <div class="risk-level high">High — 2 slips or no MAP</div>
+        <div class="risk-level critical">Critical — 3+ slips, no plan</div>
+      </div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-icon">💰</div>
+      <h4>Economic</h4>
+      <div class="risk-levels">
+        <div class="risk-level low">Low — budget confirmed by EB</div>
+        <div class="risk-level medium">Medium — assumed, unconfirmed</div>
+        <div class="risk-level high">High — EB not engaged at Proposal</div>
+        <div class="risk-level critical">Critical — freeze or eliminated</div>
+      </div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-icon">👥</div>
+      <h4>Stakeholder</h4>
+      <div class="risk-levels">
+        <div class="risk-level low">Low — 3+ contacts, EB engaged</div>
+        <div class="risk-level medium">Medium — 2 contacts, no EB</div>
+        <div class="risk-level high">High — missing EB or technical buyer</div>
+        <div class="risk-level critical">Critical — single thread, &gt;$100K</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- Gold Data Layer -->
+<section id="gold-data" class="section">
+  <div class="section-label">Framework · Gold Data Layer</div>
+  <h2>Every fact, traced to a source.</h2>
+  <p class="section-intro">
+    The Gold Data Layer is Vantage's most important differentiator vs every competitor.
+    Every signal, every draft, every risk assessment is traceable back to a specific
+    HubSpot note, email, or call transcript. Reps don't have to trust the AI — they can verify it.
+  </p>
+  <div class="gold-flow">
+    <div class="gold-step">
+      <div class="gold-step-num">1</div>
+      <h4>Signal detected</h4>
+      <p>Researcher identifies a signal (e.g. "champion dark 14 days") with a source reference and confidence score.</p>
+    </div>
+    <div class="gold-arrow">→</div>
+    <div class="gold-step">
+      <div class="gold-step-num">2</div>
+      <h4>Source verified</h4>
+      <p>Grounding Agent reads the cited source and confirms the signal. Conflicting sources are resolved with weighted voting.</p>
+    </div>
+    <div class="gold-arrow">→</div>
+    <div class="gold-step">
+      <div class="gold-step-num">3</div>
+      <h4>Fact resolved</h4>
+      <p>Resolved value stored with: confidence score, all source values, weighted vote breakdown, resolution timestamp.</p>
+    </div>
+    <div class="gold-arrow">→</div>
+    <div class="gold-step">
+      <div class="gold-step-num">4</div>
+      <h4>Draft cites it</h4>
+      <p>Drafter uses only verified facts. Each fact in the draft is linked to its gold data source. Rep can click through to the original note or email.</p>
+    </div>
+    <div class="gold-arrow">→</div>
+    <div class="gold-step">
+      <div class="gold-step-num">5</div>
+      <h4>Audit panel</h4>
+      <p>Full audit trail visible in the War Room. Every resolved fact shows: sources disagreed, how it was resolved, confidence level.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ICP Scoring -->
+<section id="icp" class="section">
+  <div class="section-label">Framework · ICP Scoring</div>
+  <h2>ICP fit scored on every deal automatically.</h2>
+  <p class="section-intro">
+    Every account is scored 0–1 for Ideal Customer Profile fit, with matching factors
+    and gaps called out. Reps can filter and sort the inbox by ICP score. High urgency
+    + low ICP = a deal that shouldn't be in the pipeline. High ICP + low urgency = a
+    deal that needs a push.
+  </p>
+  <div class="icp-grid">
+    <div class="icp-card">
+      <h4>Strong ICP signals (boost score)</h4>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--green)"></div>
+        Champion role matches: HSE Manager, HSQE Director, VP Safety
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--green)"></div>
+        Industry match: construction, O&amp;G, manufacturing, mining, logistics
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--green)"></div>
+        Compliance mentions: OSHA, ISO 45001, Ministry of Labour, WSH
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--green)"></div>
+        Multi-site operations with existing CCTV infrastructure
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--green)"></div>
+        Recent safety incident or regulatory audit mentioned
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--green)"></div>
+        500+ employees, government-linked or large enterprise
+      </div>
+    </div>
+    <div class="icp-card">
+      <h4>Anti-ICP signals (reduce score)</h4>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--red)"></div>
+        Small office or retail — no industrial operations
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--red)"></div>
+        Pure software or tech company, no physical operations
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--red)"></div>
+        No existing CCTV and no budget for cameras
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--red)"></div>
+        Consumer-facing business (B2C)
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--amber)"></div>
+        Industry match but wrong buyer role (IT vs HSE)
+      </div>
+      <div class="icp-item">
+        <div class="icp-dot" style="background:var(--amber)"></div>
+        Geography outside primary markets (MENA, SG, ANZ)
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- Safety Gates -->
+<section id="safety-gates" class="section">
+  <div class="section-label">Quality Control</div>
+  <h2>6 safety gates. Code-enforced.</h2>
+  <p class="section-intro">
+    These run in Python after every pipeline run, before any draft reaches the inbox.
+    The model cannot override them. They exist because prompt instructions alone are
+    insufficient for production-grade output quality.
+  </p>
+  <div class="gates-grid">
+    <div class="gate">
+      <div class="gate-check">✓</div>
+      <div>
+        <h4>Hard cap at 2 drafts per account</h4>
+        <p>No matter how many drafts the model returns, only the top 2 reach the inbox. Volume is noise. Quality is value.</p>
+        <code>drafter_result.drafts[:2]</code>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gate-check">✓</div>
+      <div>
+        <h4>Zero verified signals = no outbound drafts</h4>
+        <p>If the Grounding Agent found nothing verified, outbound emails are suppressed. Internal analysis types only. No hallucination risk.</p>
+        <code>has_verified_signals = len(grounding.verified) > 0</code>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gate-check">✓</div>
+      <div>
+        <h4>No champion re-engagement without a champion</h4>
+        <p>Champion MEDDPICC score must exceed 0.2 before a champion_reengagement draft is generated. You cannot re-engage someone you've never engaged.</p>
+        <code>champion_meddpicc >= 0.2</code>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gate-check">✓</div>
+      <div>
+        <h4>No ROI email before first inbound reply</h4>
+        <p>roi_business_case and executive_alignment drafts are blocked if zero inbound replies are recorded. Discovery precedes value justification.</p>
+        <code>total_emails_received > 0</code>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gate-check">✓</div>
+      <div>
+        <h4>Confidence capped by health score</h4>
+        <p>A draft's confidence score cannot exceed health_score + 0.25. A 0.06-health deal cannot produce a 0.90-confidence draft.</p>
+        <code>min(confidence, health_score + 0.25)</code>
+      </div>
+    </div>
+    <div class="gate">
+      <div class="gate-check">✓</div>
+      <div>
+        <h4>Sender stripped from stakeholder list</h4>
+        <p>Before drafting, the pipeline removes the sender's own name from the stakeholder list. Eliminates self-addressed email drafts.</p>
+        <code>filter(lambda s: s.name != sender_name)</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- Integrations -->
+<section id="integrations" class="section">
+  <div class="section-label">Integrations</div>
+  <h2>Connects to your existing stack.</h2>
+  <p class="section-intro">
+    No new data entry. No new workflows. Vantage reads from systems your team already uses
+    and writes back to the same systems. The only new behaviour is reviewing drafts and
+    acting on signals.
+  </p>
+  <div class="integrations-grid">
+    <div class="integration">
+      <div class="integration-icon">🟠</div>
+      <h4>HubSpot</h4>
+      <p>Primary data source. Full deal history, contacts, emails, notes, engagements. OAuth connect in 30 seconds. Webhook-driven for real-time stage changes.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">🔵</div>
+      <h4>Microsoft Outlook</h4>
+      <p>Draft delivery — saves approved drafts directly to rep's Outlook Drafts folder. Calendar sync for upcoming meeting context. Voice profile from sent items.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">🟢</div>
+      <h4>Fireflies.ai</h4>
+      <p>Call transcript ingestion via webhook. Participant cross-reference for champion identification. Action item extraction as deal signals.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">🟣</div>
+      <h4>Microsoft Teams</h4>
+      <p>Morning brief delivered as Adaptive Card each morning. Real-time critical signal alerts (urgency ≥ 0.85). Draft-ready notifications.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">🔶</div>
+      <h4>Perplexity</h4>
+      <p>External intelligence layer. Company news, leadership changes, regulatory events. Runs per account per nightly cycle.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">⬛</div>
+      <h4>Claude (Anthropic)</h4>
+      <p>All 6 agents run on Claude. Haiku 4.5 for bulk analysis (4 agents). Sonnet 4.6 for quality output — prioritisation and email writing.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">🔷</div>
+      <h4>Claude Desktop (MCP)</h4>
+      <p>Native MCP server. Reps can query deal context directly from Claude Desktop — "what's the status of [deal]?" — without opening the app.</p>
+    </div>
+    <div class="integration">
+      <div class="integration-icon">🌐</div>
+      <h4>Chrome Extension</h4>
+      <p>Overlay on HubSpot and LinkedIn pages. Shows urgency, health score, and top signal for the current deal without switching tabs.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- vs Actively AI -->
+<section id="vs" class="section">
+  <div class="section-label">Competitive Position</div>
+  <h2>Vantage vs Actively AI.</h2>
+  <p class="section-intro">
+    Actively AI raised $68M at a $250M valuation. They are the market leader in AI sales
+    agents. Here is how Vantage compares on the features that matter to enterprise buyers.
+  </p>
+  <table class="vs-table">
+    <thead>
+      <tr>
+        <th style="width:34%">Feature</th>
+        <th class="vantage" style="width:33%">Vantage</th>
+        <th style="width:33%">Actively AI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Grounding Agent</strong> — verifies signals against sources</td>
+        <td><span class="check">✓</span> GA from day one, every customer</td>
+        <td><span class="partial">~</span> Beta, behind feature flag</td>
+      </tr>
+      <tr>
+        <td><strong>Audit trail</strong> — every fact traced to source</td>
+        <td><span class="check">✓</span> Full Gold Data Layer with source citations, confidence scores, conflict resolution</td>
+        <td><span class="cross">✗</span> Opaque — "the AI recommended this"</td>
+      </tr>
+      <tr>
+        <td><strong>Semantic search</strong> — "find all accounts with competitive risk"</td>
+        <td><span class="check">✓</span> pgvector, same database, zero latency</td>
+        <td><span class="cross">✗</span> Not in public API</td>
+      </tr>
+      <tr>
+        <td><strong>HubSpot self-serve OAuth</strong></td>
+        <td><span class="check">✓</span> Connect in 30 seconds</td>
+        <td><span class="partial">~</span> Requires onboarding call</td>
+      </tr>
+      <tr>
+        <td><strong>MCP Server</strong> — works in Claude Desktop</td>
+        <td><span class="check">✓</span> Native stdio transport, 6 tools</td>
+        <td><span class="cross">✗</span> Not available</td>
+      </tr>
+      <tr>
+        <td><strong>Voice fidelity</strong> — drafts in rep's actual voice</td>
+        <td><span class="check">✓</span> Analysed from sent email history, per-rep</td>
+        <td><span class="partial">~</span> Generic tone adjustment</td>
+      </tr>
+      <tr>
+        <td><strong>Training signal loop</strong></td>
+        <td><span class="check">✓</span> Declined drafts with reason codes improve future output</td>
+        <td><span class="partial">~</span> Basic feedback</td>
+      </tr>
+      <tr>
+        <td><strong>Code-enforced safety gates</strong></td>
+        <td><span class="check">✓</span> 6 gates enforced in Python, not prompt instructions</td>
+        <td><span class="cross">✗</span> Not documented</td>
+      </tr>
+      <tr>
+        <td><strong>Cost per deal per night</strong></td>
+        <td><span class="check">✓</span> $0.22 — fully transparent, tracked per run</td>
+        <td>Not disclosed</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="divider" />
+
+<!-- Live Output -->
+<section id="output" class="section">
+  <div class="section-label">Live Output Examples</div>
+  <h2>Real output. Two live deals.</h2>
+  <p class="section-intro">Both examples are actual pipeline output from today's nightly run.</p>
+
+  <!-- Abu Dhabi -->
+  <div class="example-box" style="margin-top:32px;">
+    <div class="example-header">
+      <h4>Abu Dhabi Municipality — Tenderd &nbsp;·&nbsp; $1M Proposal</h4>
+      <span class="badge critical">AI Forecast: Omit</span>
+    </div>
+    <div class="example-body">
+      <div class="example-narrative">
+        "Arjun Mohan is the sole contact, 50+ days dark, using a @tenderd.com vendor email not a government domain — raising a critical authenticity question about whether this is a legitimate municipal deal or a vendor intermediary misrepresenting buyer access. Close date is 59 days past due, all 8 MEDDPICC components are at or near zero, and there is no evidence of a budget owner, evaluation process, or even confirmed buyer pain. This deal is effectively dead and should be formally disqualified unless contact identity can be verified through official Abu Dhabi government channels within 5 business days."
+      </div>
+      <div class="signal-row">
+        <span class="sig-badge critical">Critical</span>
+        <p><strong>champion_dark:</strong> Arjun Mohan unresponsive for 50+ days. Last engagement April 2026. Deal in active Proposal stage.</p>
+      </div>
+      <div class="signal-row">
+        <span class="sig-badge critical">Critical</span>
+        <p><strong>Contact legitimacy risk:</strong> Email domain @tenderd.com is a vendor/partner domain, not an Abu Dhabi government domain. May be intermediary, not buyer.</p>
+      </div>
+      <div class="signal-row">
+        <span class="sig-badge critical">Critical</span>
+        <p><strong>deal_slip:</strong> Close date March 31, 2026 — 59 days past due. Zero engagement since proposal stage entry.</p>
+      </div>
+      <div class="signal-row">
+        <span class="sig-badge high">High</span>
+        <p><strong>Recommended action:</strong> Validate deal legitimacy before any further selling. Verify contact's role through official government channels. If unresponsive in 5 days, disqualify.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thales AU -->
+  <div class="example-box" style="margin-top:20px;">
+    <div class="example-header">
+      <h4>Thales AU — Benalla Manufacturing &nbsp;·&nbsp; $100K Proposal</h4>
+      <span class="badge medium">AI Forecast: Pipeline</span>
+    </div>
+    <div class="example-body">
+      <div class="example-narrative">
+        "Matthew Fraser and Ye Sheng Tan drove a highly engaged May 13 site visit that validated manufacturing defect detection fit — both are now dark on simultaneous leave during the critical proposal evaluation window (Fraser returning ~May 30, Tan June 2), while the proposal sent May 28 outlines a clear LOI → ESG GIA grant → implementation path. No economic buyer has been identified or engaged at $100K Proposal stage — Matthew and Adam are technical champions, Ben Spilstead attended passively and may be the signatory. Recovery window opens June 2–9: if Fraser and Tan immediately name the finance owner and commit to an LOI target date, this is a Best Case deal within one week; without that, proposal momentum stalls into Q3."
+      </div>
+      <div class="email-preview">
+        <div class="email-preview-header">
+          Draft: <strong>Champion Re-engagement</strong> &nbsp;·&nbsp;
+          To: <strong>Matthew Fraser</strong> (CC: Ye Sheng Tan) &nbsp;·&nbsp;
+          Confidence: <strong style="color:var(--green);">0.83</strong> &nbsp;·&nbsp;
+          Sources: <strong>3 HubSpot records cited</strong>
+        </div>
+        <div class="email-preview-body">
+          Hope you are doing well, Matthew, and that the break was restful.<br><br>
+          I wanted to follow up on the proposal I sent just before you left. The Benalla visit was genuinely useful — Adam walked us through the facility in detail, and the CCTV infrastructure there is a strong fit for what we have in mind. I think you will find the numbers in the proposal reflect what we discussed on site.<br><br>
+          The key next step on our side is the LOI, which then triggers the ESG GIA grant approval and gets the project moving. Would you be able to jump on a 20-minute call this week so we can go through any questions and agree on the path forward? I have copied Ye Sheng Tan as well, since the grant process involves the Trust My Tech programme on her end.<br><br>
+          Thanks and Regards,<br>
+          Vishnu Saran<br>
+          CEO & Co-Founder, Invigilo Technologies
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+</div>
+
+<script>
+// Active sidebar link on scroll
+const links = document.querySelectorAll('.sidebar-link');
+const sections = document.querySelectorAll('[id]');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

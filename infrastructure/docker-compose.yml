@@ -1,0 +1,70 @@
+version: "3.9"
+
+# Vantage local development services
+# Start with: docker compose up -d
+# Then run: cd apps/api && alembic upgrade head
+
+services:
+
+  # PostgreSQL 16 + pgvector
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: vantage_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-vantage}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vantage_local}
+      POSTGRES_DB: ${POSTGRES_DB:-vantage}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: "--auth-local=scram-sha-256 --auth-host=scram-sha-256"
+    ports:
+      - "127.0.0.1:5433:5432"  # 5433 on localhost only — avoids conflict with native postgres on 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vantage -d vantage"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Redis (session cache + agent locks)
+  redis:
+    image: redis:7-alpine
+    container_name: vantage_redis
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"  # localhost only — needed when the API runs on the host (uvicorn --reload)
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru --requirepass ${REDIS_PASSWORD:-vantage_redis_local}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-vantage_redis_local}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Vantage API (development mode with hot reload)
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile.dev
+    container_name: vantage_api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vantage}:${POSTGRES_PASSWORD:-vantage_local}@postgres:5432/${POSTGRES_DB:-vantage}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-vantage_redis_local}@redis:6379/0
+    env_file:
+      - ../apps/api/.env
+    volumes:
+      - ../apps/api:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  pgdata:
+    name: vantage_pgdata

@@ -1,0 +1,28 @@
+{
+  "name": "@invigilo/vantage-mcp-server",
+  "version": "0.1.0",
+  "description": "Vantage MCP Server — per-account sales intelligence tools for Claude",
+  "main": "dist/index.js",
+  "bin": {
+    "vantage-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.1",
+    "axios": "^1.7.9",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.1",
+    "tsx": "^4.19.2"
+  },
+  "files": ["dist"],
+  "keywords": ["mcp", "sales", "crm", "ai", "claude"],
+  "license": "MIT"
+}

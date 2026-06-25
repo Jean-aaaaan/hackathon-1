@@ -1,0 +1,17 @@
+{
+  "name": "@vantage/chrome-extension",
+  "version": "0.1.0",
+  "description": "Vantage Sales Intelligence Chrome Extension — HubSpot + LinkedIn sidebar",
+  "private": true,
+  "scripts": {
+    "build": "tsc && node scripts/bundle.js",
+    "watch": "tsc --watch",
+    "zip": "node scripts/zip.js"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "typescript": "^5.3.3",
+    "esbuild": "^0.20.2",
+    "archiver": "^6.0.1"
+  }
+}

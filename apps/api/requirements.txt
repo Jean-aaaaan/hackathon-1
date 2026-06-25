@@ -1,0 +1,46 @@
+# Core
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.8.0,<3.0
+pydantic-settings>=2.7.0
+
+# Database
+sqlalchemy>=2.0.30
+alembic>=1.14.0
+asyncpg>=0.30.0
+psycopg2-binary>=2.9.9
+pgvector>=0.3.5
+
+# Cache
+redis>=5.2.0
+hiredis>=3.1.0
+
+# HTTP
+httpx>=0.28.0
+aiohttp>=3.11.0
+
+# Auth
+workos>=5.1.0
+PyJWT>=2.8.0
+
+# AI
+anthropic>=0.42.0
+voyageai>=0.3.3
+
+# Azure
+azure-servicebus>=7.14.0
+azure-keyvault-secrets>=4.9.0
+azure-identity>=1.19.0
+
+# Encryption
+cryptography>=44.0.0
+
+# Utilities
+pyyaml>=6.0.2
+structlog>=24.4.0
+sentry-sdk[fastapi]>=2.19.0
+posthog>=3.7.0
+python-multipart>=0.0.20
+python-dotenv>=1.0.1
+python-docx>=0.8.11
+python-pptx>=0.6.21

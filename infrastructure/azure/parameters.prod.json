@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName":    { "value": "prod" },
+    "location":           { "value": "southeastasia" },
+    "imageTag":           { "value": "REPLACE_WITH_COMMIT_SHA" },
+    "frontendUrl":        { "value": "https://vantage.invigilo.ai" },
+    "workosClientId":     { "value": "SET_IN_CI_OR_KEYVAULT" },
+    "hubspotClientId":    { "value": "SET_IN_CI_OR_KEYVAULT" },
+
+    "databaseUrl":           { "value": "SET_IN_CI_SECRET" },
+    "anthropicApiKey":       { "value": "SET_IN_CI_SECRET" },
+    "workosApiKey":          { "value": "SET_IN_CI_SECRET" },
+    "hubspotClientSecret":   { "value": "SET_IN_CI_SECRET" },
+    "perplexityApiKey":      { "value": "SET_IN_CI_SECRET" },
+    "voyageApiKey":          { "value": "SET_IN_CI_SECRET" },
+    "firefliesApiKey":       { "value": "SET_IN_CI_SECRET" },
+    "teamsWebhookUrl":       { "value": "SET_IN_CI_SECRET" },
+    "sentryDsn":             { "value": "" }
+  }
+}
