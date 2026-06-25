@@ -893,7 +893,7 @@ async def workspace_status(
                     "user_email": ws.outlook_user_email,
                 },
                 "fireflies": {
-                    "configured": bool(settings.fireflies_api_key),
+                    "configured": bool(ws.fireflies_api_key or settings.fireflies_api_key),
                 },
                 "teams": {
                     "configured": bool(settings.teams_webhook_url),
@@ -1039,6 +1039,27 @@ async def hubspot_sync(
         raise HTTPException(status_code=500, detail="HubSpot sync failed. Please try again or reconnect HubSpot in Settings.")
 
 
+class FirefliesConfigRequest(BaseModel):
+    api_key: str
+
+
+@router.post("/integrations/fireflies/configure")
+async def configure_fireflies(
+    body: FirefliesConfigRequest,
+    current_user: CurrentUser = Depends(require_manager()),
+    db: AsyncSession = Depends(get_db),
+):
+    """Store a per-workspace Fireflies API key (encrypted at rest)."""
+    result = await db.execute(select(Workspace).where(Workspace.id == current_user.workspace_id))
+    ws = result.scalar_one_or_none()
+    if not ws:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    ws.fireflies_api_key = body.api_key.strip() or None
+    await db.commit()
+    log.info("fireflies_api_key_saved", workspace_id=str(ws.id))
+    return {"data": {"configured": bool(ws.fireflies_api_key)}, "meta": {}}
+
+
 @router.post("/integrations/fireflies/backfill")
 async def fireflies_backfill(
     current_user: CurrentUser = Depends(require_manager()),
@@ -1056,8 +1077,11 @@ async def fireflies_backfill(
     from app.models.account import Interaction
     settings = get_settings()
 
-    if not settings.fireflies_api_key:
-        raise HTTPException(status_code=400, detail="FIREFLIES_API_KEY not configured")
+    ws_result = await db.execute(select(Workspace).where(Workspace.id == current_user.workspace_id))
+    ws_ff = ws_result.scalar_one_or_none()
+    fireflies_key = (ws_ff.fireflies_api_key if ws_ff else None) or settings.fireflies_api_key
+    if not fireflies_key:
+        raise HTTPException(status_code=400, detail="Fireflies API key not configured — add it in Settings → Integrations")
 
     # Load all accounts for the workspace with date fields for proximity matching
     accs_result = await db.execute(text("""
@@ -1113,7 +1137,7 @@ async def fireflies_backfill(
         calendar_events=len(calendar_events),
     )
 
-    client = FirefliesClient(api_key=settings.fireflies_api_key)
+    client = FirefliesClient(api_key=fireflies_key)
     matched = await backfill_all_transcripts(client, accounts, calendar_events=calendar_events)
 
     ingested = 0

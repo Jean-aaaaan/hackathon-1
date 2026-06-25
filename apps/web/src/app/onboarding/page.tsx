@@ -128,6 +128,18 @@ export default function OnboardingPage() {
   const [dealSize, setDealSize] = useState("");
   const [salesCycle, setSalesCycle] = useState("");
 
+  // Step 3 — Integrations
+  const [outlookConnected, setOutlookConnected] = useState(false);
+  const [outlookEmail, setOutlookEmail] = useState("");
+  const [voiceAnalyzing, setVoiceAnalyzing] = useState(false);
+  const [voiceResult, setVoiceResult] = useState<{ emails_analyzed: number; source: string } | null>(null);
+  const [firefliesKey, setFirefliesKey] = useState("");
+  const [firefliesSaving, setFirefliesSaving] = useState(false);
+  const [firefliesConfigured, setFirefliesConfigured] = useState(false);
+  const [teamsWebhook, setTeamsWebhook] = useState("");
+  const [teamsSaving, setTeamsSaving] = useState(false);
+  const [teamsSaved, setTeamsSaved] = useState(false);
+
   // Backfill from existing workspace settings on mount
   useEffect(() => {
     workspaceApi.get()
@@ -158,6 +170,22 @@ export default function OnboardingPage() {
         if (Array.isArray(icp.icp_regions)) setRegions(icp.icp_regions as string[]);
         if (typeof icp.typical_deal_size === "string") setDealSize(icp.typical_deal_size);
         if (typeof icp.sales_cycle_months === "string") setSalesCycle(icp.sales_cycle_months);
+
+        // Integrations
+        if (data.integrations?.outlook?.connected) {
+          setOutlookConnected(true);
+          setOutlookEmail(data.integrations.outlook.user_email ?? "");
+        }
+        const vp = s.voice_profile as Record<string, unknown> | undefined;
+        if (vp && typeof vp.emails_analyzed === "number") {
+          setVoiceResult({ emails_analyzed: vp.emails_analyzed, source: String(vp.source ?? "") });
+        }
+        if ((data.integrations as Record<string, unknown> & { fireflies?: { configured?: boolean } })?.fireflies?.configured) {
+          setFirefliesConfigured(true);
+        }
+        if ((data.integrations as Record<string, unknown> & { teams?: { configured?: boolean } })?.teams?.configured) {
+          setTeamsSaved(true);
+        }
       })
       .catch(() => {
         // No workspace yet — fresh onboarding, leave all fields empty
@@ -229,6 +257,59 @@ export default function OnboardingPage() {
       setError(e instanceof Error ? e.message : "Failed to save product context.");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleConnectOutlook = async () => {
+    setError("");
+    try {
+      const { data } = await workspaceApi.connectOutlook();
+      if (typeof window !== "undefined") localStorage.setItem("outlook_oauth_return", "/onboarding");
+      window.location.href = data.auth_url;
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to start Outlook connection.");
+    }
+  };
+
+  const handleAnalyzeVoice = async () => {
+    setVoiceAnalyzing(true);
+    setError("");
+    try {
+      const { data } = await workspaceApi.analyzeVoiceProfile();
+      setVoiceResult({ emails_analyzed: data.emails_analyzed, source: data.source });
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to analyze email voice.");
+    } finally {
+      setVoiceAnalyzing(false);
+    }
+  };
+
+  const handleSaveFireflies = async () => {
+    if (!firefliesKey.trim()) return;
+    setFirefliesSaving(true);
+    setError("");
+    try {
+      await workspaceApi.configureFireflies(firefliesKey.trim());
+      setFirefliesConfigured(true);
+      setFirefliesKey("");
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to save Fireflies key.");
+    } finally {
+      setFirefliesSaving(false);
+    }
+  };
+
+  const handleSaveTeams = async () => {
+    if (!teamsWebhook.trim()) return;
+    setTeamsSaving(true);
+    setError("");
+    try {
+      await workspaceApi.updateSettings({ teams_webhook_url: teamsWebhook.trim() });
+      setTeamsSaved(true);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Failed to save Teams webhook.");
+    } finally {
+      setTeamsSaving(false);
     }
   };
 
@@ -420,63 +501,149 @@ export default function OnboardingPage() {
           <div className="space-y-5">
             <div>
               <h2 className="text-lg font-semibold text-zinc-100 mb-1">Connect your tools</h2>
-              <p className="text-sm text-zinc-500">
-                These can be set up now or later in Settings.
-              </p>
+              <p className="text-sm text-zinc-500">All optional — can be configured later in Settings.</p>
             </div>
 
             <div className="space-y-3">
-              {[
-                {
-                  name: "HubSpot",
-                  desc: "Sync deals and push approved drafts as emails.",
-                  href: "/api/auth/hubspot",
-                  badge: "Recommended",
-                },
-                {
-                  name: "Fireflies",
-                  desc: "Auto-ingest call transcripts for meeting intelligence.",
-                  href: null,
-                  badge: "Configure in Settings",
-                },
-                {
-                  name: "Microsoft Teams",
-                  desc: "Get signal alerts and morning briefs in your sales channel.",
-                  href: null,
-                  badge: "Configure in Settings",
-                },
-              ].map((integration) => (
-                <div
-                  key={integration.name}
-                  className="flex items-center justify-between p-4 bg-zinc-800 rounded-xl border border-zinc-700"
-                >
+              {/* HubSpot */}
+              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-zinc-200">HubSpot</span>
+                    <span className="text-xs text-brand-400 bg-brand-900/30 px-2 py-0.5 rounded-full">Recommended</span>
+                  </div>
+                  <p className="text-xs text-zinc-500 mt-0.5">Sync deals and push approved emails directly.</p>
+                </div>
+                <a href="/api/auth/hubspot" className="text-xs text-brand-400 hover:text-brand-300 font-medium shrink-0">
+                  Connect
+                </a>
+              </div>
+
+              {/* Outlook + Voice Profile */}
+              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 space-y-3">
+                <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-zinc-200">{integration.name}</span>
-                      <span className="text-xs text-zinc-500 bg-zinc-700 px-2 py-0.5 rounded-full">
-                        {integration.badge}
-                      </span>
+                      <span className="text-sm font-medium text-zinc-200">Outlook</span>
+                      {outlookConnected && (
+                        <span className="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">
+                          {outlookEmail}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-0.5">{integration.desc}</p>
+                    <p className="text-xs text-zinc-500 mt-0.5">Read sent emails to match your writing voice.</p>
                   </div>
-                  {integration.href ? (
-                    <a
-                      href={integration.href}
-                      className="text-xs text-brand-400 hover:text-brand-300 font-medium"
-                    >
-                      Connect
-                    </a>
-                  ) : (
-                    <span className="text-xs text-zinc-600">Later</span>
-                  )}
+                  {outlookConnected
+                    ? <span className="text-emerald-500 text-sm shrink-0">✓</span>
+                    : <button onClick={handleConnectOutlook} className="text-xs text-brand-400 hover:text-brand-300 font-medium shrink-0">Connect</button>
+                  }
                 </div>
-              ))}
+
+                {/* Voice profile — only when Outlook connected */}
+                {outlookConnected && (
+                  <div className="border-t border-zinc-700 pt-3 flex items-center justify-between">
+                    <div>
+                      <div className="text-xs font-medium text-zinc-300">Email voice profile</div>
+                      <div className="text-xs text-zinc-500 mt-0.5">
+                        {voiceResult
+                          ? `${voiceResult.emails_analyzed} emails analyzed — agents will write in your tone`
+                          : "Analyze sent emails so agents match your writing style."}
+                      </div>
+                    </div>
+                    {!voiceResult
+                      ? (
+                        <button onClick={handleAnalyzeVoice} disabled={voiceAnalyzing}
+                          className="text-xs text-brand-400 hover:text-brand-300 font-medium disabled:opacity-50 shrink-0">
+                          {voiceAnalyzing ? "Analyzing..." : "Analyze"}
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className="text-xs text-emerald-500">✓ Done</span>
+                          <button onClick={handleAnalyzeVoice} disabled={voiceAnalyzing}
+                            className="text-xs text-zinc-500 hover:text-zinc-300">
+                            Re-run
+                          </button>
+                        </div>
+                      )
+                    }
+                  </div>
+                )}
+              </div>
+
+              {/* Fireflies */}
+              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-zinc-200">Fireflies</span>
+                      {firefliesConfigured && (
+                        <span className="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">Configured</span>
+                      )}
+                    </div>
+                    <p className="text-xs text-zinc-500 mt-0.5">Auto-ingest call transcripts for meeting intelligence.</p>
+                  </div>
+                </div>
+                {!firefliesConfigured ? (
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input type="password" value={firefliesKey} onChange={(e) => setFirefliesKey(e.target.value)}
+                        placeholder="Fireflies API key"
+                        className="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-brand-500" />
+                      <button onClick={handleSaveFireflies} disabled={firefliesSaving || !firefliesKey.trim()}
+                        className="text-xs px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-200 rounded-lg disabled:opacity-50 transition-colors shrink-0">
+                        {firefliesSaving ? "Saving..." : "Save"}
+                      </button>
+                    </div>
+                    <p className="text-xs text-zinc-600">
+                      Get your key at <span className="text-zinc-400">fireflies.ai → Settings → API</span>. Then register this webhook:
+                    </p>
+                    <div className="flex items-center gap-2 bg-zinc-900 rounded-lg px-3 py-1.5">
+                      <code className="text-xs text-zinc-400 flex-1 truncate">
+                        {(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000")}/webhooks/fireflies
+                      </code>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/webhooks/fireflies`)}
+                        className="text-xs text-zinc-500 hover:text-zinc-300 shrink-0">
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-zinc-500">
+                    Key saved. Register the webhook at <span className="text-zinc-400">fireflies.ai → Settings → Webhooks</span>.
+                  </p>
+                )}
+              </div>
+
+              {/* Microsoft Teams */}
+              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 space-y-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-zinc-200">Microsoft Teams</span>
+                    {teamsSaved && (
+                      <span className="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">Saved</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-zinc-500 mt-0.5">Signal alerts and morning briefs in your sales channel.</p>
+                </div>
+                {!teamsSaved ? (
+                  <div className="flex gap-2">
+                    <input type="url" value={teamsWebhook} onChange={(e) => setTeamsWebhook(e.target.value)}
+                      placeholder="https://outlook.office.com/webhook/..."
+                      className="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-brand-500" />
+                    <button onClick={handleSaveTeams} disabled={teamsSaving || !teamsWebhook.trim()}
+                      className="text-xs px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-200 rounded-lg disabled:opacity-50 transition-colors shrink-0">
+                      {teamsSaving ? "Saving..." : "Save"}
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-zinc-500">Webhook saved — alerts will post to your channel.</p>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-between pt-2">
-              <button onClick={() => setStep("product")} className={btnSecondary}>
-                Back
-              </button>
+              <button onClick={() => setStep("product")} className={btnSecondary}>Back</button>
               <button onClick={() => setStep("done")} className={btnPrimary}>
                 Finish setup
                 <ChevronRight className="w-4 h-4" />

@@ -40,7 +40,9 @@ function CallbackInner() {
         if (d.data?.connected) {
           setStatus("success");
           setMessage(`Connected as ${d.data.user_email}`);
-          setTimeout(() => router.push("/settings"), 1800);
+          const returnTo = typeof window !== "undefined" ? localStorage.getItem("outlook_oauth_return") : null;
+          if (returnTo) localStorage.removeItem("outlook_oauth_return");
+          setTimeout(() => router.push(returnTo ?? "/settings"), 1800);
         } else {
           setStatus("error");
           setMessage(d.error?.message || "Token exchange failed.");

@@ -36,6 +36,9 @@ class Workspace(Base):
     # Enrichment
     perplexity_api_key = Column(EncryptedText)
 
+    # Conversation intelligence
+    fireflies_api_key = Column(EncryptedText)
+
     # Notifications
     slack_webhook_url = Column(EncryptedText)
     teams_webhook_url = Column(EncryptedText)

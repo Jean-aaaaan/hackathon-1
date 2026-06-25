@@ -239,6 +239,15 @@ export const workspaceApi = {
       "/v1/workspace/voice-profile/analyze",
       { method: "POST" }
     ),
+
+  connectOutlook: () =>
+    request<{ data: { auth_url: string }; meta: Meta }>("/v1/workspace/integrations/outlook/connect"),
+
+  configureFireflies: (api_key: string) =>
+    request<{ data: { configured: boolean }; meta: Meta }>("/v1/workspace/integrations/fireflies/configure", {
+      method: "POST",
+      body: JSON.stringify({ api_key }),
+    }),
   addWebhook: (body: { url: string; events: string[] }) =>
     request<{ data: WebhookSubscription; meta: Meta }>("/v1/workspace/webhooks", {
       method: "POST",
