@@ -14,9 +14,9 @@ import { toast } from "sonner";
 import { useCommandPalette } from "@/components/providers";
 import { CommandPalette } from "@/components/ui/command-palette";
 
-// ── Invigilo logo mark ─────────────────────────────────────────────────────────
+// ── Vantage logo mark ──────────────────────────────────────────────────────────
 
-function InvigiloMark({ className }: { className?: string }) {
+function VantageMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true">
       <rect width="32" height="32" rx="8" fill="#6366F1" />
@@ -209,7 +209,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
 
         {/* Brand */}
         <Link href="/inbox" className="flex items-center gap-2 flex-shrink-0">
-          <InvigiloMark className="w-7 h-7" />
+          <VantageMark className="w-7 h-7" />
           <span className="text-sm font-semibold text-zinc-900 hidden lg:block">Vantage</span>
         </Link>
 

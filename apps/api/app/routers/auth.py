@@ -123,8 +123,13 @@ async def callback(
     _email_hash = _hl.sha256(user.email.encode()).hexdigest()[:12]
     log.info("user_logged_in", email_hash=_email_hash, workspace_id=str(ws_user.workspace_id))
 
-    # Redirect to frontend with session token in secure cookie
-    response = RedirectResponse(url=f"{settings.frontend_url}/inbox")
+    # Check whether the workspace has been configured; new workspaces need onboarding
+    ws_result = await db.execute(select(Workspace).where(Workspace.id == ws_user.workspace_id))
+    ws = ws_result.scalar_one_or_none()
+    workspace_configured = bool(ws and ws.settings and ws.settings.get("sender_name"))
+    redirect_path = "/inbox" if workspace_configured else "/onboarding"
+
+    response = RedirectResponse(url=f"{settings.frontend_url}{redirect_path}")
     response.set_cookie(
         key="vantage_session",
         value=session_token,

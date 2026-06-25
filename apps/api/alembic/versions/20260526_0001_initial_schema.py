@@ -295,14 +295,14 @@ def upgrade() -> None:
     op.create_index("ix_conversations_account", "conversations", ["account_id"])
     op.create_index("ix_conversations_updated", "conversations", ["updated_at"])
 
-    # ── seed: default workspace for Invigilo internal use ─────────────────────
+    # ── seed: default demo workspace ──────────────────────────────────────────
     op.execute("""
         INSERT INTO workspaces (id, name, slug, plan, settings)
         VALUES (
             '00000000-0000-0000-0000-000000000001',
-            'Invigilo AI',
-            'invigilo',
-            'internal',
+            'Demo Workspace',
+            'demo',
+            'free',
             '{"push_threshold": 0.85, "urgency_threshold": 0.7, "digest_hour_utc": 6}'::jsonb
         )
         ON CONFLICT DO NOTHING;

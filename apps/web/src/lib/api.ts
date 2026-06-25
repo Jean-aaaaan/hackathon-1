@@ -277,6 +277,38 @@ export const workspaceApi = {
 
   deleteProposalTemplate: () =>
     request<{ data: { deleted: boolean } }>("/v1/workspace/documents/template", { method: "DELETE" }),
+
+  setup: (body: {
+    sender_name: string;
+    sender_title?: string;
+    sender_company: string;
+    product_name: string;
+    product_description: string;
+    seller_domains?: string[];
+    icp_industries?: string[];
+    icp_regions?: string[];
+    typical_deal_size?: string;
+    sales_cycle_months?: string;
+    differentiators?: string[];
+    competitors?: string[];
+    pain_points?: string[];
+  }) =>
+    request<{ status: string; workspace_id: string }>("/v1/workspace/setup", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  create: (body: {
+    company_name: string;
+    slug: string;
+    sender_name?: string;
+    sender_title?: string;
+    seller_domains?: string[];
+  }) =>
+    request<{ id: string; name: string; slug: string }>("/v1/workspace/create", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
 };
 
 // ── Auth ──────────────────────────────────────────────────────────────────────

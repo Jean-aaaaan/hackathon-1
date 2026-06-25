@@ -622,8 +622,8 @@ class NightlyWorker:
                         hs_contact_emails[sig["email"].lower()] = sig
 
                 # Collect all unique participant emails from Fireflies (buyer side only)
-                # Filter out internal Invigilo emails to isolate buyer participants
-                internal_domains = {"invigilo.sg", "invigilo.ai"}
+                # Filter out internal seller emails to isolate buyer participants
+                internal_domains = set((ws.settings or {}).get("seller_domains", []))
                 buyer_participants: dict[str, list[str]] = {}  # email → list of transcript titles
                 for transcript in fireflies_transcripts:
                     for participant_email in (transcript.get("participants") or []):

@@ -62,7 +62,7 @@ function buildSidebarHTML(data: {
   // Top action
   const topAction = actions?.next_actions?.[0];
 
-  const frontendUrl = "https://vantage.invigilo.ai";
+  const frontendUrl = "https://app.vantage.ai";
   const accountId = account.id as string;
 
   return `

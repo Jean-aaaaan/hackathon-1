@@ -3,7 +3,7 @@
  * Handles settings save/load and connection status check.
  */
 
-const DEFAULT_API_URL = "https://api.vantage.invigilo.ai";
+const DEFAULT_API_URL = "https://api.vantage.ai";
 
 async function loadSettings() {
   const result = await chrome.storage.sync.get(["apiKey", "apiUrl"]);

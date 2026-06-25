@@ -5,7 +5,7 @@
     "environmentName":    { "value": "prod" },
     "location":           { "value": "southeastasia" },
     "imageTag":           { "value": "REPLACE_WITH_COMMIT_SHA" },
-    "frontendUrl":        { "value": "https://vantage.invigilo.ai" },
+    "frontendUrl":        { "value": "https://app.vantage.ai" },
     "workosClientId":     { "value": "SET_IN_CI_OR_KEYVAULT" },
     "hubspotClientId":    { "value": "SET_IN_CI_OR_KEYVAULT" },
 

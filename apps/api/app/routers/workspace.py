@@ -366,99 +366,99 @@ async def update_settings(
     return {"data": {"settings": _safe_settings(settings)}, "meta": {}}
 
 
-@router.post("/seed-invigilo")
-async def seed_invigilo_context(
+class WorkspaceSetupRequest(BaseModel):
+    sender_name: str
+    sender_title: str = "Account Executive"
+    sender_company: str
+    product_name: str
+    product_description: str
+    seller_domains: list[str] = []
+    icp_industries: list[str] = []
+    icp_regions: list[str] = []
+    typical_deal_size: str = ""
+    sales_cycle_months: str = ""
+    differentiators: list[str] = []
+    competitors: list[str] = []
+    pain_points: list[str] = []
+
+
+class WorkspaceCreateRequest(BaseModel):
+    company_name: str
+    slug: str
+    sender_name: str = ""
+    sender_title: str = "Account Executive"
+    seller_domains: list[str] = []
+
+
+@router.post("/setup")
+async def setup_workspace_context(
+    body: WorkspaceSetupRequest,
     current_user: CurrentUser = Depends(require_manager()),
     db: AsyncSession = Depends(get_db),
 ):
     """
-    One-time seed: pre-populate workspace settings with Invigilo AI context
-    so the DrafterAgent writes with correct product knowledge from day one.
-    Safe to call multiple times — only fills in missing fields.
+    Populate workspace agent context from onboarding or settings UI.
+    Idempotent — safe to call repeatedly; merges into existing settings.
     """
     result = await db.execute(select(Workspace).where(Workspace.id == current_user.workspace_id))
     ws = result.scalar_one_or_none()
     if not ws:
         raise HTTPException(status_code=404, detail="Workspace not found")
 
-    settings = dict(ws.settings or {})
-    seeded = {}
-
-    _product_desc = (
-        "SafeKey by Invigilo AI. AI-powered safety monitoring platform for high-risk industries. "
-        "Plugs into existing CCTV infrastructure, no new cameras required. "
-        "60+ computer vision models, 40+ safety detections, real-time alerts. "
-        "ISO 27001 certified. Proven in MENA (KSA, UAE, Oman), Singapore, and Australia. "
-        "Industries: construction, oil & gas, manufacturing, mining, logistics. "
-        "Key differentiator: works on existing cameras where competitors require hardware replacement. "
-        "Flat SaaS pricing, no per-detection fees. On-premise or cloud."
-    )
-    defaults = {
-        "sender_name": "Vishnu Saran",
-        "sender_title": "CEO & Co-Founder",
-        "sender_company": "Invigilo AI",
-        "product_description": _product_desc,
-        # icp_profile — nested object read by AgentOrchestrator via sc.get("icp_profile")
+    existing = dict(ws.settings or {})
+    existing.update({
+        "sender_name": body.sender_name,
+        "sender_title": body.sender_title,
+        "sender_company": body.sender_company,
+        "seller_domains": body.seller_domains,
+        "product_description": f"{body.product_name}: {body.product_description}",
         "icp_profile": {
-            "product_name": "SafeKey",
-            "product_description": _product_desc,
-            "ideal_customer": (
-                "Enterprise operator in construction, oil & gas, manufacturing, mining, or logistics "
-                "with 500+ employees, multi-site operations, existing CCTV infrastructure, and active "
-                "HSE compliance obligations (OSHA, ISO 45001, Ministry of Labour, WSH, NOPSEMA). "
-                "Primary geographies: MENA (KSA, UAE, Oman), Singapore, Australia."
-            ),
-            "differentiators": [
-                "Works on existing cameras — no hardware replacement required (Voxel requires upgrades for 80% of use cases)",
-                "60+ CV models trained on real industrial environments, not generic CCTV footage",
-                "ISO 27001 certified — only player in this category with this certification",
-                "Flat SaaS pricing, no per-detection fees — predictable cost at scale",
-                "On-premise option for data sovereignty (government and NOC clients)",
-                "Proven in MENA where Ministry of Labour regulatory pressure is intense",
-            ],
-            "competitors": ["Voxel", "Chooch AI", "Protex AI", "viAct", "StereoVision", "Intenseye", "Anvil", "Spot-r"],
-            "pain_points": [
-                "Regulatory compliance pressure (OSHA, ISO 45001, Ministry of Labour, WSH, NOPSEMA)",
-                "Safety incident rate and insurance cost reduction",
-                "Manual safety patrol gaps — incidents not detected in real time",
-                "Existing CCTV investment underutilised (footage only reviewed after incidents)",
-                "Permit-to-work compliance and audit trail requirements",
-            ],
-            "reference_stories": [
-                "O&G NOC contractor in KSA, 200+ cameras, 40% reduction in recordable incidents in 6 months. Champion: Site HSE Director. Won on ISO 27001 + Ministry of Labour compliance mapping.",
-                "Precision electronics manufacturer (Singapore), 120 cameras, automated shift compliance reports. Won against Voxel on integration depth and on-premise data sovereignty.",
-                "Government-linked infrastructure construction project, 80 cameras, permit-to-work integration. Won against Spot-r on AI accuracy and total cost.",
-            ],
-            "icp_champion_roles": ["HSE Manager", "HSQE Director", "Safety Manager", "EHS Director", "VP Safety", "Head of HSE"],
-            "icp_eb_roles": ["CFO", "VP Operations", "COO", "CISO", "CEO", "General Manager"],
-            "icp_industries": ["construction", "oil_and_gas", "manufacturing", "mining", "logistics"],
-            "icp_regions": ["MENA", "KSA", "UAE", "Oman", "Singapore", "Australia"],
-            "typical_deal_size_sgd": "SGD 80K-500K one-time + SGD 30K-150K/year SaaS",
-            "sales_cycle_months": "3-9 months standard; 6-18 months for government and NOCs",
+            "product_name": body.product_name,
+            "ideal_customer": ", ".join(body.icp_industries),
+            "differentiators": body.differentiators,
+            "competitors": body.competitors,
+            "pain_points": body.pain_points,
+            "icp_industries": body.icp_industries,
+            "icp_regions": body.icp_regions,
+            "typical_deal_size": body.typical_deal_size,
+            "sales_cycle_months": body.sales_cycle_months,
         },
-        "competitors": ["Voxel", "Chooch AI", "Protex AI", "viAct", "StereoVision", "Intenseye", "Anvil", "Spot-r"],
-    }
-
-    for key, value in defaults.items():
-        if not settings.get(key):
-            settings[key] = value
-            seeded[key] = value
-
-    ws.settings = settings
+    })
+    ws.settings = existing
+    db.add(ws)
     await db.commit()
-    from sqlalchemy.orm.attributes import flag_modified
-    flag_modified(ws, "settings")
-    await db.commit()
+    log.info("workspace_setup_saved", workspace_id=str(ws.id))
+    return {"status": "ok", "workspace_id": str(ws.id)}
 
-    log.info("invigilo_context_seeded", workspace_id=current_user.workspace_id, fields=list(seeded.keys()))
-    return {
-        "data": {
-            "seeded_fields": list(seeded.keys()),
-            "already_configured": [k for k in defaults if k not in seeded],
-            "message": f"Seeded {len(seeded)} fields. Run again to add any new defaults.",
+
+@router.post("/create", status_code=201)
+async def create_workspace(
+    body: WorkspaceCreateRequest,
+    current_user: CurrentUser = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Create a new workspace during onboarding."""
+    ws = Workspace(
+        name=body.company_name,
+        slug=body.slug,
+        plan="free",
+        settings={
+            "push_threshold": 0.85,
+            "urgency_threshold": 0.7,
+            "digest_hour_utc": 6,
+            "sender_name": body.sender_name,
+            "sender_title": body.sender_title,
+            "sender_company": body.company_name,
+            "seller_domains": body.seller_domains,
         },
-        "meta": {},
-    }
+    )
+    db.add(ws)
+    await db.flush()
+    wu = WorkspaceUser(workspace_id=ws.id, workos_user_id=current_user.workos_user_id, email=current_user.email, role="admin")
+    db.add(wu)
+    await db.commit()
+    await db.refresh(ws)
+    return {"id": str(ws.id), "name": ws.name, "slug": ws.slug}
 
 
 @router.get("/team")
@@ -721,11 +721,11 @@ async def outlook_sync_calendar(
 
         # Extract the real company domain root from each external attendee email
         # Uses _domain_root() which skips generic subdomain prefixes like "partner.*"
-        invigilo_domains = {"invigilo.ai", "invigilo.com", "invigilo.sg"}
+        seller_domains = set((ws.settings or {}).get("seller_domains", []))
         ext_domains = set()
         for email in attendee_emails:
             parts_e = email.split("@")
-            if len(parts_e) != 2 or parts_e[1] in invigilo_domains:
+            if len(parts_e) != 2 or parts_e[1] in seller_domains:
                 continue
             root = _domain_root(email)
             if root and root not in _SELLER_DOMAINS and root not in _GENERIC_SUBDOMAIN_PREFIXES:

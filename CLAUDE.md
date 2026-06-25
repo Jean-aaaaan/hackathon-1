@@ -1,13 +1,13 @@
 # Vantage — CLAUDE.md
-**Last updated:** 2026-05-26  
+**Last updated:** 2026-06-25  
 **Sprint:** 3 — COMPLETE ✅ All sprints shipped  
-**Mode:** PRODUCT (internal usage, Invigilo sales team)
+**Mode:** HACKATHON (multi-tenant, self-serve onboarding)
 
 ## What This Is
-Per-Account Agent Platform. One AI agent per HubSpot deal. Monitors signals 24/7, assembles account context, generates drafted emails + meeting briefs nightly. Built to match + beat Actively AI ($68M, $250M valuation) — faster, more auditable, self-serve.
+Per-Account Agent Platform. One AI agent per HubSpot deal. Monitors signals 24/7, assembles account context, generates drafted emails + meeting briefs nightly. Multi-tenant and self-serve. Any company can sign up and run agents from day one via the onboarding wizard.
 
 ## Project Root
-`C:\ClaudeProjects\Products\SalesAgent\`
+`C:\ClaudeProjects\Products\VantageHackathon\`
 
 ## Monorepo Structure
 ```
@@ -78,7 +78,9 @@ src/components/ui/skeleton.tsx   ✅
 src/components/providers.tsx     ✅ TanStack Query
 src/lib/api.ts                   ✅ All API methods + SSE streaming + Analytics types
 src/lib/utils.ts                 ✅ cn + formatters
-src/middleware.ts                ✅ Session cookie auth guard
+src/middleware.ts                ✅ Session cookie auth guard + onboarding redirect
+src/app/onboarding/layout.tsx   ✅ Centered layout (no sidebar)
+src/app/onboarding/page.tsx     ✅ 4-step wizard: Company → Product → Integrations → Done
 ```
 
 ### MCP Server — COMPLETE ✅
@@ -181,7 +183,7 @@ Before running `az deployment group create`:
    `AZURE_CREDENTIALS`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
 3. Set Vercel project env vars: `NEXT_PUBLIC_API_URL` pointing to Container App FQDN
 4. Register Fireflies webhook: Fireflies.ai → Settings → Webhooks →
-   `POST https://api.vantage.invigilo.ai/webhooks/fireflies`
+   `POST https://api.vantage.ai/webhooks/fireflies`
 5. Create Teams incoming webhook in the sales channel, copy URL to `TEAMS_WEBHOOK_URL`
 6. Load Chrome Extension: chrome://extensions → Developer mode → Load unpacked → `packages/chrome-extension/dist/`
 
@@ -189,7 +191,7 @@ Before running `az deployment group create`:
 - "Smart Fields" — AI suggests HubSpot field updates from signal context
 - Embedded HubSpot trigger buttons (1-click Run Agent from inside HubSpot sidebar)
 - Training signal loop UI — declined draft reasons visible in Analytics
-- Multi-workspace support (schema is ready; UI toggle not built)
+- Workspace switcher UI (schema + creation ready; multi-workspace dropdown in sidebar not yet built)
 - Mobile-responsive Inbox (currently desktop-first)
 
 ## North Star KPI
@@ -199,7 +201,7 @@ Draft Acceptance Rate (DAR) > 60% by Week 8
 - ADR-001: Azure Service Bus over Temporal (simpler at MVP scale)
 - ADR-002: pgvector over Pinecone (same DB, no extra vendor)
 - ADR-003: Gold Data Layer always visible (Audit Panel — differentiator vs Actively AI)
-- ADR-004: Internal usage first (single workspace Invigilo), schema is multi-tenant-ready
+- ADR-004: Multi-tenant by default — any company can onboard via the self-serve wizard; schema supports unlimited workspaces
 - ADR-005: VoyageAI voyage-3-lite for embeddings (1536-dim, matches OpenAI dim, no dependency on OpenAI)
 
 ## Differentiators vs Actively AI

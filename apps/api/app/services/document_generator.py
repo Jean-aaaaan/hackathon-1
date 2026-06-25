@@ -33,11 +33,24 @@ def _strip_dashes_deep(value):
 
 log = structlog.get_logger()
 
-# Invigilo brand colours
+# Brand colours
 NAVY   = (26, 60, 110)       # #1A3C6E
 ORANGE = (232, 119, 34)      # #E87722
 WHITE  = (255, 255, 255)
 GREY   = (100, 100, 100)
+
+
+def _ws_sender(data: dict) -> dict:
+    """Extract sender/company context from workspace settings, with generic fallbacks."""
+    ws = data.get("workspace")
+    settings = (ws.settings or {}) if ws else {}
+    return {
+        "name":    settings.get("sender_name") or "Your Name",
+        "title":   settings.get("sender_title") or "Account Executive",
+        "company": settings.get("sender_company") or "Our Company",
+        "email":   settings.get("sender_email") or "",
+        "product": settings.get("product_description") or settings.get("product_name") or "our product",
+    }
 
 HAIKU_MODEL = "claude-haiku-4-5-20251001"
 
@@ -220,7 +233,8 @@ Call notes:
 Known competitor: {competitor or 'None identified.'}
 """
 
-    prompt = f"""You are writing a professional safety technology proposal for Invigilo AI (AI workplace safety monitoring for construction, O&G, manufacturing, logistics).
+    sender = _ws_sender(data)
+    prompt = f"""You are writing a professional B2B proposal for {sender['company']} ({sender['product']}).
 Write in a confident, direct, consultative tone. Plain sentences only. No em-dashes, no bullet points, no markdown. Maximum 3 sentences per paragraph.
 
 Client context:
@@ -229,11 +243,11 @@ Client context:
 Write the following proposal sections as a JSON object. Each value must be plain prose (no markdown, no dashes):
 
 {{
-  "exec_summary": "2-3 sentences. Lead with the client's core challenge. End with what Invigilo proposes.",
-  "challenge": "2-3 sentences. Describe the specific safety or operational challenge this client faces based on the context.",
+  "exec_summary": "2-3 sentences. Lead with the client's core challenge. End with what the vendor proposes.",
+  "challenge": "2-3 sentences. Describe the specific challenge this client faces based on the context.",
   "business_case": "2-3 sentences. Quantify the cost of inaction. Reference any known metrics or industry benchmarks.",
-  "why_invigilo": "2-3 sentences. Why Invigilo specifically. Reference ISO 27001, 60+ models, 40+ clients, relevant case study.",
-  "solution_overview": "2-3 sentences. High-level description of the SafeKey deployment for this client.",
+  "why_vendor": "2-3 sentences. Why this vendor specifically. Reference key differentiators and relevant case study.",
+  "solution_overview": "2-3 sentences. High-level description of the proposed solution for this client.",
   "next_steps": "3 numbered action items as a single string, each on a new line. Format: 1. [action]\\n2. [action]\\n3. [action]"
 }}
 
@@ -258,13 +272,14 @@ Return only valid JSON. No extra text."""
     except Exception:
         log.warning("claude_sections_parse_failed", raw=raw[:200])
         # Fallback to empty strings so the doc still generates
+        _sender = _ws_sender(data)
         sections = {
-            "exec_summary": f"{name} requires real-time AI safety monitoring. Invigilo AI proposes a SafeKey deployment to address this directly.",
-            "challenge": "The client faces operational and safety monitoring challenges in a high-risk environment.",
-            "business_case": "Workplace incidents generate significant direct and indirect costs. Proactive AI monitoring reduces incident rates by 40-60%.",
-            "why_invigilo": "Invigilo AI is ISO 27001 certified with 60+ detection models deployed across 40+ clients in Singapore, MENA, and Australia.",
-            "solution_overview": f"We propose deploying SafeKey across {name} facilities, integrating with existing CCTV infrastructure for real-time AI safety monitoring.",
-            "next_steps": "1. Review proposal and confirm deployment scope\n2. Schedule technical site walkthrough\n3. Proceed to formal contract and implementation",
+            "exec_summary": f"{name} faces operational challenges that {_sender['company']} can address with {_sender['product']}.",
+            "challenge": "The client faces operational challenges in a competitive environment.",
+            "business_case": "Delays in addressing these challenges generate measurable direct and indirect costs.",
+            "why_vendor": f"{_sender['company']} offers a proven solution with key differentiators tailored to this client.",
+            "solution_overview": f"We propose deploying {_sender['product']} for {name} to address the identified challenges.",
+            "next_steps": "1. Review proposal and confirm scope\n2. Schedule technical walkthrough\n3. Proceed to formal contract and implementation",
         }
 
     return sections
@@ -348,7 +363,7 @@ async def generate_proposal(account_id: str, db: AsyncSession) -> bytes:
     Generate a proposal .docx using:
     - Claude Haiku for all section prose (matches /proposal skill quality)
     - User-uploaded template .docx as base document (if available)
-    - Invigilo 10-section structure
+    - Vendor 10-section structure
     """
     data = await _load_account_data(account_id, db)
     name     = data["name"]
@@ -381,10 +396,11 @@ async def generate_proposal(account_id: str, db: AsyncSession) -> bytes:
         run.font.color.rgb = RGBColor(*color)
         return p
 
-    centered("Safety Intelligence Proposal", 22, bold=True)
+    sender = _ws_sender(data)
+    centered("Sales Intelligence Proposal", 22, bold=True)
     centered(f"Prepared for {name}", 14, color=ORANGE)
     centered(f"{stage}  |  {amount}  |  {_today_str()}", 11, color=GREY)
-    centered("Prepared by Invigilo AI  |  Confidential", 10, color=GREY)
+    centered(f"Prepared by {sender['company']}  |  Confidential", 10, color=GREY)
     doc.add_page_break()
 
     # ── 1. Executive Summary ───────────────────────────────────────────────
@@ -411,16 +427,14 @@ async def generate_proposal(account_id: str, db: AsyncSession) -> bytes:
     _add_body(doc, sections.get("business_case", ""))
     doc.add_paragraph()
 
-    # ── 4. Why Invigilo AI ────────────────────────────────────────────────
-    _add_heading(doc, "4. Why Invigilo AI")
-    _add_body(doc, sections.get("why_invigilo", ""))
+    # ── 4. Why Us ─────────────────────────────────────────────────────────
+    _add_heading(doc, f"4. Why {sender['company']}")
+    _add_body(doc, sections.get("why_vendor", ""))
     doc.add_paragraph()
     _add_table(doc,
         ["Metric", "Result"],
         [
-            ["AI detection models",                "60+"],
-            ["Safety clients (SG, MENA, AU)",      "40+"],
-            ["Certifications",                     "ISO 27001, GDPR, PDPA, SG Cyber Safe"],
+            ["Product",                            sender['product']],
             ["MEDDPICC score (this deal)",         f"{int((meddpicc.get('overall_score') or 0) * 100)}%"],
         ]
     )
@@ -453,9 +467,8 @@ async def generate_proposal(account_id: str, db: AsyncSession) -> bytes:
     # ── 7. Privacy and Compliance ─────────────────────────────────────────
     _add_heading(doc, "7. Privacy and Compliance")
     _add_body(doc,
-        "Invigilo AI is ISO 27001 certified. The platform supports face blurring, body-only detection, "
-        "and configurable auto-delete to meet PDPA, GDPR, and local data residency requirements. "
-        "All video is processed at the edge and never stored in raw form on cloud infrastructure."
+        f"{sender['company']} meets enterprise data privacy requirements. "
+        "The platform supports configurable data retention and deletion policies to meet PDPA, GDPR, and local data residency requirements."
     )
     doc.add_paragraph()
 
@@ -492,9 +505,9 @@ async def generate_proposal(account_id: str, db: AsyncSession) -> bytes:
                 r = p.add_run(line.lstrip("0123456789. "))
                 r.font.size = Pt(11)
                 r.font.name = "Calibri"
+    contact_line = f"Contact {sender['name']} at {sender['email']} to proceed." if sender['email'] else f"Contact {sender['name']} to proceed."
     _add_body(doc,
-        f"\nThis proposal is valid for 30 days from {_today_str()}. "
-        "Contact Vishnu Saran at vishnu@invigilo.ai to proceed."
+        f"\nThis proposal is valid for 30 days from {_today_str()}. {contact_line}"
     )
 
     # ── Data attribution footer ────────────────────────────────────────────
@@ -517,7 +530,7 @@ async def generate_proposal(account_id: str, db: AsyncSession) -> bytes:
 async def _claude_deck_content(data: dict) -> dict:
     """
     Claude Haiku writes the 5 personalized sections of the deck.
-    All other slides use hardcoded Invigilo content.
+    All other slides use workspace-configured content.
     """
     settings = get_settings()
     client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
@@ -542,8 +555,9 @@ async def _claude_deck_content(data: dict) -> dict:
     meddpicc_pain = meddpicc.get("implicate_pain") or {}
     pain_text = (meddpicc_pain.get("evidence") or meddpicc_pain.get("text") or "") if isinstance(meddpicc_pain, dict) else ""
 
-    prompt = f"""You are writing slides for an Invigilo AI sales deck for a meeting with {name}.
-Invigilo AI sells AI-powered workplace safety monitoring (construction, O&G, manufacturing, mining).
+    deck_sender = _ws_sender(data)
+    prompt = f"""You are writing slides for a {deck_sender['company']} sales deck for a meeting with {name}.
+{deck_sender['company']} sells: {deck_sender['product']}.
 
 Client context:
 - Name: {name}
@@ -561,7 +575,7 @@ Client context:
 Return JSON only. No markdown. No extra text.
 
 {{
-  "headline": "One sentence: why {name} needs SafeKey specifically. Start with the client name. Plain sentence, no jargon.",
+  "headline": "One sentence: why {name} needs {deck_sender['product']} specifically. Start with the client name. Plain sentence, no jargon.",
   "context_bullets": [
     "Bullet 1: 1 sentence about this client's industry/operational context",
     "Bullet 2: 1 sentence about the safety challenge they face based on signals",
@@ -576,7 +590,7 @@ Return JSON only. No markdown. No extra text.
     "Result 2 with number",
     "Result 3 with context"
   ],
-  "why_us_headline": "Why Invigilo specifically for {name}. Max 10 words.",
+  "why_us_headline": "Why us specifically for {name}. Max 10 words.",
   "why_us_points": [
     "Differentiator 1 specific to this deal (based on their stage/signals/competitor)",
     "Differentiator 2 (reference ISO 27001, data sovereignty, or relevant cert)",
@@ -613,11 +627,11 @@ Return JSON only. No markdown. No extra text.
             "case_study_client": "HDB",
             "case_study_headline": "60% reduction in near-miss incidents",
             "case_study_bullets": ["8:1 AI vs manual detection ratio", "30 cameras deployed across 5 sites", "6-month deployment timeline"],
-            "why_us_headline": f"Why Invigilo AI for {name}",
+            "why_us_headline": f"Why us for {name}",
             "why_us_points": [
-                "60+ detection models GA from day 1, not gated behind feature flags like competitors.",
-                "ISO 27001 certified with full edge processing — no raw video stored outside your jurisdiction.",
-                "Proven in Singapore, MENA, and Australia with 40+ clients in construction and O&G."
+                "Proven solution with strong differentiators tailored to your requirements.",
+                "Enterprise-grade security and data sovereignty controls.",
+                "Track record of successful deployments and measurable outcomes."
             ],
             "next_step_1": f"Review this deck and confirm the deployment scope with {name} safety team.",
             "next_step_2": "Schedule a 1-hour technical site walkthrough to map existing camera infrastructure.",
@@ -627,7 +641,7 @@ Return JSON only. No markdown. No extra text.
 
 async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
     """
-    15-slide PowerPoint deck — Invigilo branding, Claude-personalized on 5 key slides.
+    15-slide PowerPoint deck — Claude-personalized on 5 key slides.
     Structure: Hero → Context → Challenge → Product → Case Study → Why Us → Next Steps
     """
     from pptx import Presentation
@@ -637,6 +651,7 @@ async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
 
     data  = await _load_account_data(account_id, db)
     deck  = await _claude_deck_content(data)
+    deck_sender = _ws_sender(data)
 
     name   = data["name"]
     stage  = data["stage"]
@@ -693,7 +708,7 @@ async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
         box(slide, 0, 0, 13.33, 0.55, NAVY)
         txt(slide, 0.4, 0.07, 9, 0.4, slide_title, size=16, bold=True,
             color=WHITE)
-        txt(slide, 9.8, 0.1, 3.3, 0.35, "INVIGILO AI", size=11, bold=True,
+        txt(slide, 9.8, 0.1, 3.3, 0.35, deck_sender["company"].upper(), size=11, bold=True,
             color=(180, 195, 220), align=PP_ALIGN.RIGHT)
 
     def stat_card(slide, l: float, t: float, number: str, label: str, bg_color=NAVY):
@@ -722,7 +737,10 @@ async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
     box(s, 0.8, 3.3, 4.8, 0.05, ORANGE)
     txt(s, 0.8, 3.55, 8, 0.5, f"Prepared for {name}", size=15, bold=True, color=ORANGE)
     txt(s, 0.8, 4.15, 8, 0.4, f"{stage}  ·  {amount}  ·  {_today_str()}", size=12, color=(160, 175, 200))
-    txt(s, 0.8, 6.6, 6, 0.4, "Vishnu Saran, CEO  ·  vishnu@invigilo.ai  ·  invigilo.ai",
+    _sender_line = f"{deck_sender['name']}, {deck_sender['title']}"
+    if deck_sender['email']:
+        _sender_line += f"  ·  {deck_sender['email']}"
+    txt(s, 0.8, 6.6, 6, 0.4, _sender_line,
         size=10, color=(130, 150, 180))
     # Cert badges bottom right
     for i, cert in enumerate(["ISO 27001", "GDPR", "PDPA", "SG Cyber Safe"]):
@@ -927,7 +945,7 @@ async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
         txt(s, 0.75 + col * 6.4, 1.45 + row * 1.8, 5.5, 0.7, desc_p,
             size=11, color=(70, 70, 90))
 
-    # ── Slide 12: Why Invigilo for [Client] ───────────────────────────────────
+    # ── Slide 12: Why Us for [Client] ─────────────────────────────────────────
     s = blank()
     bg(s)
     header_bar(s, deck["why_us_headline"])
@@ -959,13 +977,14 @@ async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
     s = blank()
     bg(s)
     box(s, 0, 0, 13.33, 0.6, ORANGE)
-    txt(s, 0.4, 0.1, 5, 0.42, "INVIGILO AI", size=18, bold=True, color=WHITE)
+    txt(s, 0.4, 0.1, 5, 0.42, deck_sender['company'].upper(), size=18, bold=True, color=WHITE)
     txt(s, 0.8, 1.2, 11.5, 1.1, "Thank You.", size=42, bold=True, color=NAVY)
     box(s, 0.8, 2.5, 5.5, 0.05, NAVY)
     txt(s, 0.8, 2.75, 7, 0.45, f"Prepared for {name}", size=16, color=NAVY)
-    txt(s, 0.8, 3.4, 7, 1.8,
-        "Vishnu Saran\nCEO, Invigilo AI\n\nvishnu@invigilo.ai\ninvigilo.ai",
-        size=14, color=(60, 70, 90))
+    _contact_block = f"{deck_sender['name']}\n{deck_sender['title']}, {deck_sender['company']}"
+    if deck_sender['email']:
+        _contact_block += f"\n\n{deck_sender['email']}"
+    txt(s, 0.8, 3.4, 7, 1.8, _contact_block, size=14, color=(60, 70, 90))
     txt(s, 0.8, 5.7, 12.3, 0.4,
         "This presentation is confidential and intended solely for the named recipient.",
         size=10, color=(150, 160, 175), align=PP_ALIGN.CENTER)
@@ -985,6 +1004,7 @@ async def generate_sales_deck(account_id: str, db: AsyncSession) -> bytes:
 
 async def generate_battle_card(account_id: str, db: AsyncSession) -> bytes:
     data = await _load_account_data(account_id, db)
+    bc_sender = _ws_sender(data)
     doc  = _open_doc(data.get("template_b64"))
     _set_margins(doc)
     name  = data["name"]
@@ -1008,12 +1028,10 @@ async def generate_battle_card(account_id: str, db: AsyncSession) -> bytes:
     doc.add_paragraph()
 
     _add_heading(doc, f"Competing Against: {competitor}")
-    _add_table(doc, ["Invigilo Advantage", "Why It Wins"], [
-        ["60+ CV detection models, GA from day 1",    "Competitor models often gated / in beta"],
-        ["Full Audit Panel, every fact sourced",       "Competitor evidence chain is opaque"],
-        ["Self-serve HubSpot in 30 seconds",           "Competitors require Salesforce + Gong setup"],
-        ["ISO 27001 certified",                        "Few competitors at this scale"],
-        ["Edge processing, no raw video to cloud",     "GDPR/PDPA compliant by design"],
+    _add_table(doc, [f"{bc_sender['company']} Advantage", "Why It Wins"], [
+        ["Full audit trail, every fact sourced",       "Competitor evidence chain is opaque"],
+        ["Self-serve CRM integration in minutes",      "Competitors require complex setup"],
+        ["Workspace-driven AI context",                "Competitors use generic AI defaults"],
     ])
     doc.add_paragraph()
 
@@ -1039,6 +1057,7 @@ async def generate_battle_card(account_id: str, db: AsyncSession) -> bytes:
 
 async def generate_business_case(account_id: str, db: AsyncSession) -> bytes:
     data = await _load_account_data(account_id, db)
+    bc_biz_sender = _ws_sender(data)
     doc  = _open_doc(data.get("template_b64"))
     _set_margins(doc)
     name     = data["name"]
@@ -1064,9 +1083,9 @@ async def generate_business_case(account_id: str, db: AsyncSession) -> bytes:
     pain_text    = (pain.get("evidence") or pain.get("text") or "") if isinstance(pain, dict) else ""
 
     _add_heading(doc, "1. Executive Summary")
-    _add_body(doc, f"{name} faces ongoing operational and safety monitoring gaps that carry direct financial and regulatory risk.")
-    _add_body(doc, f"This document presents the case for deploying Invigilo AI SafeKey.")
-    _add_body(doc, f"The proposed investment of {amount} targets measurable incident reduction within 6-12 months.")
+    _add_body(doc, f"{name} faces ongoing operational gaps that carry direct financial and regulatory risk.")
+    _add_body(doc, f"This document presents the case for deploying {bc_biz_sender['product']}.")
+    _add_body(doc, f"The proposed investment of {amount} targets measurable improvement within 6-12 months.")
     doc.add_paragraph()
 
     _add_heading(doc, "2. Current Cost of the Problem")
@@ -1079,7 +1098,7 @@ async def generate_business_case(account_id: str, db: AsyncSession) -> bytes:
 
     _add_heading(doc, "3. Proposed Investment")
     _add_table(doc, ["Item", "Detail"], [
-        ["Platform",    "SafeKey AI Safety Monitoring"],
+        ["Platform",    bc_biz_sender['product']],
         ["Scope",       f"As discussed with {name}"],
         ["Investment",  amount],
         ["Term",        "Annual subscription + implementation"],
@@ -1088,7 +1107,7 @@ async def generate_business_case(account_id: str, db: AsyncSession) -> bytes:
     doc.add_paragraph()
 
     _add_heading(doc, "4. ROI Projection")
-    _add_body(doc, "Based on results across 40+ deployments:")
+    _add_body(doc, "Based on results across comparable deployments:")
     for stat in [
         "40-60% incident reduction within 6 months",
         "8x improvement in near-miss detection vs manual monitoring",
@@ -1120,6 +1139,7 @@ async def generate_business_case(account_id: str, db: AsyncSession) -> bytes:
 
 async def generate_roi_calculator(account_id: str, db: AsyncSession) -> bytes:
     data  = await _load_account_data(account_id, db)
+    roi_sender = _ws_sender(data)
     doc   = _open_doc(data.get("template_b64"))
     _set_margins(doc)
     name  = data["name"]
@@ -1149,9 +1169,9 @@ async def generate_roi_calculator(account_id: str, db: AsyncSession) -> bytes:
     ])
     doc.add_paragraph()
 
-    _add_heading(doc, "Section B: Invigilo Investment")
+    _add_heading(doc, f"Section B: {roi_sender['company']} Investment")
     _add_table(doc, ["Item", "Cost (USD)"], [
-        ["SafeKey platform licence (annual)", f"${amount:,.0f}" if amount else "[to be quoted]"],
+        [f"{roi_sender['product']} licence (annual)", f"${amount:,.0f}" if amount else "[to be quoted]"],
         ["Implementation and integration",    "Included"],
         ["Training and onboarding",           "Included"],
         ["TOTAL YEAR 1",                      f"${amount:,.0f}" if amount else "[to be quoted]"],
@@ -1184,6 +1204,7 @@ async def generate_roi_calculator(account_id: str, db: AsyncSession) -> bytes:
 
 async def generate_mutual_action_plan(account_id: str, db: AsyncSession) -> bytes:
     data    = await _load_account_data(account_id, db)
+    map_sender = _ws_sender(data)
     doc     = _open_doc(data.get("template_b64"))
     _set_margins(doc)
     name    = data["name"]
@@ -1198,18 +1219,18 @@ async def generate_mutual_action_plan(account_id: str, db: AsyncSession) -> byte
     r.font.size = Pt(20); r.bold = True; r.font.color.rgb = RGBColor(*NAVY); r.font.name = "Calibri"
     cover2 = doc.add_paragraph()
     cover2.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r2 = cover2.add_run(f"{name} x Invigilo AI  |  Updated {_today_str()}")
+    r2 = cover2.add_run(f"{name} x {map_sender['company']}  |  Updated {_today_str()}")
     r2.font.size = Pt(11); r2.font.color.rgb = RGBColor(*GREY); r2.font.name = "Calibri"
     doc.add_page_break()
 
-    _add_body(doc, f"This document tracks agreed actions between {name} and Invigilo AI. Both parties are accountable for their items.")
+    _add_body(doc, f"This document tracks agreed actions between {name} and {map_sender['company']}. Both parties are accountable for their items.")
     doc.add_paragraph()
 
     def action_rows(acts):
         rows = []
         for a in acts:
             due   = str(a.due_date) if a.due_date else "TBD"
-            owner = "Invigilo AI" if a.action_type in ("email","call","demo") else name
+            owner = map_sender['company'] if a.action_type in ("email","call","demo") else name
             rows.append([a.title[:80], owner, due, a.status.title()])
         return rows
 
@@ -1224,8 +1245,8 @@ async def generate_mutual_action_plan(account_id: str, db: AsyncSession) -> byte
 
     rows = action_rows(upcoming) or [
         ["Review proposal and confirm scope",          name,             "This week",    "Upcoming"],
-        ["Schedule technical site walkthrough",        f"{name} + Invigilo AI", "2 weeks", "Upcoming"],
-        ["Technical integration review",               "Invigilo AI",    "Week 3",       "Upcoming"],
+        ["Schedule technical walkthrough",             f"{name} + {map_sender['company']}", "2 weeks", "Upcoming"],
+        ["Technical integration review",               map_sender['company'],    "Week 3",       "Upcoming"],
         ["Commercial approval and contract signature", name,             "Week 4",       "Upcoming"],
     ]
     _add_heading(doc, "Upcoming Actions", level=2)
@@ -1239,8 +1260,8 @@ async def generate_mutual_action_plan(account_id: str, db: AsyncSession) -> byte
 
     _add_heading(doc, "Key Contacts", level=2)
     _add_table(doc, ["Name", "Organisation", "Role", "Contact"], [
-        ["Vishnu Saran",   "Invigilo AI", "CEO",    "vishnu@invigilo.ai"],
-        ["[To be filled]", name,          "[Role]", "[Email]"],
+        [map_sender['name'],  map_sender['company'], map_sender['title'], map_sender['email'] or "[email]"],
+        ["[To be filled]",    name,                  "[Role]",            "[Email]"],
     ])
 
     buf = io.BytesIO()

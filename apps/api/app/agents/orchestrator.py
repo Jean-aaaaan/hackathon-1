@@ -193,19 +193,14 @@ class AgentOrchestrator:
                 "icp_pain_points": icp.get("pain_points", []),
             }
         else:
-            # Invigilo dogfood defaults — used until workspace configures ICP
-            _INVIGILO_DEFAULTS = {
-                "sender_name": "Vishnu Saran",
-                "sender_title": "CEO & Co-Founder",
-                "sender_company": "Invigilo AI",
-                "product_description": (
-                    "SafeKey by Invigilo AI. AI-powered safety monitoring platform for high-risk industries "
-                    "(construction, O&G, manufacturing, mining, logistics). Plugs into existing CCTV with no new "
-                    "cameras required. 60+ computer vision models, 40+ safety detections, real-time alerts. "
-                    "ISO 27001 certified. On-premise or cloud. Proven in MENA, Singapore, and Australia."
-                ),
+            # Placeholder defaults — workspace should configure product context in Settings
+            _AGENT_DEFAULTS = {
+                "sender_name": "Your Name",
+                "sender_title": "Account Executive",
+                "sender_company": "Your Company",
+                "product_description": "Configure your product description in Settings → Workspace.",
             }
-            seller_context = {**_INVIGILO_DEFAULTS, **{k: v for k, v in seller_context.items() if v}}
+            seller_context = {**_AGENT_DEFAULTS, **{k: v for k, v in seller_context.items() if v}}
 
         # Initialise agents
         haiku = self.settings.anthropic_model_bulk

@@ -123,33 +123,11 @@ Count distinct engaged contacts. If only 1 contact engaged = single_thread_risk 
 Enterprise deals need 3+ multi-threaded contacts to survive champion departure.
 
 ==============================================================================
-INVIGILO AI - ICP & PRODUCT CONTEXT (for ICP scoring and signal interpretation)
+ICP & PRODUCT CONTEXT (for ICP scoring and signal interpretation)
 ==============================================================================
-Invigilo sells SafeKey - AI safety monitoring that works on existing CCTV cameras.
-Ideal Customer Profile (ICP - strong fit):
-  - Industry: Construction, Oil & Gas (upstream/midstream/downstream), Manufacturing, Mining, Logistics
-  - Size: 500+ employees, multi-site operations
-  - Existing CCTV: Already has cameras (SafeKey adds AI, no new hardware needed)
-  - Compliance pressure: OSHA, ISO 45001, Ministry of Labour (KSA/UAE), NOPSEMA (Australia), WSH (Singapore)
-  - Has dedicated HSQE/HSE team and appointed safety officers
-  - Geography: MENA (KSA, UAE, Oman, Kuwait), Singapore, ANZ, Japan
-
-ICP Signals (boost ICP score):
-  - HSE Director / HSQE Manager involved = champion match (core buyer)
-  - Mentions of safety incidents, regulatory audit, accident rate = high implicate pain
-  - Multi-site operations with existing VMS/CCTV = perfect technical fit
-  - Government-linked company or NOC = longer cycle but high-value, compliance-driven
-  - Recent safety fine or incident investigation = immediate urgency trigger (why_now)
-
-NOT ICP (reduce ICP score):
-  - Small office/retail without industrial operations
-  - Pure software/tech company with no physical operations
-  - No existing CCTV infrastructure and no budget for cameras
-  - Consumer-facing business
-
-Competitors to flag when mentioned: Voxel, Chooch AI, Protex AI, viAct, StereoVision, Intenseye, Anvil, Spot-r.
-If a competitor is mentioned, always create a competitive_evaluation_active or competitive_mention signal.
-Note Voxel's weakness (requires camera upgrades) and Intenseye's weakness (no on-premise, EU-only focus).
+ICP profile and product context are provided per-workspace in the user message (=== ICP SCORING === section).
+Use those details to score ICP fit. If a competitor is mentioned, create a competitive_evaluation_active or competitive_mention signal.
+Score ICP fit based on how well the account matches the workspace's ideal customer profile.
 
 DEAL VELOCITY SIGNALS:
 Extract these velocity indicators from CRM/notes/activity:
@@ -213,15 +191,30 @@ def _build_prompt_sections(workspace_settings: dict | None) -> tuple[str, str]:
     ai_fields come from workspace config and are JSON-serialised here so the
     LLM sees a stable schema regardless of field ordering in the DB record.
     """
-    icp_section = """
+    ws = workspace_settings or {}
+    icp_profile = ws.get("icp_profile") or {}
+    product_desc = ws.get("product_description") or ws.get("product_name") or "the company's product"
+    icp_industries = ", ".join(icp_profile.get("icp_industries", [])) or "enterprise companies"
+    icp_regions = ", ".join(icp_profile.get("icp_regions", [])) or "any region"
+    ideal_customer = icp_profile.get("ideal_customer") or ""
+    competitors = ", ".join(icp_profile.get("competitors", [])) or "any known competitors"
+    differentiators = "; ".join(icp_profile.get("differentiators", [])) or ""
+    typical_deal_size = icp_profile.get("typical_deal_size") or ws.get("typical_deal_size") or "$50K+"
+
+    icp_section = f"""
 === ICP SCORING ===
-Score this account's ICP fit (0-1) for a B2B AI safety platform targeting enterprise companies
-in O&G, construction, manufacturing, mining (MENA/APAC focus, $50K+ deals).
-Extract: icp_score.score (0.0-1.0), icp_score.tier (strong/moderate/weak/unknown),
-icp_score.signals (list of matching ICP factors), icp_score.gaps (list of ICP mismatches).
+Product: {product_desc}
+Target industries: {icp_industries}
+Target regions: {icp_regions}
+{f"Ideal customer: {ideal_customer}" if ideal_customer else ""}
+{f"Key differentiators: {differentiators}" if differentiators else ""}
+Competitors to flag: {competitors}
+If a competitor is mentioned, create a competitive_evaluation_active or competitive_mention signal.
+Typical deal size: {typical_deal_size}
+Score ICP fit: icp_score.score (0.0-1.0), icp_score.tier (strong/moderate/weak/unknown),
+icp_score.signals (matching ICP factors), icp_score.gaps (ICP mismatches).
 """
     ai_fields_section = ""
-    ws = workspace_settings or {}
     ai_fields = ws.get("ai_fields") or []
     if ai_fields:
         ai_fields_section = f"""
@@ -385,7 +378,7 @@ EXTRACTION TASKS:
    - champion_dark → resolved if champion replied or attended a meeting recently
    - procurement_engaged → resolved if contract was executed or PO was issued
    - budget_risk → resolved if budget was explicitly confirmed by the economic buyer
-   - competitive_evaluation_active → resolved if buyer confirmed they chose Invigilo
+   - competitive_evaluation_active → resolved if buyer confirmed they chose this vendor
    Use exact signal type strings from the taxonomy.
 """
 

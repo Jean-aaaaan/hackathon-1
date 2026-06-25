@@ -14,7 +14,7 @@ export default function LoginPage() {
         </div>
 
         <h1 className="text-lg font-semibold text-gray-900 mb-1">Sign in to Vantage</h1>
-        <p className="text-sm text-gray-500 mb-8">Per-Account Agent Platform · Invigilo Sales Team</p>
+        <p className="text-sm text-gray-500 mb-8">Per-Account Agent Platform</p>
 
         {/* Sign in with Google (via WorkOS) */}
         <a
@@ -31,7 +31,7 @@ export default function LoginPage() {
         </a>
 
         <p className="text-xs text-gray-400 mt-6">
-          Access is restricted to the Invigilo workspace.{" "}
+          Sign in to access your workspace.{" "}
           <span className="text-gray-500">Contact your admin to be added.</span>
         </p>
       </div>

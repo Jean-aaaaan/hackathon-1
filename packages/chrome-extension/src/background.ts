@@ -3,11 +3,11 @@
  * Handles API calls, storage, and message routing between content scripts and popup.
  */
 
-const DEFAULT_API_URL = "https://api.vantage.invigilo.ai";
+const DEFAULT_API_URL = "https://api.vantage.ai";
 
 // Only allow fetching from the production API or localhost in development
 const ALLOWED_API_ORIGINS = new Set([
-  "https://api.vantage.invigilo.ai",
+  "https://api.vantage.ai",
 ]);
 
 function _isAllowedApiUrl(url: string): boolean {

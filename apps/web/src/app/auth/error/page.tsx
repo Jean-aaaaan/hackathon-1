@@ -57,7 +57,7 @@ function AuthErrorInner() {
           {/* Support */}
           <p className="text-xs text-gray-400 mt-5">
             Still having issues?{" "}
-            <a href="mailto:support@invigilo.ai" className="text-brand-600 hover:underline">
+            <a href="mailto:support@vantage.ai" className="text-brand-600 hover:underline">
               Contact support
             </a>
           </p>

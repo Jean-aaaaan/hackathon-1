@@ -64,7 +64,7 @@ param firefliesApiKey string = ''
 param teamsWebhookUrl string = ''
 
 @description('Frontend URL (Vercel deployment)')
-param frontendUrl string = 'https://vantage.invigilo.ai'
+param frontendUrl string = 'https://app.vantage.ai'
 
 @description('Sentry DSN for error tracking')
 @secure()

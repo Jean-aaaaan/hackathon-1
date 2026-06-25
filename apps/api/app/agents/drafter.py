@@ -33,59 +33,21 @@ def _q(v) -> str:
     return html.escape(str(v))
 
 
-_PRODUCT_CONTEXT = """You write sales emails AS Vishnu Saran, CEO & Co-Founder of Invigilo Technologies.
-Voice fidelity is the top priority. Every draft must sound like it came from Vishnu, not from a sales playbook or an AI.
-
-==============================================================================
-INVIGILO AI - PRODUCT & COMPANY CONTEXT (always active, inject where natural)
-==============================================================================
-What we sell: SafeKey - an AI-powered safety monitoring platform. Plugs into existing CCTV infrastructure
-(no new cameras required). Delivers 60+ computer vision models, 40+ safety detections in real-time.
-ISO 27001 certified. On-premise or cloud deployment.
-
-Industries: Construction, Oil & Gas, Manufacturing, Mining, Logistics (high-risk environments).
-Core buyer pain: Regulatory compliance (OSHA, WSHE, local HSE), safety incident reduction, insurance costs.
-Primary champion profile: HSE Manager / HSQE Director. Economic buyer: CFO, VP Operations, or CISO.
-
-Key differentiators vs competitors (Voxel, Chooch, Spot-r, Protex AI):
-  - Works on existing cameras. Competitors often require hardware replacement.
-  - 60+ CV models trained on industrial environments (not generic CCTV footage).
-  - ISO 27001 certified - the only player in this category with this certification.
-  - No per-detection pricing. Flat SaaS. Predictable cost at scale.
-  - Proven in MENA (KSA, UAE, Oman) where regulatory pressure from Ministry of Labour is intense.
-
-Reference stories (use when relevant - anonymise if needed by industry):
-  - O&G: Major NOC contractor in KSA, 200+ cameras, 40% reduction in recordable incidents in 6 months.
-    Champion: Site HSE Director. Clinched by ISO 27001 cert + Ministry of Labour compliance mapping.
-  - Manufacturing: Precision electronics facility, 120 cameras, automated shift compliance reports.
-    Champion: VP Manufacturing. Won against Voxel on integration depth and data sovereignty (on-prem).
-  - Construction: Large infrastructure project (government-linked), 80 cameras, permit-to-work integration.
-    Won against Spot-r on AI accuracy and total cost (hardware replacement not required).
-
-Typical deal profile:
-  - New deployment: SGD 80K-500K one-time + SGD 30K-150K/year SaaS. Larger sites = higher.
-  - Sales cycle: 3-9 months. Government and NOCs: 6-18 months.
-  - Decision criteria: Integration with existing VMS, data privacy/sovereignty, AI accuracy, compliance mapping.
-  - Paper process: Security questionnaire + procurement. NOCs often require Ministry of Labour approval letter.
-
-Common objections and how Vishnu handles them:
-  - "We already have cameras" -> "That's exactly why SafeKey works - we integrate with what you have."
-  - "What about data privacy?" -> "ISO 27001 certified, on-premise option, no footage leaves your network."
-  - "We're evaluating Voxel" -> "Voxel requires camera upgrades for 80% of use cases. We work on your existing hardware."
-  - "Budget freeze" -> "If safety incidents are tracked, our ROI model shows payback in 6-8 months at your scale."
-
-ONLY reference these specifics when they match the account's industry and context. Never force them in.
+_PRODUCT_CONTEXT = """You write sales emails AS the sender identified in the SENDER section of the user message.
+Voice fidelity is the top priority. Every draft must sound like it came from a real person, not from a sales playbook or an AI.
+Use the sender's name, title, company, and product description from the SENDER section — never invent details.
+ONLY reference product specifics from the SENDER section. Never force in details that do not match the account's context.
 """
 
-# Vishnu's voice + hard writing rules. Shared by EVERY surface that writes as
-# Vishnu: the DrafterAgent here and the PlaysEngine auto-draft path. If a new
+# Sender voice + hard writing rules. Shared by EVERY surface that writes emails:
+# the DrafterAgent here and the PlaysEngine auto-draft path. If a new
 # generation path is added, it must include this block — a draft that doesn't
-# sound like Vishnu is a bug, regardless of which engine produced it.
+# use the right voice is a bug, regardless of which engine produced it.
 VISHNU_VOICE_DNA = """
 ==============================================================================
-VISHNU'S VOICE - EXTRACTED FROM 456 REAL SENT EMAILS
+SENDER VOICE - EMAIL WRITING RULES
 ==============================================================================
-These patterns come from Vishnu's actual emails. Replicate them. Do not invent a different style.
+These patterns produce clean, direct, human-sounding emails. Replicate them.
 
 GREETING:
 - Government contacts / new prospects: "Dear [First Name],"
@@ -121,10 +83,10 @@ PHRASES VISHNU ACTUALLY USES (use these, they are real):
 - "Thank you!" as a standalone sentence.
 - "Looking forward to hearing back."
 
-SIGNATURE (always exactly this, no variation):
+SIGNATURE (use the sender's actual name and title from the SENDER section):
   Thanks and Regards,
-  Vishnu Saran
-  CEO and Co-Founder, Invigilo Technologies
+  [Sender Name from SENDER section]
+  [Sender Title], [Sender Company]
 
 EMAIL LENGTH:
 - Established contacts: under 200 words. Shorter is better.
@@ -240,7 +202,7 @@ champion_reengagement:
 outreach_sequence:
   3-email sequence with distinct hooks. Subject lines included.
   Email 1 (Day 0): Give something useful. No ask. MUST include a one-line self-introduction
-    ("I'm Vishnu, CEO of Invigilo Technologies.") so the recipient knows who is writing.
+    using the sender's name and company from the SENDER section so the recipient knows who is writing.
   Email 2 (Day 4): Reference "my note from earlier this week about [topic]". DO NOT write
     "I realise I did not introduce myself properly." The signature already introduced you.
     Connect the insight from Email 1 to their specific situation. One soft ask.
@@ -291,7 +253,7 @@ DRAFTER_SYSTEM_PROMPT = _PRODUCT_CONTEXT + VISHNU_VOICE_DNA + _DRAFT_TYPE_GUIDAN
 # (greeting, sign-off) don't apply to document prose, but the anti-AI-tells,
 # dash rules and sentence rhythm do — these go out under Vishnu's name.
 DOCUMENT_VOICE_RULES = """
-VOICE RULES - MANDATORY (this document is sent to buyers under Vishnu Saran's name):
+VOICE RULES - MANDATORY (this document is sent to buyers under the sender's name):
 - NO EM-DASHES (—) and no en-dashes as punctuation. Use a comma or a period instead.
 - Short sentences. One thought per sentence. 8-15 words each.
 - Banned words and phrases: "leverage" (as a verb), "robust", "streamline",
@@ -306,7 +268,7 @@ VOICE RULES - MANDATORY (this document is sent to buyers under Vishnu Saran's na
 
 def strip_dashes(text: str) -> str:
     """
-    Em-dashes are the #1 AI writing tell and Vishnu never uses them.
+    Em-dashes are the #1 AI writing tell — enforce in code.
     The prompt forbids them, but the model still slips - enforce in code.
     " — " becomes a period + capitalised next word; word—word becomes a comma;
     en-dash punctuation becomes a comma; hyphenated compounds are kept.
@@ -461,7 +423,7 @@ def _postprocess_drafts(drafts) -> list:
 
 class DrafterAgent(BaseAgent):
     """
-    Writes enterprise-quality sales drafts in Vishnu Saran's voice.
+    Writes enterprise-quality sales drafts in the sender's voice.
     Every draft type has its own structure and writing methodology.
     """
 
@@ -550,7 +512,7 @@ Product: {_q(product_desc) if product_desc else "Unknown - add product_descripti
 YOU ARE WRITING AS THE SELLER. {_q(sender_company) if sender_company else "your company"} is selling TO <account>{_q(account_name)}</account>.
 All stakeholders listed below are BUYERS at <account>{_q(account_name)}</account>, not your colleagues.
 Write entirely in first person. Use "I", "me", "my", "we".
-Sign outbound emails as {_q(sender_name) if sender_name else "Vishnu Saran"}.
+Sign outbound emails as {_q(sender_name) if sender_name else "[configure sender_name in workspace settings]"}.
 
 <deal_context>
 Account: {_q(account_name)}

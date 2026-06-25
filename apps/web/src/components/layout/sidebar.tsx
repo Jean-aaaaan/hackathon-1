@@ -10,9 +10,9 @@ import { authApi, draftsApi, setPreferredWorkspace, type CurrentUser, type Works
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState as useSt } from "react";
 
-// ── Invigilo logo mark ─────────────────────────────────────────────────────────
+// ── Vantage logo mark ──────────────────────────────────────────────────────────
 
-function InvigiloMark({ className }: { className?: string }) {
+function VantageMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true">
       <rect width="32" height="32" rx="8" fill="#6366F1" />
@@ -87,7 +87,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       {/* ── Brand ────────────────────────────────────────────────────────────── */}
       <div className="px-4 py-4 border-b border-zinc-100">
         <div className="flex items-center gap-2.5">
-          <InvigiloMark className="w-8 h-8 flex-shrink-0" />
+          <VantageMark className="w-8 h-8 flex-shrink-0" />
           <p className="text-sm font-semibold text-zinc-900 leading-tight flex-1">
             Vantage
           </p>

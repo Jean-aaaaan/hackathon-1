@@ -338,9 +338,11 @@ async def ingest_fireflies_for_account(
         for t in all_recent:
             title = t.get("title") or ""
             title_lower = title.lower()
-            # Handle "Company ~ Invigilo AI" and "Invigilo AI ~ Company" formats
-            # Strip known noise and check if any account word appears
-            stripped = title_lower.replace("invigilo ai", "").replace("invigilo", "").replace("vishnu", "")
+            # Handle "Company ~ [Seller] ~ Company" formats
+            # Strip noise words from _TITLE_NOISE and check if any account word appears
+            stripped = title_lower
+            for noise in _TITLE_NOISE:
+                stripped = stripped.replace(noise, "")
             if any(w in stripped for w in account_words):
                 transcripts.append(t)
         transcripts = transcripts[:5]
@@ -353,10 +355,10 @@ async def ingest_fireflies_for_account(
 # ── Matching constants ─────────────────────────────────────────────────────────
 
 # Words stripped from transcript titles before name-matching
-_TITLE_NOISE = {"invigilo", "invigilo ai", "vishnu", "saran", "anand", "kumar", "selma"}
+_TITLE_NOISE: set[str] = set()  # workspace-specific names stripped from titles at match time
 
 # Seller-side email domains — never use these as a company identifier
-_SELLER_DOMAINS = {"invigilo", "gmail", "hotmail", "outlook", "yahoo"}
+_SELLER_DOMAINS = {"gmail", "hotmail", "outlook", "yahoo"}  # generic free-email providers only
 
 # Generic subdomain prefixes that appear before the real company name in institutional
 # email addresses (e.g. partner.nus.edu.sg → skip "partner", use "nus" instead)
@@ -402,7 +404,7 @@ def _domain_root(email: str) -> Optional[str]:
       'tomo@partner.nus.edu.sg'    → None  (edu = institutional, skip)
       'dawn@tech.gov.sg'           → None  (gov = institutional, skip)
       'nathan@westgold.com.au'     → 'westgold'
-      'vishnu@invigilo.sg'         → 'invigilo'
+      'alex@acmecorp.com'          → 'acmecorp'
       'info@aramco.com'            → 'aramco'
       'user@subsidiary.bigcorp.com'→ 'bigcorp' (skips generic subdomain)
     """

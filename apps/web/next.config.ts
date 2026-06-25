@@ -12,8 +12,8 @@ const cspDirectives = [
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https:",
   isDev
-    ? "connect-src 'self' http://localhost:8000 ws://localhost:3000 https://api.vantage.invigilo.ai wss://api.vantage.invigilo.ai"
-    : "connect-src 'self' https://api.vantage.invigilo.ai wss://api.vantage.invigilo.ai",
+    ? "connect-src 'self' http://localhost:8000 ws://localhost:3000 https://api.vantage.ai wss://api.vantage.ai"
+    : "connect-src 'self' https://api.vantage.ai wss://api.vantage.ai",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -62,7 +62,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // Server Actions for form submissions
     serverActions: {
-      allowedOrigins: ["localhost:3000", "app.vantage.invigilo.ai"],
+      allowedOrigins: ["localhost:3000", "app.vantage.ai"],
     },
   },
 };

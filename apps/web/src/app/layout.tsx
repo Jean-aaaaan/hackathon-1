@@ -11,9 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Invigilo Vantage",
+  title: "Vantage",
   description: "AI-powered sales intelligence for enterprise teams",
-  robots: "noindex",  // Internal tool — don't index
 };
 
 export default function RootLayout({

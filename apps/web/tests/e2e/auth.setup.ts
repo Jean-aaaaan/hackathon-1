@@ -18,7 +18,7 @@ const AUTH_FILE = path.join(__dirname, ".auth/user.json");
 
 setup("authenticate", async ({ page }) => {
   const testEmail =
-    process.env.WORKOS_TEST_EMAIL ?? "test@invigilo.ai";
+    process.env.WORKOS_TEST_EMAIL ?? "test@vantage.ai";
   const useBypass = process.env.VANTAGE_TEST_BYPASS === "1";
 
   if (useBypass) {

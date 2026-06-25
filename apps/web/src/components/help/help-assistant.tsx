@@ -113,7 +113,7 @@ const GUIDE: GuideSection[] = [
       },
       {
         q: "What is the ICP / Sales Intelligence section?",
-        a: "This is where you tell the agent what you sell and who you sell to: product name, description, top differentiators, main competitors, ideal customer profile, and reference success stories. Without this, the agent uses generic Invigilo SafeKey defaults.",
+        a: "This is where you tell the agent what you sell and who you sell to: product name, description, top differentiators, main competitors, ideal customer profile, and reference success stories. Without this, the agent falls back to placeholder text — set it up in Settings → Workspace.",
       },
       {
         q: "How do I check if everything is connected correctly?",

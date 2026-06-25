@@ -357,6 +357,41 @@ export default function SettingsPage() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workspace"] }),
   });
 
+  // Sender identity
+  const [senderDraft, setSenderDraft] = useState({
+    sender_name: "",
+    sender_title: "",
+    sender_company: "",
+    seller_domains: "",
+  });
+  const [senderEditing, setSenderEditing] = useState(false);
+  const [senderSaving, setSenderSaving] = useState(false);
+
+  const openSenderEdit = () => {
+    setSenderDraft({
+      sender_name: (ws?.settings?.sender_name as string) ?? "",
+      sender_title: (ws?.settings?.sender_title as string) ?? "",
+      sender_company: (ws?.settings?.sender_company as string) ?? "",
+      seller_domains: ((ws?.settings?.seller_domains as string[]) ?? []).join(", "),
+    });
+    setSenderEditing(true);
+  };
+
+  const saveSender = async () => {
+    if (senderSaving) return;
+    setSenderSaving(true);
+    try {
+      await workspaceApi.updateSettings({
+        sender_name: senderDraft.sender_name,
+        sender_title: senderDraft.sender_title,
+        sender_company: senderDraft.sender_company,
+        seller_domains: senderDraft.seller_domains.split(",").map((s: string) => s.trim()).filter(Boolean),
+      });
+      queryClient.invalidateQueries({ queryKey: ["workspace"] });
+      setSenderEditing(false);
+    } catch { /* silent */ } finally { setSenderSaving(false); }
+  };
+
   // ICP builder
   const icpProfile = (ws?.settings?.icp_profile as import("@/lib/api").IcpProfile | undefined) ?? {};
   const [icpDraft, setIcpDraft] = useState<import("@/lib/api").IcpProfile>({});
@@ -402,6 +437,20 @@ export default function SettingsPage() {
         <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
         <p className="text-sm text-gray-400 mt-0.5">Workspace configuration and integrations</p>
       </div>
+
+      {/* Agent config completeness banner */}
+      {ws && (!ws.settings?.sender_name || !ws.settings?.product_description) && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-start gap-3">
+          <span className="text-yellow-500 text-base mt-0.5">&#9888;</span>
+          <div>
+            <div className="font-medium text-yellow-900 text-sm">Agent context not configured</div>
+            <div className="text-yellow-700 text-sm mt-0.5">
+              Your agents need your product and ICP context to generate accurate emails and scores.
+              Fill in the <strong>Sender Identity</strong> and <strong>Sales Intelligence</strong> sections below.
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Workspace overview */}
       <Section title="Workspace" description="Your Vantage workspace details and usage">
@@ -659,7 +708,7 @@ export default function SettingsPage() {
             </div>
             <p className="text-xs text-gray-400 mt-1.5">
               Use this key with the{" "}
-              <a href="https://github.com/Invigilo-AI/vantage-mcp" className="text-brand-600 hover:underline" target="_blank" rel="noopener">
+              <a href="https://github.com/vantage-ai/mcp-server" className="text-brand-600 hover:underline" target="_blank" rel="noopener">
                 Vantage MCP Server
               </a>
               {" "}to query account context from Claude Desktop.
@@ -931,6 +980,59 @@ export default function SettingsPage() {
         })()}
       </Section>
 
+      {/* ── Sender Identity ───────────────────────────────────────────────────────── */}
+      <Section title="Sender Identity" description="How agents sign emails and which domains to exclude from buyer analysis">
+        {!senderEditing ? (
+          <div className="space-y-3">
+            {ws?.settings?.sender_name ? (
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div><span className="text-xs text-gray-500 block mb-0.5">Name</span><span className="font-medium">{ws.settings.sender_name as string}</span></div>
+                <div><span className="text-xs text-gray-500 block mb-0.5">Title</span><span>{(ws.settings.sender_title as string) || "-"}</span></div>
+                <div><span className="text-xs text-gray-500 block mb-0.5">Company</span><span>{(ws.settings.sender_company as string) || "-"}</span></div>
+                <div><span className="text-xs text-gray-500 block mb-0.5">Seller domains</span><span>{((ws.settings.seller_domains as string[]) ?? []).join(", ") || "-"}</span></div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-400">Not configured. Agents will use placeholder names in generated emails.</p>
+            )}
+            <button onClick={openSenderEdit} className="text-sm text-brand-600 hover:underline font-medium">
+              {ws?.settings?.sender_name ? "Edit sender →" : "Configure sender →"}
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {[
+              { key: "sender_name",    label: "Your name *",          placeholder: "Alex Johnson" },
+              { key: "sender_title",   label: "Your title",           placeholder: "Account Executive" },
+              { key: "sender_company", label: "Company name",         placeholder: "Acme Corp" },
+              { key: "seller_domains", label: "Seller email domains", placeholder: "acmecorp.com, acme.io" },
+            ].map(f => (
+              <div key={f.key}>
+                <label className="text-xs font-medium text-gray-700 block mb-1">{f.label}</label>
+                <input
+                  type="text"
+                  value={(senderDraft as Record<string, string>)[f.key] ?? ""}
+                  onChange={e => setSenderDraft(d => ({ ...d, [f.key]: e.target.value }))}
+                  placeholder={f.placeholder}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
+                />
+                {f.key === "seller_domains" && (
+                  <p className="text-xs text-gray-400 mt-1">Comma-separated. These domains are excluded from buyer analysis.</p>
+                )}
+              </div>
+            ))}
+            <div className="flex gap-2 pt-1">
+              <button onClick={saveSender} disabled={senderSaving}
+                className="px-4 py-1.5 bg-brand-600 text-white text-xs rounded-lg hover:bg-brand-700 disabled:opacity-50">
+                {senderSaving ? "Saving..." : "Save"}
+              </button>
+              <button onClick={() => setSenderEditing(false)} className="px-4 py-1.5 border border-gray-200 text-gray-600 text-xs rounded-lg hover:bg-gray-50">
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </Section>
+
       {/* ── Sales Intelligence (ICP) ────────────────────────────────────────────── */}
       <Section title="Sales Intelligence" description="Define your ICP, product context, and competitive positioning for the AI agents">
         {!icpEditing ? (
@@ -978,7 +1080,7 @@ export default function SettingsPage() {
         ) : (
           <div className="space-y-3">
             {[
-              { key: "product_name",        label: "Product name",         placeholder: "SafeKey by Invigilo AI" },
+              { key: "product_name",        label: "Product name",         placeholder: "e.g. Acme Analytics" },
               { key: "ideal_customer",      label: "Ideal customer",        placeholder: "HSE Director at an O&G contractor in MENA with 500+ workers" },
               { key: "product_description", label: "Product description",   placeholder: "What you sell, who it's for, top 3 capabilities" },
             ].map(f => (

@@ -23,7 +23,7 @@ log = structlog.get_logger()
 
 # Seller-side email domains — mirrors the buyer-participant filter in
 # nightly_worker (internal_domains). Keep in sync.
-REP_DOMAINS = {"invigilo.sg", "invigilo.ai"}
+REP_DOMAINS: set[str] = set()
 
 STATS_VERSION = 1
 MAX_BUYER_QUESTIONS = 10
@@ -34,7 +34,7 @@ def identify_rep_speakers(transcript: dict, rep_domains: set[str] = REP_DOMAINS)
     Speaker display-names on OUR side of the table.
     Sources: organizer_email + meeting_attendees whose email is a rep domain,
     matched to attendee displayName (Fireflies speaker_name follows displayName).
-    Falls back to first-token matching so "Vishnu Saran" matches speaker "Vishnu".
+    Falls back to first-token matching on the local part of the email address.
     """
     rep_names: set[str] = set()
     rep_emails: set[str] = set()

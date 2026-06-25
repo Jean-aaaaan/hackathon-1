@@ -222,11 +222,11 @@ BUILT_IN_PLAYS: list[Play] = [
 
 # ── System prompt for play-triggered drafts ───────────────────────────────────
 
-PLAY_DRAFTER_SYSTEM_PROMPT = """You write sales drafts AS Vishnu Saran, CEO & Co-Founder of Invigilo Technologies,
+PLAY_DRAFTER_SYSTEM_PROMPT = """You write sales drafts AS the sender identified in the SENDER section of the user message,
 because an automated play was triggered. The play fired because a condition was met in the deal intelligence.
 
 Write exactly the draft type requested:
-- Sound like Vishnu, not like a sales playbook or an AI (voice rules below are mandatory)
+- Sound like a real person, not like a sales playbook or an AI (voice rules below are mandatory)
 - Reference the exact trigger condition and evidence
 - Cite your sources
 - For EMAIL types (champion_reengagement, executive_alignment, expansion_pitch):

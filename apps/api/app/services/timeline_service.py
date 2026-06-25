@@ -196,7 +196,7 @@ class TimelineService:
             "decision_criteria": (
                 "email",
                 "Send decision criteria alignment brief",
-                "Decision criteria weakly mapped. Send a brief showing how Invigilo meets their evaluation framework.",
+                "Decision criteria weakly mapped. Send a brief showing how your company meets their evaluation framework.",
                 0.60,
             ),
             "implicate_pain": (

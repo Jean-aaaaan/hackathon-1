@@ -167,7 +167,7 @@ async function showLinkedInSidebar(accountId: string, accountName: string) {
   const forecastCat = (account.pov_forecast_cat as string) ?? "—";
   const signals = (state?.signals as Array<{ type: string; detail: string }>) ?? [];
   const topAction = actions?.next_actions?.[0];
-  const frontendUrl = "https://vantage.invigilo.ai";
+  const frontendUrl = "https://app.vantage.ai";
 
   const urgencyColor =
     urgencyScore >= 0.85 ? "#ef4444" :

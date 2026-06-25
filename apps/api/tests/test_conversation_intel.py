@@ -14,43 +14,43 @@ SYNTH_TRANSCRIPT = {
     "title": "Vantage x Acme — discovery",
     "date": 1760000000000,
     "duration": 1800,  # seconds
-    "organizer_email": "vishnu@invigilo.sg",
-    "participants": ["vishnu@invigilo.sg", "sarah.lee@acme.com", "cfo@acme.com"],
+    "organizer_email": "rep@acmecorp.com",
+    "participants": ["rep@acmecorp.com", "sarah.lee@acme.com", "cfo@acme.com"],
     "meeting_attendees": [
-        {"displayName": "Vishnu Saran", "email": "vishnu@invigilo.sg"},
+        {"displayName": "Alex Johnson", "email": "rep@acmecorp.com"},
         {"displayName": "Sarah Lee", "email": "sarah.lee@acme.com"},
         {"displayName": "Tom Chen", "email": "cfo@acme.com"},
     ],
     "transcript_url": "https://app.fireflies.ai/view/ff-001",
     "summary": {
-        "overview": "Discovery call about safety monitoring.",
-        "keywords": ["safety", "cameras"],
+        "overview": "Discovery call about the platform.",
+        "keywords": ["platform", "integration"],
         "action_items": [
-            "**Vishnu** Send the proposal by Friday (12:03)",
+            "**Alex** Send the proposal by Friday (12:03)",
             "**Sarah** Share the security questionnaire (24:10)",
             "Review budget internally",
         ],
     },
     "sentences": [
-        {"speaker_name": "Vishnu Saran", "text": "Let me walk you through SafeKey.", "start_time": 0, "end_time": 60},
-        {"speaker_name": "Vishnu Saran", "text": "It works on your existing cameras.", "start_time": 60, "end_time": 120},
+        {"speaker_name": "Alex Johnson", "text": "Let me walk you through the platform.", "start_time": 0, "end_time": 60},
+        {"speaker_name": "Alex Johnson", "text": "It integrates with your existing tools.", "start_time": 60, "end_time": 120},
         {"speaker_name": "Sarah Lee", "text": "How does the data privacy side work exactly?", "start_time": 120, "end_time": 150},
-        {"speaker_name": "Tom Chen", "text": "What does this cost at our scale of two hundred cameras?", "start_time": 150, "end_time": 180},
-        {"speaker_name": "Vishnu Saran", "text": "Good questions, let me answer both.", "start_time": 180, "end_time": 200},
+        {"speaker_name": "Tom Chen", "text": "What does this cost at our scale of two hundred seats?", "start_time": 150, "end_time": 180},
+        {"speaker_name": "Alex Johnson", "text": "Good questions, let me answer both.", "start_time": 180, "end_time": 200},
     ],
 }
 
 
 def test_rep_speakers_identified():
     reps = identify_rep_speakers(SYNTH_TRANSCRIPT)
-    assert "vishnu saran" in reps
+    assert "alex johnson" in reps
     assert not any("sarah" in r for r in reps)
 
 
 def test_speaker_stats_and_ratio():
     reps = identify_rep_speakers(SYNTH_TRANSCRIPT)
     stats, ratio = compute_speaker_stats(SYNTH_TRANSCRIPT["sentences"], reps)
-    assert stats["Vishnu Saran"]["talk_time_pct"] == 70.0  # 140s of 200s
+    assert stats["Alex Johnson"]["talk_time_pct"] == 70.0  # 140s of 200s
     assert stats["Sarah Lee"]["talk_time_pct"] == 15.0
     assert ratio == 0.7
 
@@ -77,9 +77,9 @@ def test_commitment_attribution():
     commitments = attribute_commitments(
         SYNTH_TRANSCRIPT["summary"]["action_items"], reps, attendees
     )
-    owners = {c["text"][:12]: c["owner"] for c in commitments}
-    assert owners["Vishnu Send "] == "us"
-    assert owners["Sarah Share "] == "buyer"
+    owners = {c["text"][:10]: c["owner"] for c in commitments}
+    assert owners["Alex Send "] == "us"
+    assert owners["Sarah Shar"] == "buyer"
     assert owners["Review budge"] == "unknown"
 
 
@@ -88,19 +88,19 @@ def test_commitment_header_format():
     reps = identify_rep_speakers(SYNTH_TRANSCRIPT)
     attendees = [{"name": "Kenneth Edwards", "email": "ken@buyer.com"}]
     items = [
-        "**Vishnu Saran**",
-        "Check with team to confirm DoneSafe access (27:20)",
+        "**Alex Johnson**",
+        "Check with team to confirm sandbox access (27:20)",
         "Provide sandbox environment access (31:30)",
         "**Kenneth Edwards**",
-        "Review DoneSafe platform once access is granted (27:40)",
+        "Review platform once access is granted (27:40)",
         "**Jonathan Kramer**",
         "Arrange meeting early next week (29:30)",
     ]
     commitments = attribute_commitments(items, reps, attendees)
     # Headers are NOT commitments
     assert len(commitments) == 4
-    assert all(c["text"] not in ("Vishnu Saran", "Kenneth Edwards", "Jonathan Kramer") for c in commitments)
-    assert commitments[0]["owner"] == "us" and "DoneSafe access" in commitments[0]["text"]
+    assert all(c["text"] not in ("Alex Johnson", "Kenneth Edwards", "Jonathan Kramer") for c in commitments)
+    assert commitments[0]["owner"] == "us" and "sandbox access" in commitments[0]["text"]
     assert commitments[1]["owner"] == "us"
     assert commitments[2]["owner"] == "buyer" and commitments[2]["owner_name"] == "Kenneth Edwards"
     # Jonathan is not in attendees — unknown side, but context name retained
