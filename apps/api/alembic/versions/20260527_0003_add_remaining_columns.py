@@ -24,43 +24,17 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # ── workspace_users ───────────────────────────────────────────────────────
-    op.add_column("workspace_users", sa.Column("name", sa.Text, nullable=True))
-
-    # ── api_keys ──────────────────────────────────────────────────────────────
-    op.add_column("api_keys", sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True))
-
-    # ── interactions ──────────────────────────────────────────────────────────
-    op.add_column("interactions", sa.Column("sentiment", sa.Text, nullable=True))
-    op.add_column("interactions", sa.Column("sentiment_score", sa.Float, nullable=True))
-    op.add_column("interactions", sa.Column("contact_name", sa.Text, nullable=True))
-    op.add_column("interactions", sa.Column("contact_email", sa.Text, nullable=True))
-
-    # ── agent_runs ────────────────────────────────────────────────────────────
-    # Add started_at (model uses this; DB has 'created_at' from initial migration).
-    # Both columns coexist — started_at is used by the ORM, created_at is orphaned but harmless.
-    op.add_column(
-        "agent_runs",
-        sa.Column(
-            "started_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("NOW()"),
-            nullable=True,
-        ),
-    )
-    op.add_column("agent_runs", sa.Column("error_summary", postgresql.JSONB, nullable=True))
-    op.add_column(
-        "agent_runs",
-        sa.Column(
-            "triggered_by_user",
-            postgresql.UUID(as_uuid=True),
-            sa.ForeignKey("workspace_users.id"),
-            nullable=True,
-        ),
-    )
-
-    # ── audit_log ─────────────────────────────────────────────────────────────
-    op.add_column("audit_log", sa.Column("user_id", postgresql.UUID(as_uuid=True), nullable=True))
+    conn = op.get_bind()
+    conn.execute(sa.text("ALTER TABLE workspace_users ADD COLUMN IF NOT EXISTS name TEXT"))
+    conn.execute(sa.text("ALTER TABLE api_keys ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ"))
+    conn.execute(sa.text("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS sentiment TEXT"))
+    conn.execute(sa.text("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS sentiment_score FLOAT"))
+    conn.execute(sa.text("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS contact_name TEXT"))
+    conn.execute(sa.text("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS contact_email TEXT"))
+    conn.execute(sa.text("ALTER TABLE agent_runs ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ DEFAULT NOW()"))
+    conn.execute(sa.text("ALTER TABLE agent_runs ADD COLUMN IF NOT EXISTS error_summary JSONB"))
+    conn.execute(sa.text("ALTER TABLE agent_runs ADD COLUMN IF NOT EXISTS triggered_by_user UUID REFERENCES workspace_users(id)"))
+    conn.execute(sa.text("ALTER TABLE audit_log ADD COLUMN IF NOT EXISTS user_id UUID"))
 
 
 def downgrade() -> None:

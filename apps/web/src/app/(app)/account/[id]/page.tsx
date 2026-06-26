@@ -24,7 +24,7 @@ import {
   CheckCircle, XCircle, Send, MessageSquare, BarChart3, Activity,
   ChevronDown, ChevronUp, ExternalLink, RefreshCw, User, Bot,
   StickyNote, Sparkles, Shield, Target, HelpCircle, GraduationCap,
-  CalendarDays, FileText, Download, X, MessagesSquare, Phone,
+  CalendarDays, FileText, Download, X, MessagesSquare, Phone, Mail,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -821,6 +821,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   const [calendarSyncing, setCalendarSyncing] = useState(false);
   const [calendarSynced, setCalendarSynced] = useState<{ meetings_found: number; matched: number } | null>(null);
   const [agentRunning, setAgentRunning] = useState(false);
+  const [sampleMeetingLoaded, setSampleMeetingLoaded] = useState(false);
+  const [sampleEmailLoaded, setSampleEmailLoaded] = useState(false);
 
   // SSE real-time updates
   // EventSource cannot set Authorization headers or send cookies cross-origin.
@@ -1289,7 +1291,12 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
             {/* Deal story */}
             {narrative && (
               <div className="space-y-1.5">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Deal Story</p>
+                <div className="flex items-center gap-1.5">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Deal Story</p>
+                  <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-full px-1.5 py-0.5">
+                    <Sparkles className="w-2.5 h-2.5" />AI
+                  </span>
+                </div>
                 <div className="space-y-1.5">
                   {narrative.split(/(?<=\.)\s+/).filter(Boolean).map((sentence, i) => (
                     <p key={i} className="text-xs text-gray-700 leading-relaxed">{sentence}</p>
@@ -1336,7 +1343,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
               <div className="space-y-1">
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Engagement</p>
                 <div className="space-y-1.5">
-                  {activitySummary.last_inbound_reply_date && (
+                  {(activitySummary.last_inbound_reply_date || activitySummary.days_since_last_inbound != null) && (
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-400">Last reply</span>
                       <span className={cn("text-xs font-medium",
@@ -1637,21 +1644,33 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                           </span>
                         )}
                       </div>
-                      <div className="space-y-2">
-                        {["metrics","economic_buyer","decision_criteria","decision_process","implicate_pain","champion","competition","paper_process"].map(k => {
-                          const val = (meddpiccData[k] as number) ?? 0;
-                          const barColor = val >= 0.6 ? "bg-green-400" : val >= 0.3 ? "bg-amber-400" : "bg-red-400";
+                      <div className="space-y-2.5">
+                        {(["metrics","economic_buyer","decision_criteria","decision_process","implicate_pain","champion","competition","paper_process"] as const).map((k, idx) => {
+                          const letters = ["M","E","D","D","I","C","C","P"];
+                          const raw = meddpiccData[k];
+                          const val = typeof raw === "number" ? raw : 0;
+                          const pct = Math.round(val * 100);
+                          const barColor = val >= 0.6
+                            ? "bg-gradient-to-r from-emerald-400 to-emerald-500"
+                            : val >= 0.3
+                            ? "bg-gradient-to-r from-amber-400 to-amber-500"
+                            : "bg-gradient-to-r from-red-400 to-red-500";
+                          const textColor = val >= 0.6 ? "text-emerald-600" : val >= 0.3 ? "text-amber-600" : "text-red-500";
                           const isGap = val < 0.5;
                           return (
-                            <div key={k} className="flex items-center gap-3">
-                              <span className={cn("text-xs w-36 flex-shrink-0", isGap ? "text-red-600 font-semibold" : "text-gray-500")}>
+                            <div key={k} className="flex items-center gap-2">
+                              <span className="text-[10px] font-black text-gray-300 w-3 flex-shrink-0 font-mono">{letters[idx]}</span>
+                              <span className={cn("text-xs w-32 flex-shrink-0 truncate", isGap ? "text-red-600 font-semibold" : "text-gray-500")}>
                                 {MEDDPICC_LABELS[k]}
                               </span>
-                              <div className="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
-                                <div className={cn("h-full rounded-full", barColor)} style={{ width: `${val * 100}%` }} />
+                              <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                                <div
+                                  className={cn("h-full rounded-full transition-all duration-700", barColor)}
+                                  style={{ width: `${pct}%` }}
+                                />
                               </div>
-                              <span className={cn("text-xs w-8 text-right tabular-nums flex-shrink-0", isGap ? "text-red-500 font-semibold" : "text-gray-400")}>
-                                {Math.round(val * 100)}%
+                              <span className={cn("text-xs w-8 text-right tabular-nums font-semibold flex-shrink-0", textColor)}>
+                                {pct}%
                               </span>
                             </div>
                           );
@@ -1686,20 +1705,181 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                     </div>
                   )}
 
+                  {/* Communication — email engagement */}
+                  <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Mail className="w-4 h-4 text-brand-600" />
+                      <p className="text-sm font-semibold text-gray-800">Communication</p>
+                      {(activitySummary?.email_exchange_count ?? 0) > 0 && (
+                        <span className="ml-auto text-xs text-gray-400">
+                          {activitySummary!.email_exchange_count} total emails
+                        </span>
+                      )}
+                    </div>
+                    {(activitySummary?.email_exchange_count ?? 0) > 0 ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
+                            <p className="text-base font-bold text-gray-800">{activitySummary!.total_emails_sent ?? 0}</p>
+                            <p className="text-[10px] text-gray-400">emails sent</p>
+                          </div>
+                          <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
+                            <p className="text-base font-bold text-gray-800">{activitySummary!.total_emails_received ?? 0}</p>
+                            <p className="text-[10px] text-gray-400">replies received</p>
+                          </div>
+                          <div className={cn(
+                            "rounded-xl border px-3 py-2.5 text-center",
+                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "bg-amber-50 border-amber-200" : "bg-gray-50 border-gray-100"
+                          )}>
+                            <p className={cn("text-base font-bold",
+                              (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-700" : "text-gray-800")}>
+                              {activitySummary!.days_since_last_inbound != null ? `${activitySummary!.days_since_last_inbound}d` : "—"}
+                            </p>
+                            <p className={cn("text-[10px]",
+                              (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-600" : "text-gray-400")}>since reply</p>
+                          </div>
+                        </div>
+                        {sampleEmailLoaded && (
+                          <div>
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Recent Threads</p>
+                            <div className="space-y-2">
+                              <div className="flex items-start gap-2.5 rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5">
+                                <div className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <span className="text-[9px] font-bold text-indigo-600">SC</span>
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-xs font-semibold text-gray-700">Re: Security review timeline</p>
+                                  <p className="text-[11px] text-gray-400 truncate">"We'll have the questionnaire back to you by EOW..." · 12d ago</p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-2.5 rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5">
+                                <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                  <span className="text-[9px] font-bold text-slate-600">RK</span>
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-xs font-semibold text-gray-700">Re: Pilot scope — CFO review</p>
+                                  <p className="text-[11px] text-gray-400 truncate">"Forwarded to legal. Expect response next week." · 18d ago</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {!sampleEmailLoaded && (
+                          <button
+                            onClick={() => setSampleEmailLoaded(true)}
+                            className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-colors w-full">
+                            <Sparkles className="w-3 h-3" />
+                            Simulate AI Email Analysis
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-xs text-gray-400 mb-4">
+                          No email activity tracked yet. Connect Gmail to auto-log communication with this account.
+                        </p>
+                        <div className="flex flex-col gap-2">
+                          <a href="/settings?tab=integrations"
+                            className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors w-full">
+                            <Mail className="w-3 h-3" />
+                            Connect Gmail
+                          </a>
+                          <button
+                            onClick={() => setSampleEmailLoaded(true)}
+                            className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-colors w-full">
+                            <Sparkles className="w-3 h-3" />
+                            Simulate AI Email Analysis
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Conversation Intelligence — from Fireflies call data */}
                   {(() => {
                     const intel = transcriptsData?.intel;
                     const calls = transcriptsData?.data ?? [];
                     if (!intel || !intel.calls_total) {
+                      if (sampleMeetingLoaded) {
+                        return (
+                          <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+                            <div className="flex items-center gap-2">
+                              <Phone className="w-4 h-4 text-brand-600" />
+                              <p className="text-sm font-semibold text-gray-800">Meeting Log</p>
+                              <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-full px-1.5 py-0.5 ml-1">
+                                <Sparkles className="w-2.5 h-2.5" />Sample
+                              </span>
+                              <span className="ml-auto text-xs text-gray-400">2 recorded calls</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
+                                <p className="text-base font-bold text-gray-800">5d</p>
+                                <p className="text-[10px] text-gray-400">since last call</p>
+                              </div>
+                              <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
+                                <p className="text-base font-bold text-gray-800">2</p>
+                                <p className="text-[10px] text-gray-400">calls last 30d</p>
+                              </div>
+                              <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-center">
+                                <p className="text-base font-bold text-amber-700">72%</p>
+                                <p className="text-[10px] text-amber-600">rep talk share · high</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5">
+                              <AlertTriangle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
+                              <p className="text-xs text-amber-700">
+                                Rep talk share above 70% — prospect not engaged enough. Ask more discovery questions next call.
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">What the buyer asked</p>
+                              <div className="space-y-1.5">
+                                <p className="text-xs text-gray-600 leading-snug"><span className="font-semibold text-gray-700">Sarah Chen:</span> "What does the implementation timeline look like for a team our size?"</p>
+                                <p className="text-xs text-gray-600 leading-snug"><span className="font-semibold text-gray-700">Sarah Chen:</span> "How does this integrate with our existing EHR system?"</p>
+                                <p className="text-xs text-gray-600 leading-snug"><span className="font-semibold text-gray-700">Raymond Kirk:</span> "What's the contract flexibility if we need to scale down?"</p>
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">They owe us</p>
+                                <p className="text-xs text-gray-600 leading-snug mb-1">Security questionnaire · Jun 15</p>
+                                <p className="text-xs text-gray-600 leading-snug">IT architecture diagram · Jun 20</p>
+                              </div>
+                              <div>
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">We owe them</p>
+                                <p className="text-xs text-gray-600 leading-snug">Pilot scoping doc · Jun 22</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
                       return (
                         <div className="bg-white rounded-2xl border border-gray-200 p-5">
-                          <div className="flex items-center gap-2 mb-1">
+                          <div className="flex items-center gap-2 mb-3">
                             <Phone className="w-4 h-4 text-brand-600" />
-                            <p className="text-sm font-semibold text-gray-800">Conversation Intelligence</p>
+                            <p className="text-sm font-semibold text-gray-800">Meeting Log</p>
                           </div>
-                          <p className="text-xs text-gray-400">
-                            No recorded calls for this deal yet. Calls recorded in Fireflies are matched here automatically.
+                          <p className="text-xs text-gray-400 mb-4">
+                            No recorded calls matched to this deal yet. Connect Fireflies to auto-ingest call transcripts and AI meeting summaries.
                           </p>
+                          <div className="flex flex-col gap-2">
+                            <a href="/settings?tab=integrations"
+                              className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors w-full">
+                              <Phone className="w-3 h-3" />
+                              Connect Fireflies.ai
+                            </a>
+                            <button
+                              className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors w-full">
+                              <FileText className="w-3 h-3" />
+                              Upload Transcript
+                            </button>
+                            <button
+                              onClick={() => setSampleMeetingLoaded(true)}
+                              className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-colors w-full">
+                              <Sparkles className="w-3 h-3" />
+                              Load Sample Meeting Insights
+                            </button>
+                          </div>
                         </div>
                       );
                     }
@@ -1709,7 +1889,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                       <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
                         <div className="flex items-center gap-2">
                           <Phone className="w-4 h-4 text-brand-600" />
-                          <p className="text-sm font-semibold text-gray-800">Conversation Intelligence</p>
+                          <p className="text-sm font-semibold text-gray-800">Meeting Log</p>
                           <span className="ml-auto text-xs text-gray-400">{intel.calls_total} recorded call{intel.calls_total !== 1 ? "s" : ""}</span>
                         </div>
 

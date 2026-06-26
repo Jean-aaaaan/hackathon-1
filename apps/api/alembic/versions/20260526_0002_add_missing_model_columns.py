@@ -17,26 +17,21 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # ── signals: columns in model missing from migration ──────────────────────
-    op.add_column("signals", sa.Column("gold_confidence", sa.Float, nullable=True))
-    op.add_column("signals", sa.Column("processed_at", sa.DateTime(timezone=True), nullable=True))
-    op.add_column("signals", sa.Column("notification_sent", sa.Boolean, server_default="false", nullable=False))
-    op.add_column("signals", sa.Column("detected_at", sa.DateTime(timezone=True), server_default=sa.text("NOW()"), nullable=True))
-
-    # ── drafts: columns in model missing from migration ───────────────────────
-    op.add_column("drafts", sa.Column("content_html", sa.Text, nullable=True))
-    op.add_column("drafts", sa.Column("target_contact", sa.Text, nullable=True))
-    op.add_column("drafts", sa.Column("subject_line", sa.Text, nullable=True))
-    op.add_column("drafts", sa.Column(
-        "reviewer_id",
-        postgresql.UUID(as_uuid=True),
-        sa.ForeignKey("workspace_users.id"),
-        nullable=True,
-    ))
-    op.add_column("drafts", sa.Column("final_content", sa.Text, nullable=True))
-    op.add_column("drafts", sa.Column("pushed_to_crm", sa.Boolean, server_default="false", nullable=False))
-    op.add_column("drafts", sa.Column("crm_draft_id", sa.Text, nullable=True))
-    op.add_column("drafts", sa.Column("crm_pushed_at", sa.DateTime(timezone=True), nullable=True))
+    conn = op.get_bind()
+    # ── signals ───────────────────────────────────────────────────────────────
+    conn.execute(sa.text("ALTER TABLE signals ADD COLUMN IF NOT EXISTS gold_confidence FLOAT"))
+    conn.execute(sa.text("ALTER TABLE signals ADD COLUMN IF NOT EXISTS processed_at TIMESTAMPTZ"))
+    conn.execute(sa.text("ALTER TABLE signals ADD COLUMN IF NOT EXISTS notification_sent BOOLEAN NOT NULL DEFAULT false"))
+    conn.execute(sa.text("ALTER TABLE signals ADD COLUMN IF NOT EXISTS detected_at TIMESTAMPTZ DEFAULT NOW()"))
+    # ── drafts ────────────────────────────────────────────────────────────────
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS content_html TEXT"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS target_contact TEXT"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS subject_line TEXT"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS reviewer_id UUID REFERENCES workspace_users(id)"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS final_content TEXT"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS pushed_to_crm BOOLEAN NOT NULL DEFAULT false"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS crm_draft_id TEXT"))
+    conn.execute(sa.text("ALTER TABLE drafts ADD COLUMN IF NOT EXISTS crm_pushed_at TIMESTAMPTZ"))
 
 
 def downgrade() -> None:
