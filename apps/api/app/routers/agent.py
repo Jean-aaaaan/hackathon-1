@@ -119,6 +119,8 @@ async def chat(
                         "thread_id": thread_id,
                         "token_count": chunk.get("tokens", 0),
                     })
+                elif chunk["type"] == "error":
+                    yield _sse_event("error", {"message": chunk.get("message", "Stream interrupted. Please retry.")})
 
         except Exception as e:
             log.error("chat_stream_error", error=str(e), thread_id=thread_id)

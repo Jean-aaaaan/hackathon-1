@@ -104,8 +104,32 @@ function AssistantInner() {
             copy[copy.length - 1] = { ...copy[copy.length - 1], content: fullText, citations, isStreaming: false };
             return copy;
           });
+        } else if (chunk.type === "error") {
+          const errMsg = (chunk.message as string) || "Sorry, something went wrong. Please try again.";
+          setMessages(prev => {
+            const copy = [...prev];
+            copy[copy.length - 1] = {
+              role: "assistant",
+              content: fullText || errMsg,
+              citations,
+              isStreaming: false,
+            };
+            return copy;
+          });
         }
       }
+      // Stream closed without a done/error event — clear stuck "Thinking…" state
+      setMessages(prev => {
+        const last = prev[prev.length - 1];
+        if (!last?.isStreaming) return prev;
+        const copy = [...prev];
+        copy[copy.length - 1] = {
+          ...last,
+          content: last.content || "No response received. Please try again.",
+          isStreaming: false,
+        };
+        return copy;
+      });
     } catch {
       setMessages(prev => {
         const copy = [...prev];
