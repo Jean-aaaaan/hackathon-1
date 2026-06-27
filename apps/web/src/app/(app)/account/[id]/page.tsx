@@ -14,17 +14,18 @@ import {
   type TimelineAction, type GeneratedDocument, type DocType,
 } from "@/lib/api";
 import { SmartFieldsPanel } from "@/components/account/smart-fields-panel";
+import { WarRoomHeader, WarRoomTabNav } from "@/components/account/war-room-header";
 import { MarkdownContent } from "@/components/markdown-content";
 import { cn, signalLabel, formatDate, draftTypeLabel, urgencyLevel } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { formatDistanceToNow, format } from "date-fns";
 import {
-  ArrowLeft, Zap, AlertTriangle, Clock, TrendingUp, TrendingDown, Minus,
+  Zap, AlertTriangle, Clock, TrendingUp, TrendingDown, Minus,
   CheckCircle, XCircle, Send, MessageSquare, BarChart3, Activity,
   ChevronDown, ChevronUp, ExternalLink, RefreshCw, User, Bot,
   StickyNote, Sparkles, Shield, Target, HelpCircle, GraduationCap,
-  CalendarDays, FileText, Download, X, MessagesSquare, Phone, Mail,
+  CalendarDays, FileText, Download, X, Phone, Mail,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -74,40 +75,9 @@ const DECLINE_CATEGORIES = [
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 
-function fmtCurrency(n: number | null) {
-  if (!n) return "-";
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
-}
-
 function fmtPct(n: number | null | undefined) {
   if (n == null) return "—";
   return `${Math.round(n * 100)}%`;
-}
-
-// ── Health badge ──────────────────────────────────────────────────────────────
-
-function HealthBadge({ score }: { score: number }) {
-  const level = urgencyLevel(score);
-  const styles = {
-    critical: "bg-red-50 text-red-700 border-red-200 ring-red-100",
-    high:     "bg-orange-50 text-orange-700 border-orange-200 ring-orange-100",
-    medium:   "bg-amber-50 text-amber-700 border-amber-200 ring-amber-100",
-    low:      "bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-100",
-  };
-  const dots = {
-    critical: "bg-red-500", high: "bg-orange-400",
-    medium: "bg-amber-400", low: "bg-emerald-500",
-  };
-  const labels = { critical: "Critical", high: "High Risk", medium: "At Risk", low: "Healthy" };
-  return (
-    <span className={cn(
-      "inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ring-2",
-      styles[level]
-    )}>
-      <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", dots[level])} />
-      {labels[level]}
-    </span>
-  );
 }
 
 // ── Deal story ────────────────────────────────────────────────────────────────
@@ -1116,9 +1086,6 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClosed, winLossAlreadyCaptured]);
 
-  const momentumStyle = momentum === "accelerating" ? "text-emerald-600" : momentum === "declining" ? "text-red-500" : "text-amber-500";
-  const momentumIcon = momentum === "accelerating" ? "↗" : momentum === "declining" ? "↓" : "↘";
-
   const contextSeed = (() => {
     if (overduePlanActions.length > 0) return `${accountName} has ${overduePlanActions.length} overdue action(s). What's the best approach to clear them?`;
     if (activitySummary?.days_since_last_inbound && activitySummary.days_since_last_inbound > 14)
@@ -1139,113 +1106,30 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
 
-      {/* ── Header ────────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-zinc-200 px-5 py-3.5 flex items-center gap-4">
-        {/* Back + account info */}
-        <Link href="/inbox" className="text-zinc-400 hover:text-zinc-600 transition-colors flex-shrink-0">
-          <ArrowLeft className="w-4 h-4" />
-        </Link>
-
-        <div className="flex items-center gap-3 min-w-0">
-          <h1 className="text-base font-semibold text-zinc-900 truncate">{accountName}</h1>
-          {accountStage && (
-            <span className="text-xs font-medium text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full flex-shrink-0">
-              {accountStage}
-            </span>
-          )}
-          {dealAmount && (
-            <span className="text-sm font-semibold text-zinc-700 flex-shrink-0">{fmtCurrency(dealAmount)}</span>
-          )}
-        </div>
-
-        {/* Status chips */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          {urgencyScore !== null && <HealthBadge score={urgencyScore} />}
-          {momentum && (
-            <span className={cn("text-xs font-medium", momentumStyle)}>
-              {momentumIcon} {momentum}
-            </span>
-          )}
-          {aiCloseDate && crmCloseDate && aiCloseDate !== crmCloseDate && (
-            <span className="text-xs text-zinc-400">
-              AI close: <span className="font-medium text-zinc-700">
-                {new Date(aiCloseDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-              </span>
-              {" · "}CRM: {new Date(crmCloseDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-            </span>
-          )}
-        </div>
-
-        {/* Generate toast */}
-        {generateToast && (
-          <span className="text-xs font-medium text-brand-700 bg-brand-50 border border-brand-200 px-3 py-1 rounded-full">
-            {generateToast}
-          </span>
-        )}
-
-        {/* Actions — push to right */}
-        <div className="ml-auto flex items-center gap-2 flex-shrink-0">
-          <button onClick={() => setChatOpen(true)} className="btn-secondary flex items-center gap-1.5 text-xs">
-            <MessagesSquare className="w-3 h-3" />
-            Chat
-          </button>
-
-          {/* Generate dropdown */}
-          <div className="relative">
-            <button onClick={() => setGenerateOpen(v => !v)}
-              className="btn-accent flex items-center gap-1.5 text-xs">
-              <FileText className="w-3 h-3" />
-              {generatingDoc ? "Generating…" : "Generate"}
-              <ChevronDown className="w-3 h-3 opacity-80" />
-            </button>
-            {generateOpen && (
-              <div className="absolute right-0 top-full mt-1.5 bg-white border border-zinc-200 rounded-xl shadow-lg z-30 min-w-[200px] py-1.5 overflow-hidden">
-                {(Object.entries(DOC_TYPE_LABELS) as [DocType, string][]).map(([type, label]) => (
-                  <button key={type} onClick={() => handleGenerateDoc(type)}
-                    className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors">
-                    {label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <button onClick={() => runAgentMutation.mutate()} disabled={agentRunning}
-            className={cn(
-              "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors disabled:opacity-50",
-              agentRunning ? "bg-zinc-100 text-zinc-700 border border-zinc-200" : "btn-accent"
-            )}>
-            <Zap className="w-3 h-3" />
-            {agentRunning ? "Running…" : "Run Agent"}
-          </button>
-
-          {/* Overflow: Brief + Share + Refresh */}
-          <div className="relative">
-            <button onClick={() => setGenerateOpen(false)}
-              className="flex items-center gap-1 text-zinc-400 hover:text-zinc-600 transition-colors px-1.5 py-1.5 rounded-lg hover:bg-zinc-100">
-              <ChevronDown className="w-4 h-4" />
-            </button>
-          </div>
-
-          <button onClick={fetchBrief} disabled={briefFetching}
-            className="btn-secondary flex items-center gap-1.5 text-xs px-2.5 disabled:opacity-50"
-            title="Meeting Brief">
-            <FileText className="w-3.5 h-3.5" />
-          </button>
-
-          <button onClick={() => shareMutation.mutate()} disabled={shareMutation.isPending}
-            title={shareCopied ? "Copied!" : "Copy share link"}
-            className="text-zinc-400 hover:text-zinc-600 transition-colors p-1">
-            <ExternalLink className="w-4 h-4" />
-          </button>
-
-          <button onClick={() => queryClient.invalidateQueries({ queryKey: ["account", id] })}
-            title="Refresh"
-            className="text-zinc-400 hover:text-zinc-600 transition-colors p-1">
-            <RefreshCw className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+      <WarRoomHeader
+        accountName={accountName}
+        accountStage={accountStage}
+        dealAmount={dealAmount}
+        urgencyScore={urgencyScore}
+        momentum={momentum}
+        aiCloseDate={aiCloseDate}
+        crmCloseDate={crmCloseDate}
+        generateToast={generateToast}
+        generateOpen={generateOpen}
+        generatingDoc={!!generatingDoc}
+        agentRunning={agentRunning}
+        briefFetching={briefFetching}
+        sharePending={shareMutation.isPending}
+        shareCopied={shareCopied}
+        onChatOpen={() => setChatOpen(true)}
+        onGenerateToggle={() => setGenerateOpen(v => !v)}
+        onGenerateDoc={handleGenerateDoc}
+        onRunAgent={() => runAgentMutation.mutate()}
+        onGenerateClose={() => setGenerateOpen(false)}
+        onFetchBrief={fetchBrief}
+        onShare={() => shareMutation.mutate()}
+        onRefresh={() => queryClient.invalidateQueries({ queryKey: ["account", id] })}
+      />
 
       {/* ── Body: sidebar + main ───────────────────────────────────────────── */}
       <div className="flex-1 flex overflow-hidden">
@@ -1408,32 +1292,11 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
         {/* ── Main content ─────────────────────────────────────────────────── */}
         <div className="flex-1 flex flex-col overflow-hidden bg-zinc-50">
 
-          {/* Tab strip — 3 tabs */}
-          <div className="bg-white border-b border-zinc-200 px-6 flex items-center gap-1">
-            {([
-              { id: "act",     label: "Act",          icon: Zap,      badge: overduePlanActions.length + pendingDrafts.length },
-              { id: "intel",   label: "Intelligence",  icon: BarChart3, badge: 0 },
-              { id: "history", label: "History",       icon: Clock,    badge: 0 },
-            ] as const).map(tab => {
-              const Icon = tab.icon;
-              const isActive = activeCenter === tab.id;
-              return (
-                <button key={tab.id} onClick={() => setActiveCenter(tab.id)}
-                  className={cn(
-                    "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors relative",
-                    isActive ? "border-zinc-900 text-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-700"
-                  )}>
-                  <Icon className="w-3.5 h-3.5" />
-                  {tab.label}
-                  {tab.badge > 0 && (
-                    <span className="inline-flex items-center justify-center min-w-[16px] h-4 text-[10px] font-bold bg-zinc-900 text-white rounded-full px-1">
-                      {tab.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+          <WarRoomTabNav
+            activeCenter={activeCenter}
+            onCenterChange={setActiveCenter}
+            actBadgeCount={overduePlanActions.length + pendingDrafts.length}
+          />
 
           {/* Tab content */}
           <div className="flex-1 overflow-y-auto">

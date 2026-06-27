@@ -19,13 +19,13 @@ import { CommandPalette } from "@/components/ui/command-palette";
 function VantageMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true">
-      <rect width="32" height="32" rx="8" fill="#6366F1" />
+      <rect width="32" height="32" rx="8" fill="#18181B" />
       <path
         d="M16 10.5C12.1 10.5 8.5 14 8.5 16c0 2 3.6 5.5 7.5 5.5s7.5-3.5 7.5-5.5c0-2-3.6-5.5-7.5-5.5z"
         fill="white"
         fillOpacity="0.95"
       />
-      <circle cx="16" cy="16" r="2.8" fill="#6366F1" />
+      <circle cx="16" cy="16" r="2.8" fill="#18181B" />
       <circle cx="16" cy="16" r="1.2" fill="white" />
     </svg>
   );
@@ -234,12 +234,12 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
               >
                 {label}
                 {badge !== null && (
-                  <span className="text-[10px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded-full leading-none min-w-[1.1rem] text-center">
+                  <span className="text-[10px] font-bold bg-zinc-900 text-white px-1.5 py-0.5 rounded-full leading-none min-w-[1.1rem] text-center">
                     {badge > 99 ? "99+" : badge}
                   </span>
                 )}
                 {active && (
-                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-indigo-500 rounded-full" />
+                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-zinc-900 rounded-full" />
                 )}
               </Link>
             );
@@ -364,9 +364,9 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
           <div className="relative" ref={avatarRef}>
             <button
               onClick={() => setAvatarOpen(v => !v)}
-              className="w-8 h-8 rounded-full bg-indigo-100 hover:bg-indigo-200 flex items-center justify-center transition-colors flex-shrink-0"
+              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center transition-colors flex-shrink-0"
             >
-              <span className="text-[11px] font-semibold text-indigo-700">{initials}</span>
+              <span className="text-[11px] font-semibold text-zinc-700">{initials}</span>
             </button>
 
             {avatarOpen && (
@@ -407,7 +407,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                               ws.is_current ? "text-zinc-900 font-medium" : "text-zinc-600 hover:bg-zinc-100"
                             )}
                           >
-                            <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", ws.is_current ? "bg-indigo-500" : "bg-zinc-300")} />
+                            <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", ws.is_current ? "bg-zinc-900" : "bg-zinc-300")} />
                             <span className="flex-1 truncate">{ws.name}</span>
                             <span className="text-[10px] text-zinc-400">{ws.role}</span>
                           </button>
