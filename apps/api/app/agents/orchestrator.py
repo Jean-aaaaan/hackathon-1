@@ -732,8 +732,14 @@ class AgentOrchestrator:
             "health_reasoning": _humanize_prose(risk_result.health_reasoning),
             "last_updated": now,
 
-            # MEDDPICC framework scores
-            "meddpicc": risk_result.meddpicc.model_dump() if risk_result.meddpicc else None,
+            # MEDDPICC framework scores — preserve existing state if agent returned defaults
+            # (gpt-4o-mini returns {} for complex schemas at high context; overall_score=0.24
+            # is the computed default from all-minimum component values)
+            "meddpicc": (
+                risk_result.meddpicc.model_dump()
+                if risk_result.meddpicc and round(risk_result.meddpicc.overall_score, 2) != 0.24
+                else current_state.get("pov", {}).get("meddpicc") or (risk_result.meddpicc.model_dump() if risk_result.meddpicc else None)
+            ),
             "qualification_score": risk_result.qualification_score,
 
             # 5 risk vectors
@@ -757,17 +763,21 @@ class AgentOrchestrator:
                 else risk_result.days_since_meaningful_activity
             ),
 
-            # 3 Whys — model populates meddpicc.three_whys; fall back to that if top-level is empty
+            # 3 Whys — fall through to existing state if agent returned nothing
             "three_whys": (
                 risk_result.three_whys_assessment
                 or (risk_result.meddpicc.three_whys if risk_result.meddpicc else None)
+                or current_state.get("pov", {}).get("three_whys")
             ),
 
             # Win probability — deterministic formula, fully auditable
             "win_probability": win_probability,
 
-            # Flowing narrative and correlated signal themes
-            "deal_narrative": _humanize_prose(risk_result.deal_narrative),
+            # Flowing narrative — preserve existing if agent returned empty
+            "deal_narrative": (
+                _humanize_prose(risk_result.deal_narrative)
+                or current_state.get("pov", {}).get("deal_narrative", "")
+            ),
             "signal_themes": risk_result.signal_themes,
 
             # Top risk as a single sentence (for morning brief)

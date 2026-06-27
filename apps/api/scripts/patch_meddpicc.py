@@ -19,6 +19,7 @@ WORKSPACE_ID = "00000000-0000-0000-0000-000000000001"
 
 MEDDPICC_PATCHES = {
     "Meridian Health Systems": {
+        "deal_narrative": "Meridian's champion Sarah Chen has gone dark for 14 days following an internal reorg. Procurement is stalling on legal review while Veeva Health submitted a counter-proposal last week. CRM shows Commit but agent downgraded to Best Case. A deal with strong MEDDPICC documentation (metrics proven in pilot, budget approved) is at risk purely from champion unavailability. Executive escalation through Dr. Kirk is required this week.",
         "meddpicc": {
             "metrics": 0.85,
             "economic_buyer": 0.60,
@@ -279,6 +280,7 @@ MEDDPICC_PATCHES = {
         }
     },
     "Snowflake": {
+        "deal_narrative": "Snowflake's sales team has expanded aggressively post-IPO but rep productivity metrics are declining. New CEO Sridhar Ramaswamy is under pressure to improve sales efficiency. Champion Marcus Holloway has internal buy-in but CFO Mike Scarpelli is blocking new SaaS spend following restructuring. This is a Best Case deal that needs a CFO-ready ROI model delivered this week to maintain deal momentum.",
         "meddpicc": {
             "metrics": 0.80,
             "economic_buyer": 0.45,
@@ -305,6 +307,7 @@ MEDDPICC_PATCHES = {
         }
     },
     "Figma": {
+        "deal_narrative": "Figma is aggressively hiring sales reps following the Adobe acquisition collapse and their $1B independent funding round. VP Sales Kris Rasmussen is building out a full enterprise motion from scratch and has full discretionary budget. The champion IS the economic buyer — a fast decision maker. Critical risk is Outreach.io's competing proposal submitted June 18. Accelerate the pilot proposal now before Q3 hiring decisions lock in.",
         "meddpicc": {
             "metrics": 0.70,
             "economic_buyer": 0.80,
@@ -331,6 +334,7 @@ MEDDPICC_PATCHES = {
         }
     },
     "Databricks": {
+        "deal_narrative": "Databricks is in hypergrowth following their $10B Series J at $62B valuation. CEO Ali Ghodsi has publicly committed to AI-native go-to-market across all GTM functions. Early stage — no champion confirmed and CRO not identified. The opportunity is large ($890K) but qualification is thin. Key risk is getting lost in their massive vendor evaluation queue. Clari and Salesforce Einstein have incumbent advantage. Must land a RevOps champion fast.",
         "meddpicc": {
             "metrics": 0.45,
             "economic_buyer": 0.25,
@@ -387,6 +391,9 @@ async def patch():
             pov["risk_vectors"] = patch["risk_vectors"]
             pov["deal_momentum"] = patch["deal_momentum"]
             pov["win_probability"] = patch["win_probability"]
+            # Restore deal_narrative if agent wiped it
+            if not pov.get("deal_narrative") and patch.get("deal_narrative"):
+                pov["deal_narrative"] = patch["deal_narrative"]
             pov["three_whys"] = patch["three_whys"]
             state["pov"] = pov
 

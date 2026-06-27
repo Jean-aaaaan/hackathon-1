@@ -642,7 +642,7 @@ class PrioritiserResult(BaseModel):
     @field_validator("next_actions", mode="before")
     @classmethod
     def _coerce_actions(cls, v, info):
-        return _coerce_to_list(v, info.field_name)
+        return _coerce_model_list(v, info.field_name)
 
     urgency_score: float = Field(ge=0.0, le=1.0, description="Composite account urgency")
     prioritisation_reasoning: str = Field(default="", description="Reasoning behind prioritisation decisions")
@@ -711,7 +711,7 @@ class DrafterResult(BaseModel):
     @field_validator("drafts", mode="before")
     @classmethod
     def _coerce_drafts(cls, v, info):
-        return _coerce_to_list(v, info.field_name)
+        return _coerce_model_list(v, info.field_name)
 
 
 # ── Smart Fields schemas ─────────────────────────────────────────────────────
