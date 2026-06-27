@@ -2,6 +2,20 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
+function apiConnectOrigins(): string[] {
+  const raw = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  try {
+    const u = new URL(raw);
+    const http = u.origin;
+    const ws = u.protocol === "https:" ? `wss://${u.host}` : `ws://${u.host}`;
+    return [http, ws];
+  } catch {
+    return ["http://localhost:8000", "ws://localhost:3000"];
+  }
+}
+
+const apiOrigins = apiConnectOrigins();
+
 const cspDirectives = [
   "default-src 'self'",
   // unsafe-eval is required by Next.js dev server (webpack HMR); never in production
@@ -12,8 +26,8 @@ const cspDirectives = [
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https:",
   isDev
-    ? "connect-src 'self' http://localhost:8000 ws://localhost:3000 https://api.vantage.ai wss://api.vantage.ai"
-    : "connect-src 'self' https://api.vantage.ai wss://api.vantage.ai",
+    ? `connect-src 'self' http://localhost:8000 ws://localhost:3000 ${apiOrigins.join(" ")}`
+    : `connect-src 'self' ${apiOrigins.join(" ")}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
