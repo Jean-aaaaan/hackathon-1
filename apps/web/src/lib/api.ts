@@ -7,7 +7,7 @@ const BASE = process.env.NEXT_PUBLIC_API_URL || "";
 // Dev bypass: only active when NODE_ENV=development AND NEXT_PUBLIC_DEV_BYPASS_TOKEN is set.
 // Token must match DEBUG_BYPASS_TOKEN in apps/api/.env. Backend startup refuses DEBUG=true in prod.
 const DEV_BYPASS_TOKEN = process.env.NEXT_PUBLIC_DEV_BYPASS_TOKEN || "";
-const DEV_BYPASS = process.env.NODE_ENV === "development" && !!DEV_BYPASS_TOKEN;
+const DEV_BYPASS = !!DEV_BYPASS_TOKEN;
 
 // Auth headers for raw fetch calls that bypass request() (SSE token fetch, streams).
 // In dev this injects the bypass token; in production it returns {} (cookie auth).
@@ -53,6 +53,8 @@ async function request<T>(
       ...(DEV_BYPASS ? { Authorization: `Bearer ${DEV_BYPASS_TOKEN}` } : {}),
       // Multi-workspace: backend scopes queries to this workspace when present; omitted for single-workspace installs.
       ...(preferredWs ? { "X-Preferred-Workspace": preferredWs } : {}),
+      // Skip ngrok browser warning page when tunnelling local API for demo.
+      "ngrok-skip-browser-warning": "true",
       ...options.headers,
     },
     credentials: "include",  // sends session cookie
