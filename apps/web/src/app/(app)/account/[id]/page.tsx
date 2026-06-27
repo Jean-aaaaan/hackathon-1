@@ -821,8 +821,6 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   const [calendarSyncing, setCalendarSyncing] = useState(false);
   const [calendarSynced, setCalendarSynced] = useState<{ meetings_found: number; matched: number } | null>(null);
   const [agentRunning, setAgentRunning] = useState(false);
-  const [sampleMeetingLoaded, setSampleMeetingLoaded] = useState(false);
-  const [sampleEmailLoaded, setSampleEmailLoaded] = useState(false);
 
   // SSE real-time updates
   // EventSource cannot set Authorization headers or send cookies cross-origin.
@@ -1142,21 +1140,21 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
     <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
 
       {/* ── Header ────────────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200 px-5 py-3.5 flex items-center gap-4">
+      <div className="bg-white border-b border-zinc-200 px-5 py-3.5 flex items-center gap-4">
         {/* Back + account info */}
-        <Link href="/inbox" className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0">
+        <Link href="/inbox" className="text-zinc-400 hover:text-zinc-600 transition-colors flex-shrink-0">
           <ArrowLeft className="w-4 h-4" />
         </Link>
 
         <div className="flex items-center gap-3 min-w-0">
-          <h1 className="text-base font-semibold text-gray-900 truncate">{accountName}</h1>
+          <h1 className="text-base font-semibold text-zinc-900 truncate">{accountName}</h1>
           {accountStage && (
-            <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full flex-shrink-0">
+            <span className="text-xs font-medium text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full flex-shrink-0">
               {accountStage}
             </span>
           )}
           {dealAmount && (
-            <span className="text-sm font-semibold text-gray-700 flex-shrink-0">{fmtCurrency(dealAmount)}</span>
+            <span className="text-sm font-semibold text-zinc-700 flex-shrink-0">{fmtCurrency(dealAmount)}</span>
           )}
         </div>
 
@@ -1169,8 +1167,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
             </span>
           )}
           {aiCloseDate && crmCloseDate && aiCloseDate !== crmCloseDate && (
-            <span className="text-xs text-gray-400">
-              AI close: <span className="font-medium text-gray-700">
+            <span className="text-xs text-zinc-400">
+              AI close: <span className="font-medium text-zinc-700">
                 {new Date(aiCloseDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
               </span>
               {" · "}CRM: {new Date(crmCloseDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
@@ -1187,8 +1185,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
         {/* Actions — push to right */}
         <div className="ml-auto flex items-center gap-2 flex-shrink-0">
-          <button onClick={() => setChatOpen(true)}
-            className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+          <button onClick={() => setChatOpen(true)} className="btn-secondary flex items-center gap-1.5 text-xs">
             <MessagesSquare className="w-3 h-3" />
             Chat
           </button>
@@ -1196,16 +1193,16 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
           {/* Generate dropdown */}
           <div className="relative">
             <button onClick={() => setGenerateOpen(v => !v)}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+              className="btn-accent flex items-center gap-1.5 text-xs">
               <FileText className="w-3 h-3" />
               {generatingDoc ? "Generating…" : "Generate"}
               <ChevronDown className="w-3 h-3 opacity-80" />
             </button>
             {generateOpen && (
-              <div className="absolute right-0 top-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-30 min-w-[200px] py-1.5 overflow-hidden">
+              <div className="absolute right-0 top-full mt-1.5 bg-white border border-zinc-200 rounded-xl shadow-lg z-30 min-w-[200px] py-1.5 overflow-hidden">
                 {(Object.entries(DOC_TYPE_LABELS) as [DocType, string][]).map(([type, label]) => (
                   <button key={type} onClick={() => handleGenerateDoc(type)}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                    className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors">
                     {label}
                   </button>
                 ))}
@@ -1215,8 +1212,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
           <button onClick={() => runAgentMutation.mutate()} disabled={agentRunning}
             className={cn(
-              "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50",
-              agentRunning ? "bg-indigo-50 text-indigo-700 border border-indigo-200" : "bg-slate-900 text-white hover:bg-slate-800"
+              "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors disabled:opacity-50",
+              agentRunning ? "bg-zinc-100 text-zinc-700 border border-zinc-200" : "btn-accent"
             )}>
             <Zap className="w-3 h-3" />
             {agentRunning ? "Running…" : "Run Agent"}
@@ -1225,26 +1222,26 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
           {/* Overflow: Brief + Share + Refresh */}
           <div className="relative">
             <button onClick={() => setGenerateOpen(false)}
-              className="flex items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors px-1.5 py-1.5 rounded-lg hover:bg-gray-100">
+              className="flex items-center gap-1 text-zinc-400 hover:text-zinc-600 transition-colors px-1.5 py-1.5 rounded-lg hover:bg-zinc-100">
               <ChevronDown className="w-4 h-4" />
             </button>
           </div>
 
           <button onClick={fetchBrief} disabled={briefFetching}
-            className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="btn-secondary flex items-center gap-1.5 text-xs px-2.5 disabled:opacity-50"
             title="Meeting Brief">
-            <Sparkles className="w-3.5 h-3.5" />
+            <FileText className="w-3.5 h-3.5" />
           </button>
 
           <button onClick={() => shareMutation.mutate()} disabled={shareMutation.isPending}
             title={shareCopied ? "Copied!" : "Copy share link"}
-            className="text-gray-400 hover:text-gray-600 transition-colors p-1">
+            className="text-zinc-400 hover:text-zinc-600 transition-colors p-1">
             <ExternalLink className="w-4 h-4" />
           </button>
 
           <button onClick={() => queryClient.invalidateQueries({ queryKey: ["account", id] })}
             title="Refresh"
-            className="text-gray-400 hover:text-gray-600 transition-colors p-1">
+            className="text-zinc-400 hover:text-zinc-600 transition-colors p-1">
             <RefreshCw className="w-4 h-4" />
           </button>
         </div>
@@ -1409,10 +1406,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
         </div>
 
         {/* ── Main content ─────────────────────────────────────────────────── */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
+        <div className="flex-1 flex flex-col overflow-hidden bg-zinc-50">
 
           {/* Tab strip — 3 tabs */}
-          <div className="bg-white border-b border-gray-200 px-6 flex items-center gap-1">
+          <div className="bg-white border-b border-zinc-200 px-6 flex items-center gap-1">
             {([
               { id: "act",     label: "Act",          icon: Zap,      badge: overduePlanActions.length + pendingDrafts.length },
               { id: "intel",   label: "Intelligence",  icon: BarChart3, badge: 0 },
@@ -1424,12 +1421,12 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                 <button key={tab.id} onClick={() => setActiveCenter(tab.id)}
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-3.5 text-sm font-medium border-b-2 transition-colors relative",
-                    isActive ? "border-indigo-600 text-indigo-700" : "border-transparent text-gray-500 hover:text-gray-700"
+                    isActive ? "border-zinc-900 text-zinc-900" : "border-transparent text-zinc-500 hover:text-zinc-700"
                   )}>
                   <Icon className="w-3.5 h-3.5" />
                   {tab.label}
                   {tab.badge > 0 && (
-                    <span className="inline-flex items-center justify-center min-w-[16px] h-4 text-[10px] font-bold bg-indigo-600 text-white rounded-full px-1">
+                    <span className="inline-flex items-center justify-center min-w-[16px] h-4 text-[10px] font-bold bg-zinc-900 text-white rounded-full px-1">
                       {tab.badge}
                     </span>
                   )}
@@ -1706,91 +1703,49 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   )}
 
                   {/* Communication — email engagement */}
-                  <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                  <div className="card p-5">
                     <div className="flex items-center gap-2 mb-3">
-                      <Mail className="w-4 h-4 text-brand-600" />
-                      <p className="text-sm font-semibold text-gray-800">Communication</p>
+                      <Mail className="w-4 h-4 text-zinc-500" />
+                      <p className="section-header !mb-0">Communication</p>
                       {(activitySummary?.email_exchange_count ?? 0) > 0 && (
-                        <span className="ml-auto text-xs text-gray-400">
+                        <span className="ml-auto text-xs text-zinc-400">
                           {activitySummary!.email_exchange_count} total emails
                         </span>
                       )}
                     </div>
                     {(activitySummary?.email_exchange_count ?? 0) > 0 ? (
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
-                            <p className="text-base font-bold text-gray-800">{activitySummary!.total_emails_sent ?? 0}</p>
-                            <p className="text-[10px] text-gray-400">emails sent</p>
-                          </div>
-                          <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
-                            <p className="text-base font-bold text-gray-800">{activitySummary!.total_emails_received ?? 0}</p>
-                            <p className="text-[10px] text-gray-400">replies received</p>
-                          </div>
-                          <div className={cn(
-                            "rounded-xl border px-3 py-2.5 text-center",
-                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "bg-amber-50 border-amber-200" : "bg-gray-50 border-gray-100"
-                          )}>
-                            <p className={cn("text-base font-bold",
-                              (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-700" : "text-gray-800")}>
-                              {activitySummary!.days_since_last_inbound != null ? `${activitySummary!.days_since_last_inbound}d` : "—"}
-                            </p>
-                            <p className={cn("text-[10px]",
-                              (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-600" : "text-gray-400")}>since reply</p>
-                          </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="rounded-lg bg-zinc-50 border border-zinc-100 px-3 py-2.5 text-center">
+                          <p className="text-base font-bold text-zinc-800 tabular-nums">{activitySummary!.total_emails_sent ?? 0}</p>
+                          <p className="text-[10px] text-zinc-400">emails sent</p>
                         </div>
-                        {sampleEmailLoaded && (
-                          <div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Recent Threads</p>
-                            <div className="space-y-2">
-                              <div className="flex items-start gap-2.5 rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5">
-                                <div className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                  <span className="text-[9px] font-bold text-indigo-600">SC</span>
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="text-xs font-semibold text-gray-700">Re: Security review timeline</p>
-                                  <p className="text-[11px] text-gray-400 truncate">"We'll have the questionnaire back to you by EOW..." · 12d ago</p>
-                                </div>
-                              </div>
-                              <div className="flex items-start gap-2.5 rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5">
-                                <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                  <span className="text-[9px] font-bold text-slate-600">RK</span>
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="text-xs font-semibold text-gray-700">Re: Pilot scope — CFO review</p>
-                                  <p className="text-[11px] text-gray-400 truncate">"Forwarded to legal. Expect response next week." · 18d ago</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                        {!sampleEmailLoaded && (
-                          <button
-                            onClick={() => setSampleEmailLoaded(true)}
-                            className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-colors w-full">
-                            <Sparkles className="w-3 h-3" />
-                            Simulate AI Email Analysis
-                          </button>
-                        )}
+                        <div className="rounded-lg bg-zinc-50 border border-zinc-100 px-3 py-2.5 text-center">
+                          <p className="text-base font-bold text-zinc-800 tabular-nums">{activitySummary!.total_emails_received ?? 0}</p>
+                          <p className="text-[10px] text-zinc-400">replies received</p>
+                        </div>
+                        <div className={cn(
+                          "rounded-lg border px-3 py-2.5 text-center",
+                          (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "bg-amber-50 border-amber-200" : "bg-zinc-50 border-zinc-100"
+                        )}>
+                          <p className={cn("text-base font-bold tabular-nums",
+                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-700" : "text-zinc-800")}>
+                            {activitySummary!.days_since_last_inbound != null ? `${activitySummary!.days_since_last_inbound}d` : "—"}
+                          </p>
+                          <p className={cn("text-[10px]",
+                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-600" : "text-zinc-400")}>since reply</p>
+                        </div>
                       </div>
                     ) : (
-                      <div>
-                        <p className="text-xs text-gray-400 mb-4">
-                          No email activity tracked yet. Connect Gmail to auto-log communication with this account.
+                      <div className="py-2">
+                        <p className="text-sm text-zinc-600 mb-1">No email activity tracked yet</p>
+                        <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
+                          Connect Gmail to automatically log threads and engagement metrics for this account.
                         </p>
-                        <div className="flex flex-col gap-2">
-                          <a href="/settings?tab=integrations"
-                            className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors w-full">
-                            <Mail className="w-3 h-3" />
-                            Connect Gmail
-                          </a>
-                          <button
-                            onClick={() => setSampleEmailLoaded(true)}
-                            className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-colors w-full">
-                            <Sparkles className="w-3 h-3" />
-                            Simulate AI Email Analysis
-                          </button>
-                        </div>
+                        <a href="/settings?tab=integrations"
+                          className="btn-accent inline-flex items-center justify-center gap-1.5 text-xs">
+                          <Mail className="w-3 h-3" />
+                          Connect Gmail
+                        </a>
                       </div>
                     )}
                   </div>
@@ -1800,84 +1755,26 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                     const intel = transcriptsData?.intel;
                     const calls = transcriptsData?.data ?? [];
                     if (!intel || !intel.calls_total) {
-                      if (sampleMeetingLoaded) {
-                        return (
-                          <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-4 h-4 text-brand-600" />
-                              <p className="text-sm font-semibold text-gray-800">Meeting Log</p>
-                              <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-full px-1.5 py-0.5 ml-1">
-                                <Sparkles className="w-2.5 h-2.5" />Sample
-                              </span>
-                              <span className="ml-auto text-xs text-gray-400">2 recorded calls</span>
-                            </div>
-                            <div className="grid grid-cols-3 gap-2">
-                              <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
-                                <p className="text-base font-bold text-gray-800">5d</p>
-                                <p className="text-[10px] text-gray-400">since last call</p>
-                              </div>
-                              <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
-                                <p className="text-base font-bold text-gray-800">2</p>
-                                <p className="text-[10px] text-gray-400">calls last 30d</p>
-                              </div>
-                              <div className="rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5 text-center">
-                                <p className="text-base font-bold text-amber-700">72%</p>
-                                <p className="text-[10px] text-amber-600">rep talk share · high</p>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-2 rounded-xl bg-amber-50 border border-amber-200 px-3 py-2.5">
-                              <AlertTriangle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
-                              <p className="text-xs text-amber-700">
-                                Rep talk share above 70% — prospect not engaged enough. Ask more discovery questions next call.
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">What the buyer asked</p>
-                              <div className="space-y-1.5">
-                                <p className="text-xs text-gray-600 leading-snug"><span className="font-semibold text-gray-700">Sarah Chen:</span> "What does the implementation timeline look like for a team our size?"</p>
-                                <p className="text-xs text-gray-600 leading-snug"><span className="font-semibold text-gray-700">Sarah Chen:</span> "How does this integrate with our existing EHR system?"</p>
-                                <p className="text-xs text-gray-600 leading-snug"><span className="font-semibold text-gray-700">Raymond Kirk:</span> "What's the contract flexibility if we need to scale down?"</p>
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
-                              <div>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">They owe us</p>
-                                <p className="text-xs text-gray-600 leading-snug mb-1">Security questionnaire · Jun 15</p>
-                                <p className="text-xs text-gray-600 leading-snug">IT architecture diagram · Jun 20</p>
-                              </div>
-                              <div>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">We owe them</p>
-                                <p className="text-xs text-gray-600 leading-snug">Pilot scoping doc · Jun 22</p>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      }
                       return (
-                        <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                        <div className="card p-5">
                           <div className="flex items-center gap-2 mb-3">
-                            <Phone className="w-4 h-4 text-brand-600" />
-                            <p className="text-sm font-semibold text-gray-800">Meeting Log</p>
+                            <Phone className="w-4 h-4 text-zinc-500" />
+                            <p className="section-header !mb-0">Meeting Log</p>
                           </div>
-                          <p className="text-xs text-gray-400 mb-4">
-                            No recorded calls matched to this deal yet. Connect Fireflies to auto-ingest call transcripts and AI meeting summaries.
+                          <p className="text-sm text-zinc-600 mb-1">No recorded calls for this deal</p>
+                          <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
+                            Connect Fireflies to ingest call transcripts, talk-time metrics, and buyer questions automatically.
                           </p>
-                          <div className="flex flex-col gap-2">
+                          <div className="flex flex-col gap-2 max-w-sm">
                             <a href="/settings?tab=integrations"
-                              className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors w-full">
+                              className="btn-accent inline-flex items-center justify-center gap-1.5 text-xs">
                               <Phone className="w-3 h-3" />
                               Connect Fireflies.ai
                             </a>
                             <button
-                              className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors w-full">
+                              className="btn-secondary inline-flex items-center justify-center gap-1.5 text-xs w-full">
                               <FileText className="w-3 h-3" />
                               Upload Transcript
-                            </button>
-                            <button
-                              onClick={() => setSampleMeetingLoaded(true)}
-                              className="flex items-center justify-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-colors w-full">
-                              <Sparkles className="w-3 h-3" />
-                              Load Sample Meeting Insights
                             </button>
                           </div>
                         </div>
@@ -1886,33 +1783,33 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                     const talkPct = intel.avg_talk_ratio_rep != null ? Math.round(intel.avg_talk_ratio_rep * 100) : null;
                     const buyerQs = calls.flatMap(t => (t.buyer_questions ?? []).map(q => ({ ...q, call: t.title })));
                     return (
-                      <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+                      <div className="card p-5 space-y-4">
                         <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4 text-brand-600" />
-                          <p className="text-sm font-semibold text-gray-800">Meeting Log</p>
-                          <span className="ml-auto text-xs text-gray-400">{intel.calls_total} recorded call{intel.calls_total !== 1 ? "s" : ""}</span>
+                          <Phone className="w-4 h-4 text-zinc-500" />
+                          <p className="section-header !mb-0">Meeting Log</p>
+                          <span className="ml-auto text-xs text-zinc-400">{intel.calls_total} recorded call{intel.calls_total !== 1 ? "s" : ""}</span>
                         </div>
 
                         {/* Headline stats */}
                         <div className="grid grid-cols-3 gap-2">
-                          <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
-                            <p className="text-base font-bold text-gray-800">
+                          <div className="rounded-lg bg-zinc-50 border border-zinc-100 px-3 py-2.5 text-center">
+                            <p className="text-base font-bold text-zinc-800 tabular-nums">
                               {intel.days_since_last_call != null ? `${intel.days_since_last_call}d` : "—"}
                             </p>
-                            <p className="text-[10px] text-gray-400">since last call</p>
+                            <p className="text-[10px] text-zinc-400">since last call</p>
                           </div>
-                          <div className="rounded-xl bg-gray-50 border border-gray-100 px-3 py-2.5 text-center">
-                            <p className="text-base font-bold text-gray-800">{intel.calls_last_30d}</p>
-                            <p className="text-[10px] text-gray-400">calls last 30d</p>
+                          <div className="rounded-lg bg-zinc-50 border border-zinc-100 px-3 py-2.5 text-center">
+                            <p className="text-base font-bold text-zinc-800 tabular-nums">{intel.calls_last_30d}</p>
+                            <p className="text-[10px] text-zinc-400">calls last 30d</p>
                           </div>
                           <div className={cn(
-                            "rounded-xl border px-3 py-2.5 text-center",
-                            talkPct != null && talkPct > 65 ? "bg-amber-50 border-amber-200" : "bg-gray-50 border-gray-100"
+                            "rounded-lg border px-3 py-2.5 text-center",
+                            talkPct != null && talkPct > 65 ? "bg-amber-50 border-amber-200" : "bg-zinc-50 border-zinc-100"
                           )}>
-                            <p className={cn("text-base font-bold", talkPct != null && talkPct > 65 ? "text-amber-700" : "text-gray-800")}>
+                            <p className={cn("text-base font-bold tabular-nums", talkPct != null && talkPct > 65 ? "text-amber-700" : "text-zinc-800")}>
                               {talkPct != null ? `${talkPct}%` : "—"}
                             </p>
-                            <p className={cn("text-[10px]", talkPct != null && talkPct > 65 ? "text-amber-600" : "text-gray-400")}>
+                            <p className={cn("text-[10px]", talkPct != null && talkPct > 65 ? "text-amber-600" : "text-zinc-400")}>
                               rep talk share{talkPct != null && talkPct > 65 ? " · high" : ""}
                             </p>
                           </div>
@@ -1920,7 +1817,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                         {/* EB attendance flag */}
                         {intel.eb_identified && !intel.eb_attendance && (
-                          <div className="flex items-start gap-2 rounded-xl bg-red-50 border border-red-200 px-3 py-2.5">
+                          <div className="flex items-start gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2.5">
                             <AlertTriangle className="w-3.5 h-3.5 text-red-500 flex-shrink-0 mt-0.5" />
                             <p className="text-xs text-red-700">
                               The economic buyer has never attended a recorded call. Decisions are happening in rooms you are not in.
@@ -1931,11 +1828,11 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                         {/* What the buyer asked */}
                         {buyerQs.length > 0 && (
                           <div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">What the buyer asked</p>
+                            <p className="section-header mb-2">What the buyer asked</p>
                             <div className="space-y-1.5">
                               {buyerQs.slice(0, 5).map((q, i) => (
-                                <p key={i} className="text-xs text-gray-600 leading-snug">
-                                  <span className="font-semibold text-gray-700">{q.speaker}:</span> “{q.text}”
+                                <p key={i} className="text-xs text-zinc-600 leading-snug">
+                                  <span className="font-semibold text-zinc-700">{q.speaker}:</span> “{q.text}”
                                 </p>
                               ))}
                             </div>
@@ -1946,24 +1843,24 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                         {(intel.open_buyer_commitments.length > 0 || intel.open_our_commitments.length > 0) && (
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">They owe us</p>
+                              <p className="section-header mb-1.5">They owe us</p>
                               {intel.open_buyer_commitments.length === 0 ? (
-                                <p className="text-xs text-gray-300">Nothing open</p>
+                                <p className="text-xs text-zinc-300">Nothing open</p>
                               ) : intel.open_buyer_commitments.slice(0, 4).map((c, i) => (
-                                <p key={i} className="text-xs text-gray-600 leading-snug mb-1">
+                                <p key={i} className="text-xs text-zinc-600 leading-snug mb-1">
                                   {c.text}
-                                  {c.call_date ? <span className="text-gray-400"> · {format(new Date(c.call_date), "MMM d")}</span> : null}
+                                  {c.call_date ? <span className="text-zinc-400"> · {format(new Date(c.call_date), "MMM d")}</span> : null}
                                 </p>
                               ))}
                             </div>
                             <div>
-                              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">We owe them</p>
+                              <p className="section-header mb-1.5">We owe them</p>
                               {intel.open_our_commitments.length === 0 ? (
-                                <p className="text-xs text-gray-300">Nothing open</p>
+                                <p className="text-xs text-zinc-300">Nothing open</p>
                               ) : intel.open_our_commitments.slice(0, 4).map((c, i) => (
-                                <p key={i} className="text-xs text-gray-600 leading-snug mb-1">
+                                <p key={i} className="text-xs text-zinc-600 leading-snug mb-1">
                                   {c.text}
-                                  {c.call_date ? <span className="text-gray-400"> · {format(new Date(c.call_date), "MMM d")}</span> : null}
+                                  {c.call_date ? <span className="text-zinc-400"> · {format(new Date(c.call_date), "MMM d")}</span> : null}
                                 </p>
                               ))}
                             </div>
@@ -2152,10 +2049,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-              <Sparkles className="w-4 h-4 text-brand-600" />
-              <h2 className="text-base font-semibold text-gray-900">Meeting Brief</h2>
-              <span className="text-xs text-gray-400 ml-1">{accountName}</span>
-              <button onClick={() => setBriefOpen(false)} className="ml-auto text-gray-400 hover:text-gray-600">
+              <FileText className="w-4 h-4 text-zinc-500" />
+              <h2 className="text-base font-semibold text-zinc-900">Meeting Brief</h2>
+              <span className="text-xs text-zinc-400 ml-1">{accountName}</span>
+              <button onClick={() => setBriefOpen(false)} className="ml-auto text-zinc-400 hover:text-zinc-600">
                 <X className="w-4 h-4" />
               </button>
             </div>
