@@ -1,0 +1,41 @@
+---
+description: Vantage hackathon monorepo conventions — API, UI, demo
+globs:
+  - apps/web/**
+  - apps/api/**
+  - packages/**
+alwaysApply: true
+---
+
+# Vantage
+
+Per-deal AI agent for HubSpot. Monorepo at hackathon 1/vantage-hackathon.
+
+## Structure
+- `apps/web` — Next.js 15 App Router frontend (port 3000)
+- `apps/api` — FastAPI backend (port 8000)
+- `packages/mcp-server` — MCP tools for deal intelligence
+
+## API client (do not break)
+- All frontend API calls go through `apps/web/src/lib/api.ts`
+- Keep `accountsApi`, `draftsApi`, `signalsApi` method signatures unchanged unless explicitly asked
+- Dev auth: `NEXT_PUBLIC_DEV_BYPASS_TOKEN` in `apps/web/.env.local` matches `DEBUG_BYPASS_TOKEN` in `apps/api/.env`
+
+## UI design system
+- Neutrals: `zinc-*` only (migrate any `gray-*` to `zinc-*`)
+- Primary actions: `bg-zinc-900 text-white` — not indigo gradients
+- No `Sparkles` icons for AI labels; use subtle text badges or nothing
+- No `bg-gradient-to-*` hero banners; use white cards with left border accents
+- Reuse classes from `apps/web/src/app/globals.css`: `.card`, `.section-header`, `.btn-accent`, urgency dots
+- Font: Inter (already configured)
+
+## Demo
+- Demo account: `python scripts/seed_demo_account.py` in `apps/api` (Meridian Ops)
+- Do NOT run agents on the 9 seeded showcase accounts — it replaces MEDDPICC state
+- Remove or hide "Simulate" / "Sample" buttons — pre-seed data instead for demo trust
+- Trigger agents: War Room "Run Agent" or `POST /v1/accounts/batch-refresh`
+
+## Scope discipline
+- One page per agent session when possible
+- Extract components from large files instead of growing them
+- No drive-by refactors outside the requested page
