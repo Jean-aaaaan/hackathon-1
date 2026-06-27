@@ -223,7 +223,7 @@ export function CommandPalette({ open, onClose }: Props) {
                       onClick={() => navigate({ kind: "action", action })}
                       className={cn(
                         "w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors text-left",
-                        activeIdx === globalIdx ? "bg-indigo-50 text-indigo-700" : "text-zinc-700 hover:bg-zinc-50"
+                        activeIdx === globalIdx ? "bg-zinc-50 text-zinc-700" : "text-zinc-700 hover:bg-zinc-50"
                       )}
                     >
                       <Icon className="w-4 h-4 flex-shrink-0 text-zinc-400" />
@@ -272,12 +272,12 @@ function AccountRow({
       onClick={onClick}
       className={cn(
         "w-full flex items-center gap-3 px-4 py-2.5 transition-colors text-left",
-        active ? "bg-indigo-50" : "hover:bg-zinc-50"
+        active ? "bg-zinc-50" : "hover:bg-zinc-50"
       )}
     >
       <UrgencyDot score={account.urgency_score} />
       <div className="flex-1 min-w-0">
-        <p className={cn("text-sm font-medium truncate", active ? "text-indigo-700" : "text-zinc-900")}>
+        <p className={cn("text-sm font-medium truncate", active ? "text-zinc-700" : "text-zinc-900")}>
           {account.name}
         </p>
         {(stage || amount) && (
@@ -287,7 +287,7 @@ function AccountRow({
         )}
       </div>
       {account.pending_drafts > 0 && (
-        <span className="text-[10px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded-full leading-none flex-shrink-0">
+        <span className="text-[10px] font-bold bg-zinc-900 text-white px-1.5 py-0.5 rounded-full leading-none flex-shrink-0">
           {account.pending_drafts}
         </span>
       )}

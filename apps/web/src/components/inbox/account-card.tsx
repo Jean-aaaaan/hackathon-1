@@ -78,8 +78,8 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
     <div
       data-testid="account-card"
       className={cn(
-        "w-full text-left transition-colors border-b border-gray-100 last:border-0",
-        isSelected ? "bg-brand-50" : "hover:bg-gray-50"
+        "w-full text-left transition-colors border-b border-zinc-100 last:border-0",
+        isSelected ? "bg-brand-50" : "hover:bg-zinc-50"
       )}
     >
       {/* Main click area */}
@@ -87,7 +87,7 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
 
         {/* Top row: name + urgency */}
         <div className="flex items-start justify-between mb-1.5">
-          <p className="text-sm font-semibold text-gray-900 truncate pr-3 leading-tight">{account.name}</p>
+          <p className="text-sm font-semibold text-zinc-900 truncate pr-3 leading-tight">{account.name}</p>
           <div className="flex-shrink-0 flex items-center gap-1.5">
             <div className={cn("w-2 h-2 rounded-full flex-shrink-0", URGENCY_COLOR[urgencyLevel])} />
             <span className={cn("text-xs font-bold tabular-nums", URGENCY_TEXT[urgencyLevel])}>{urgencyPct}%</span>
@@ -97,15 +97,15 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
         {/* Row 2: stage · amount · close date */}
         <div className="flex items-center gap-1.5 flex-wrap mb-2.5">
           {stageDisplay && (
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full truncate max-w-[120px]">
+            <span className="text-xs text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full truncate max-w-[120px]">
               {stageDisplay}
             </span>
           )}
           {dealAmount && (
-            <span className="text-xs font-medium text-gray-700">{dealAmount}</span>
+            <span className="text-xs font-medium text-zinc-700">{dealAmount}</span>
           )}
           {closeDate && (
-            <span className="flex items-center gap-1 text-xs text-gray-400">
+            <span className="flex items-center gap-1 text-xs text-zinc-400">
               <Calendar className="w-3 h-3" />
               {closeDate}
             </span>
@@ -116,8 +116,8 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
         <div className="space-y-1 mb-2.5">
           {/* Urgency bar */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-gray-400 w-11 flex-shrink-0">Urgency</span>
-            <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+            <span className="text-[10px] text-zinc-400 w-11 flex-shrink-0">Urgency</span>
+            <div className="flex-1 h-1.5 bg-zinc-100 rounded-full overflow-hidden">
               <div
                 className={cn("h-full rounded-full transition-all", URGENCY_COLOR[urgencyLevel])}
                 style={{ width: `${urgencyPct}%` }}
@@ -127,8 +127,8 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
           {/* Health bar (only shown when available) */}
           {healthPct !== null && (
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-gray-400 w-11 flex-shrink-0">Health</span>
-              <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <span className="text-[10px] text-zinc-400 w-11 flex-shrink-0">Health</span>
+              <div className="flex-1 h-1.5 bg-zinc-100 rounded-full overflow-hidden">
                 <div
                   className={cn("h-full rounded-full transition-all", HEALTH_COLOR[healthLevel])}
                   style={{ width: `${healthPct}%` }}
@@ -146,14 +146,14 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
             </span>
           )}
           {account.pov_confidence && account.pov_forecast_cat && (
-            <span className="text-xs text-gray-400">{Math.round(account.pov_confidence * 100)}% conf.</span>
+            <span className="text-xs text-zinc-400">{Math.round(account.pov_confidence * 100)}% conf.</span>
           )}
           {account.icp_score != null && (
             <span className={cn(
               "text-xs px-1.5 py-0.5 rounded-full font-medium flex-shrink-0",
               account.icp_score >= 0.7 ? "bg-green-100 text-green-700" :
               account.icp_score >= 0.4 ? "bg-yellow-100 text-yellow-700" :
-              "bg-gray-100 text-gray-500"
+              "bg-zinc-100 text-zinc-500"
             )}
               title={`ICP fit: ${Math.round(account.icp_score * 100)}%`}
             >
@@ -173,17 +173,17 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
             ↪ {account.next_step.text}
           </p>
         ) : account.deal_narrative ? (
-          <p className="text-xs text-gray-500 line-clamp-2 mt-1.5 leading-snug">
+          <p className="text-xs text-zinc-500 line-clamp-2 mt-1.5 leading-snug">
             {account.deal_narrative}
           </p>
         ) : account.signals_summary[0] ? (
-          <p className="text-xs text-gray-400 truncate mt-1.5 leading-tight">
+          <p className="text-xs text-zinc-400 truncate mt-1.5 leading-tight">
             ↑ {account.signals_summary[0].detail}
           </p>
         ) : null}
 
         {/* Last agent run */}
-        <p className="text-[10px] text-gray-400 mt-1.5">Agent ran {lastRun}</p>
+        <p className="text-[10px] text-zinc-400 mt-1.5">Agent ran {lastRun}</p>
       </button>
 
       {/* Action strip */}
@@ -199,7 +199,7 @@ export function AccountCard({ account, isSelected, onClick }: Props) {
         <Link
           href={`/account/${account.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-gray-700 px-2.5 py-1 rounded-md hover:bg-gray-100 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-700 px-2.5 py-1 rounded-md hover:bg-zinc-100 transition-colors"
         >
           <ExternalLink className="w-3 h-3" />
           War Room

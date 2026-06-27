@@ -14,8 +14,8 @@ B2B Frameworks encoded:
 from typing import Any, Optional
 from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
-import anthropic
 import contextvars  # ContextVar threads per-parse coercion warnings without global state
+from app.integrations.llm import LLMUsage, structured_call, provider as llm_provider
 import json
 import re
 import structlog
@@ -891,10 +891,12 @@ def reconcile_forecast_category(
 # Rates in USD per 1 M tokens. Key is a substring matched against the model ID.
 # Update rates here when Anthropic changes pricing; never inline them in code.
 _MODEL_PRICING: dict[str, tuple[float, float]] = {
-    "haiku":  (0.80,  4.0),   # Claude Haiku 4.5: $0.80/M input, $4/M output
-    "sonnet": (3.0,  15.0),   # Claude Sonnet 4.6: $3/M input, $15/M output
+    "haiku":      (0.80,  4.0),
+    "sonnet":     (3.0,  15.0),
+    "gpt-4o-mini": (0.15,  0.60),
+    "gpt-4o":     (2.50, 10.0),
 }
-_DEFAULT_PRICING = (3.0, 15.0)  # fall back to Sonnet rates for unknown models
+_DEFAULT_PRICING = (2.5, 10.0)
 
 
 # ── Base Agent ───────────────────────────────────────────────────────────────
@@ -905,8 +907,7 @@ class BaseAgent:
     Handles: LLM calls, token tracking, error recovery, cost logging.
     """
 
-    def __init__(self, client: anthropic.AsyncAnthropic, model: str):
-        self.client = client
+    def __init__(self, model: str):
         self.model = model
         self.total_input_tokens = 0
         self.total_output_tokens = 0
@@ -946,16 +947,17 @@ class BaseAgent:
         return (self.total_input_tokens / 1_000_000 * input_rate) + \
                (self.total_output_tokens / 1_000_000 * output_rate)
 
-    def _record_call_metrics(self, response: Any, latency_ms: float) -> None:
+    def _record_call_metrics(self, usage: LLMUsage, latency_ms: float) -> None:
         """Accumulate token counts, emit structured log, and fire PostHog trace."""
-        self.total_input_tokens += response.usage.input_tokens
-        self.total_output_tokens += response.usage.output_tokens
+        self.total_input_tokens += usage.input_tokens
+        self.total_output_tokens += usage.output_tokens
         log.info(
             "llm_call_complete",
             agent=self.__class__.__name__,
+            provider=llm_provider(),
             model=self.model,
-            input_tokens=response.usage.input_tokens,
-            output_tokens=response.usage.output_tokens,
+            input_tokens=usage.input_tokens,
+            output_tokens=usage.output_tokens,
             latency_ms=round(latency_ms),
             cost_usd=round(self.total_cost_usd, 6),
         )
@@ -964,25 +966,18 @@ class BaseAgent:
             _s = _gs()
             if _s.posthog_api_key:
                 import posthog as _ph
-                # posthog module exposes a default client; configure once via the
-                # module-level singleton. Concurrent async calls may race on these
-                # two writes, but PostHog's own thread-safe client (posthog.Client)
-                # is the right fix if that becomes an issue — acceptable for now
-                # because key/host never change within a process lifetime.
                 _ph.api_key = _s.posthog_api_key
                 _ph.host = _s.posthog_host
                 _ph.capture("vantage_api", "$ai_generation", {
-                    "$ai_provider": "anthropic",
+                    "$ai_provider": llm_provider(),
                     "$ai_model": self.model,
-                    "$ai_input_tokens": response.usage.input_tokens,
-                    "$ai_output_tokens": response.usage.output_tokens,
+                    "$ai_input_tokens": usage.input_tokens,
+                    "$ai_output_tokens": usage.output_tokens,
                     "$ai_latency": round(latency_ms / 1000, 3),
                     "agent_name": self.__class__.__name__,
                     "cost_usd": round(self.total_cost_usd, 6),
                 })
         except Exception as e:
-            # PostHog is observability-only; never let a misconfiguration or
-            # network failure surface here and break the agent pipeline.
             log.warning("posthog_capture_failed", error=str(e))
 
     async def _call_llm(
@@ -993,46 +988,27 @@ class BaseAgent:
         tool_schema: dict,
         max_tokens: int = 2048,
     ) -> dict:
-        """
-        Structured LLM call using Anthropic tool_use.
-        Guarantees JSON output matching the tool schema.
-        """
+        """Structured LLM call — OpenAI function calling or Anthropic tool_use."""
         start = time.time()
         try:
-            response = await self.client.messages.create(
+            result, usage = await structured_call(
+                system_prompt=system_prompt,
+                user_message=user_message,
+                tool_name=tool_name,
+                tool_schema=tool_schema,
                 model=self.model,
                 max_tokens=max_tokens,
-                system=system_prompt,
-                messages=[{"role": "user", "content": user_message}],
-                tools=[{
-                    "name": tool_name,
-                    "description": f"Output the {tool_name} result",
-                    "input_schema": tool_schema,
-                }],
-                tool_choice={"type": "tool", "name": tool_name},
+                agent_name=self.__class__.__name__,
             )
-
-            self._record_call_metrics(response, latency_ms=(time.time() - start) * 1000)
-
-            # Extract tool use result
-            for block in response.content:
-                if block.type == "tool_use":
-                    result = block.input
-                    if not isinstance(result, dict):
-                        log.warning(
-                            "tool_use_non_dict_output",
-                            agent=self.__class__.__name__,
-                            tool=tool_name,
-                            type=type(result).__name__,
-                        )
-                    return result
-
-            log.warning("no_tool_use_block", agent=self.__class__.__name__, tool=tool_name)
-            raise ValueError("No tool_use block in response")
-
-        except anthropic.RateLimitError:
-            log.warning("rate_limited", agent=self.__class__.__name__, retry="backoff")
-            raise
+            self._record_call_metrics(usage, latency_ms=(time.time() - start) * 1000)
+            if not isinstance(result, dict):
+                log.warning(
+                    "structured_non_dict_output",
+                    agent=self.__class__.__name__,
+                    tool=tool_name,
+                    type=type(result).__name__,
+                )
+            return result
         except Exception as e:
             log.error("llm_call_failed", agent=self.__class__.__name__, error=str(e))
             raise

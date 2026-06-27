@@ -34,10 +34,10 @@ function Section({ title, description, children }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100">
-        <h2 className="text-sm font-semibold text-gray-900">{title}</h2>
-        {description && <p className="text-xs text-gray-400 mt-0.5">{description}</p>}
+    <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-zinc-100">
+        <h2 className="text-sm font-semibold text-zinc-900">{title}</h2>
+        {description && <p className="text-xs text-zinc-400 mt-0.5">{description}</p>}
       </div>
       <div className="px-6 py-5">{children}</div>
     </div>
@@ -70,30 +70,30 @@ function IntegrationRow({
   syncResult?: string | null;
 }) {
   return (
-    <div className="py-4 border-b border-gray-50 last:border-0">
+    <div className="py-4 border-b border-zinc-50 last:border-0">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-          <Icon className="w-5 h-5 text-gray-600" />
+        <div className="w-10 h-10 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
+          <Icon className="w-5 h-5 text-zinc-600" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-medium text-gray-900">{name}</p>
+            <p className="text-sm font-medium text-zinc-900">{name}</p>
             <span className={cn(
               "text-xs px-1.5 py-0.5 rounded-full font-medium",
-              connected ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+              connected ? "bg-green-100 text-green-700" : "bg-zinc-100 text-zinc-500"
             )}>
               {connected ? "Connected" : "Not connected"}
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-0.5">{description}</p>
-          {detail && <p className="text-xs text-gray-400 mt-0.5">{detail}</p>}
+          <p className="text-xs text-zinc-500 mt-0.5">{description}</p>
+          {detail && <p className="text-xs text-zinc-400 mt-0.5">{detail}</p>}
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           {connected && onSync && (
             <button
               onClick={onSync}
               disabled={syncPending}
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-600 hover:text-gray-800 px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-800 px-3 py-1.5 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors disabled:opacity-50"
               title="Re-pull all deals from HubSpot and resolve stage labels"
             >
               <RefreshCw className={cn("w-3.5 h-3.5", syncPending && "animate-spin")} />
@@ -130,24 +130,24 @@ function IntegrationRow({
 function TeamRow({ member }: { member: TeamMember }) {
   const roleStyle: Record<string, string> = {
     admin:   "bg-brand-100 text-brand-700",
-    manager: "bg-purple-100 text-purple-700",
-    rep:     "bg-gray-100 text-gray-600",
+    manager: "bg-zinc-100 text-zinc-700",
+    rep:     "bg-zinc-100 text-zinc-600",
   };
 
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-gray-50 last:border-0">
+    <div className="flex items-center gap-3 py-3 border-b border-zinc-50 last:border-0">
       <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0">
         <span className="text-sm font-semibold text-brand-700">
           {member.email[0].toUpperCase()}
         </span>
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 truncate">{member.email}</p>
+        <p className="text-sm font-medium text-zinc-900 truncate">{member.email}</p>
         {member.hubspot_owner_id && (
-          <p className="text-xs text-gray-400">HubSpot owner: {member.hubspot_owner_id}</p>
+          <p className="text-xs text-zinc-400">HubSpot owner: {member.hubspot_owner_id}</p>
         )}
       </div>
-      <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full capitalize", roleStyle[member.role] ?? "bg-gray-100 text-gray-600")}>
+      <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full capitalize", roleStyle[member.role] ?? "bg-zinc-100 text-zinc-600")}>
         {member.role}
       </span>
     </div>
@@ -167,17 +167,17 @@ function ApiKeyRow({ apiKey, onDelete }: { apiKey: { id: string; name: string; p
   };
 
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-gray-50 last:border-0">
-      <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-        <Key className="w-4 h-4 text-gray-500" />
+    <div className="flex items-center gap-3 py-3 border-b border-zinc-50 last:border-0">
+      <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center flex-shrink-0">
+        <Key className="w-4 h-4 text-zinc-500" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900">{apiKey.name}</p>
+        <p className="text-sm font-medium text-zinc-900">{apiKey.name}</p>
         <div className="flex items-center gap-1.5 mt-0.5">
-          <code className="text-xs text-gray-400 font-mono">
+          <code className="text-xs text-zinc-400 font-mono">
             {revealed ? apiKey.prefix + "••••••••••••••••" : "vnt_live_••••••••••••"}
           </code>
-          <button onClick={() => setRevealed(!revealed)} className="text-gray-300 hover:text-gray-500">
+          <button onClick={() => setRevealed(!revealed)} className="text-zinc-300 hover:text-zinc-500">
             {revealed ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
           </button>
         </div>
@@ -185,14 +185,14 @@ function ApiKeyRow({ apiKey, onDelete }: { apiKey: { id: string; name: string; p
       <div className="flex items-center gap-2">
         <button
           onClick={handleCopy}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-zinc-400 hover:text-zinc-600 transition-colors"
           title="Copy prefix"
         >
           {copied ? <CheckCircle className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
         </button>
         <button
           onClick={() => onDelete(apiKey.id)}
-          className="text-gray-300 hover:text-red-500 transition-colors"
+          className="text-zinc-300 hover:text-red-500 transition-colors"
           title="Revoke key"
         >
           <Trash2 className="w-4 h-4" />
@@ -434,8 +434,8 @@ export default function SettingsPage() {
     <div className="p-6 max-w-3xl space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Workspace configuration and integrations</p>
+        <h1 className="text-xl font-semibold text-zinc-900">Settings</h1>
+        <p className="text-sm text-zinc-400 mt-0.5">Workspace configuration and integrations</p>
       </div>
 
       {/* Agent config completeness banner */}
@@ -456,18 +456,18 @@ export default function SettingsPage() {
       <Section title="Workspace" description="Your Vantage workspace details and usage">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">Workspace</label>
-            <p className="text-sm font-medium text-gray-900 mt-1">{ws?.name ?? "-"}</p>
-            <p className="text-xs text-gray-400">{ws?.slug}</p>
+            <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">Workspace</label>
+            <p className="text-sm font-medium text-zinc-900 mt-1">{ws?.name ?? "-"}</p>
+            <p className="text-xs text-zinc-400">{ws?.slug}</p>
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">Plan</label>
-            <p className="text-sm font-medium text-gray-900 mt-1 capitalize">{ws?.plan ?? "-"}</p>
+            <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">Plan</label>
+            <p className="text-sm font-medium text-zinc-900 mt-1 capitalize">{ws?.plan ?? "-"}</p>
           </div>
           {usage && (
             <>
               <div>
-                <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">DAR (all time)</label>
+                <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">DAR (all time)</label>
                 <div className="mt-1 flex items-center gap-2">
                   <span className={cn(
                     "text-lg font-bold",
@@ -475,13 +475,13 @@ export default function SettingsPage() {
                   )}>
                     {Math.round(usage.drafts.dar * 100)}%
                   </span>
-                  <span className="text-xs text-gray-400">target 60%</span>
+                  <span className="text-xs text-zinc-400">target 60%</span>
                 </div>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-400 uppercase tracking-wide">LLM Cost (30d)</label>
-                <p className="text-lg font-bold text-gray-900 mt-1">${usage.llm_costs_30d.total_usd.toFixed(2)}</p>
-                <p className="text-xs text-gray-400">{usage.llm_costs_30d.run_count} runs · ${usage.llm_costs_30d.cost_per_run.toFixed(4)} each</p>
+                <label className="text-xs font-medium text-zinc-400 uppercase tracking-wide">LLM Cost (30d)</label>
+                <p className="text-lg font-bold text-zinc-900 mt-1">${usage.llm_costs_30d.total_usd.toFixed(2)}</p>
+                <p className="text-xs text-zinc-400">{usage.llm_costs_30d.run_count} runs · ${usage.llm_costs_30d.cost_per_run.toFixed(4)} each</p>
               </div>
             </>
           )}
@@ -562,12 +562,12 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   {vp ? (
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-zinc-500">
                       Analyzed {vp.emails_analyzed} emails from {vp.source} ·{" "}
                       {vp.analyzed_at ? new Date(vp.analyzed_at).toLocaleDateString() : ""}
                     </p>
                   ) : (
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-zinc-400">
                       Not yet analyzed. Run analysis to have drafts match your writing style automatically.
                     </p>
                   )}
@@ -587,32 +587,32 @@ export default function SettingsPage() {
                 </p>
               )}
               {vp && (
-                <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-2">
+                <div className="bg-zinc-50 border border-zinc-100 rounded-xl p-4 space-y-2">
                   <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
                     <div>
-                      <span className="text-gray-400 font-medium">Tone</span>
-                      <p className="text-gray-700 mt-0.5">{vp.tone}</p>
+                      <span className="text-zinc-400 font-medium">Tone</span>
+                      <p className="text-zinc-700 mt-0.5">{vp.tone}</p>
                     </div>
                     <div>
-                      <span className="text-gray-400 font-medium">Avg length</span>
-                      <p className="text-gray-700 mt-0.5">{vp.avg_word_count} words</p>
+                      <span className="text-zinc-400 font-medium">Avg length</span>
+                      <p className="text-zinc-700 mt-0.5">{vp.avg_word_count} words</p>
                     </div>
                     {vp.common_openers?.length > 0 && (
                       <div className="col-span-2">
-                        <span className="text-gray-400 font-medium">Opens with</span>
-                        <p className="text-gray-700 mt-0.5">{vp.common_openers.slice(0, 3).join(", ")}</p>
+                        <span className="text-zinc-400 font-medium">Opens with</span>
+                        <p className="text-zinc-700 mt-0.5">{vp.common_openers.slice(0, 3).join(", ")}</p>
                       </div>
                     )}
                     {vp.common_ctas?.length > 0 && (
                       <div className="col-span-2">
-                        <span className="text-gray-400 font-medium">Calls to action</span>
-                        <p className="text-gray-700 mt-0.5">{vp.common_ctas.slice(0, 2).join(", ")}</p>
+                        <span className="text-zinc-400 font-medium">Calls to action</span>
+                        <p className="text-zinc-700 mt-0.5">{vp.common_ctas.slice(0, 2).join(", ")}</p>
                       </div>
                     )}
                     {vp.avoids?.length > 0 && (
                       <div className="col-span-2">
-                        <span className="text-gray-400 font-medium">Avoids</span>
-                        <p className="text-gray-700 mt-0.5">{vp.avoids.slice(0, 3).join(", ")}</p>
+                        <span className="text-zinc-400 font-medium">Avoids</span>
+                        <p className="text-zinc-700 mt-0.5">{vp.avoids.slice(0, 3).join(", ")}</p>
                       </div>
                     )}
                   </div>
@@ -628,16 +628,16 @@ export default function SettingsPage() {
         <div>
           {team.map(m => <TeamRow key={m.id} member={m} />)}
           {team.length === 0 && (
-            <p className="text-sm text-gray-400 text-center py-4">No team members yet</p>
+            <p className="text-sm text-zinc-400 text-center py-4">No team members yet</p>
           )}
         </div>
         {isAdmin && (
-          <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="mt-4 pt-4 border-t border-zinc-100">
             <button className="flex items-center gap-2 text-sm font-medium text-brand-600 hover:text-brand-700">
               <Plus className="w-4 h-4" />
               Invite team member via WorkOS
             </button>
-            <p className="text-xs text-gray-400 mt-1">Invitations go through WorkOS. Members sign in with Google SSO.</p>
+            <p className="text-xs text-zinc-400 mt-1">Invitations go through WorkOS. Members sign in with Google SSO.</p>
           </div>
         )}
       </Section>
@@ -654,7 +654,7 @@ export default function SettingsPage() {
                   <p className="text-sm font-semibold text-green-800">API key created</p>
                   <p className="text-xs text-green-600 mt-0.5">Copy this key now. It will not be shown again.</p>
                   <div className="flex items-center gap-2 mt-2">
-                    <code className="flex-1 text-xs font-mono bg-white border border-green-200 rounded-lg px-3 py-2 text-gray-700 break-all">
+                    <code className="flex-1 text-xs font-mono bg-white border border-green-200 rounded-lg px-3 py-2 text-zinc-700 break-all">
                       {freshKey}
                     </code>
                     <button
@@ -679,18 +679,18 @@ export default function SettingsPage() {
           {/* Existing keys */}
           <div className="mb-4">
             {/* Placeholder - real list would come from workspace API */}
-            <p className="text-xs text-gray-400 italic">Keys are listed here when created.</p>
+            <p className="text-xs text-zinc-400 italic">Keys are listed here when created.</p>
           </div>
 
           {/* Create new key */}
-          <div className="pt-4 border-t border-gray-100">
-            <p className="text-sm font-medium text-gray-800 mb-2">Create new key</p>
+          <div className="pt-4 border-t border-zinc-100">
+            <p className="text-sm font-medium text-zinc-800 mb-2">Create new key</p>
             <div className="flex items-center gap-2">
               <input
                 value={newKeyName}
                 onChange={(e) => setNewKeyName(e.target.value)}
                 placeholder="Key name (e.g. MCP Server, Claude Desktop)"
-                className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
+                className="flex-1 text-sm border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
                 onKeyDown={(e) => e.key === "Enter" && newKeyName.trim() && createApiKey.mutate(newKeyName)}
               />
               <button
@@ -706,7 +706,7 @@ export default function SettingsPage() {
                 Create
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-1.5">
+            <p className="text-xs text-zinc-400 mt-1.5">
               Use this key with the{" "}
               <a href="https://github.com/vantage-ai/mcp-server" className="text-brand-600 hover:underline" target="_blank" rel="noopener">
                 Vantage MCP Server
@@ -722,12 +722,12 @@ export default function SettingsPage() {
         <Section title="AI Fields" description="Custom questions the agent answers for every account on every run">
           <div className="space-y-3">
             {((ws?.settings?.ai_fields as AiField[] | undefined) ?? []).map((field: AiField) => (
-              <div key={field.id} className="flex items-start justify-between gap-3 py-2 border-b border-gray-50 last:border-0">
+              <div key={field.id} className="flex items-start justify-between gap-3 py-2 border-b border-zinc-50 last:border-0">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-800">{field.question}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Stored as: <code className="font-mono">{field.key}</code></p>
+                  <p className="text-sm text-zinc-800">{field.question}</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">Stored as: <code className="font-mono">{field.key}</code></p>
                 </div>
-                <button onClick={() => removeAiField.mutate(field.id)} className="text-gray-300 hover:text-red-400 flex-shrink-0">
+                <button onClick={() => removeAiField.mutate(field.id)} className="text-zinc-300 hover:text-red-400 flex-shrink-0">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -737,14 +737,14 @@ export default function SettingsPage() {
                 value={newFieldQuestion}
                 onChange={e => setNewFieldQuestion(e.target.value)}
                 placeholder="Question, e.g. What is the buyer's strategic priority?"
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
+                className="w-full text-sm border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
               />
               <div className="flex items-center gap-2">
                 <input
                   value={newFieldKey}
                   onChange={e => setNewFieldKey(e.target.value)}
                   placeholder="Field key (auto-generated if blank)"
-                  className="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-brand-400 font-mono"
+                  className="flex-1 text-xs border border-zinc-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-brand-400 font-mono"
                 />
                 <button
                   onClick={() => newFieldQuestion.trim() && addAiField.mutate()}
@@ -765,48 +765,48 @@ export default function SettingsPage() {
         <Section title="Automation Rules" description="Trigger drafts or alerts automatically based on deal conditions">
           <div className="space-y-3">
             {((ws?.settings?.automation_rules as AutomationRule[] | undefined) ?? []).map((rule: AutomationRule) => (
-              <div key={rule.id} className={cn("flex items-start justify-between gap-3 p-3 rounded-xl border", rule.enabled ? "bg-white border-gray-200" : "bg-gray-50 border-gray-100")}>
+              <div key={rule.id} className={cn("flex items-start justify-between gap-3 p-3 rounded-xl border", rule.enabled ? "bg-white border-zinc-200" : "bg-zinc-50 border-zinc-100")}>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className={cn("w-2 h-2 rounded-full flex-shrink-0", rule.enabled ? "bg-green-400" : "bg-gray-300")} />
-                    <p className="text-sm font-medium text-gray-800">{rule.name}</p>
+                    <span className={cn("w-2 h-2 rounded-full flex-shrink-0", rule.enabled ? "bg-green-400" : "bg-zinc-300")} />
+                    <p className="text-sm font-medium text-zinc-800">{rule.name}</p>
                   </div>
-                  <p className="text-xs text-gray-400 mt-0.5 ml-4">
+                  <p className="text-xs text-zinc-400 mt-0.5 ml-4">
                     When: {rule.trigger.type.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}{rule.trigger.signal_type ? ` (${signalLabel(rule.trigger.signal_type)})` : ""}
                     {" · "}Then: {rule.action.type.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}{rule.action.draft_type ? ` (${draftTypeLabel(rule.action.draft_type)})` : ""}
                     {" · "}{rule.cooldown_hours / 24}d cooldown
                   </p>
                 </div>
-                <button onClick={() => toggleRule.mutate(rule.id)} className={cn("text-xs px-2 py-1 rounded-lg border transition-colors", rule.enabled ? "border-green-200 text-green-700 hover:bg-green-50" : "border-gray-200 text-gray-500 hover:bg-gray-50")}>
+                <button onClick={() => toggleRule.mutate(rule.id)} className={cn("text-xs px-2 py-1 rounded-lg border transition-colors", rule.enabled ? "border-green-200 text-green-700 hover:bg-green-50" : "border-zinc-200 text-zinc-500 hover:bg-zinc-50")}>
                   {rule.enabled ? "Disable" : "Enable"}
                 </button>
               </div>
             ))}
             {((ws?.settings?.automation_rules as AutomationRule[] | undefined) ?? []).length === 0 && (
-              <p className="text-xs text-gray-400 italic">No rules yet. Add one below.</p>
+              <p className="text-xs text-zinc-400 italic">No rules yet. Add one below.</p>
             )}
             {ruleForm ? (
-              <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 space-y-2">
-                <input value={ruleForm.name} onChange={e => setRuleForm(f => f ? { ...f, name: e.target.value } : f)} placeholder="Rule name" className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none" />
+              <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-200 space-y-2">
+                <input value={ruleForm.name} onChange={e => setRuleForm(f => f ? { ...f, name: e.target.value } : f)} placeholder="Rule name" className="w-full text-sm border border-zinc-200 rounded-lg px-3 py-1.5 focus:outline-none" />
                 <div className="grid grid-cols-2 gap-2">
-                  <select value={ruleForm.trigger_type} onChange={e => setRuleForm(f => f ? { ...f, trigger_type: e.target.value } : f)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5">
+                  <select value={ruleForm.trigger_type} onChange={e => setRuleForm(f => f ? { ...f, trigger_type: e.target.value } : f)} className="text-xs border border-zinc-200 rounded-lg px-2 py-1.5">
                     <option value="signal_detected">Signal detected</option>
                     <option value="health_drop">Health drop</option>
                     <option value="stage_changed">Stage changed</option>
                     <option value="close_date_passed">Close date passed</option>
                   </select>
                   {ruleForm.trigger_type === "signal_detected" && (
-                    <input value={ruleForm.signal_type} onChange={e => setRuleForm(f => f ? { ...f, signal_type: e.target.value } : f)} placeholder="Signal type (e.g. champion_dark)" className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 font-mono" />
+                    <input value={ruleForm.signal_type} onChange={e => setRuleForm(f => f ? { ...f, signal_type: e.target.value } : f)} placeholder="Signal type (e.g. champion_dark)" className="text-xs border border-zinc-200 rounded-lg px-2 py-1.5 font-mono" />
                   )}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <select value={ruleForm.action_type} onChange={e => setRuleForm(f => f ? { ...f, action_type: e.target.value } : f)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5">
+                  <select value={ruleForm.action_type} onChange={e => setRuleForm(f => f ? { ...f, action_type: e.target.value } : f)} className="text-xs border border-zinc-200 rounded-lg px-2 py-1.5">
                     <option value="create_draft">Create draft</option>
                     <option value="send_teams_alert">Send Teams alert</option>
                     <option value="set_next_step">Set next step</option>
                   </select>
                   {ruleForm.action_type === "create_draft" && (
-                    <select value={ruleForm.draft_type} onChange={e => setRuleForm(f => f ? { ...f, draft_type: e.target.value } : f)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5">
+                    <select value={ruleForm.draft_type} onChange={e => setRuleForm(f => f ? { ...f, draft_type: e.target.value } : f)} className="text-xs border border-zinc-200 rounded-lg px-2 py-1.5">
                       <option value="champion_reengagement">Champion reengagement</option>
                       <option value="close_plan_proposal">Close plan proposal</option>
                       <option value="executive_alignment">Executive alignment</option>
@@ -815,11 +815,11 @@ export default function SettingsPage() {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <input value={ruleForm.cooldown} onChange={e => setRuleForm(f => f ? { ...f, cooldown: e.target.value } : f)} placeholder="Cooldown hours (e.g. 168)" className="w-28 text-xs border border-gray-200 rounded-lg px-2 py-1.5" type="number" min="1" />
-                  <span className="text-xs text-gray-400">hours cooldown</span>
+                  <input value={ruleForm.cooldown} onChange={e => setRuleForm(f => f ? { ...f, cooldown: e.target.value } : f)} placeholder="Cooldown hours (e.g. 168)" className="w-28 text-xs border border-zinc-200 rounded-lg px-2 py-1.5" type="number" min="1" />
+                  <span className="text-xs text-zinc-400">hours cooldown</span>
                   <div className="ml-auto flex items-center gap-2">
                     <button onClick={() => saveRule.mutate({ id: crypto.randomUUID(), name: ruleForm.name, trigger: { type: ruleForm.trigger_type, signal_type: ruleForm.signal_type || undefined }, action: { type: ruleForm.action_type, draft_type: ruleForm.draft_type || undefined }, enabled: true, cooldown_hours: parseInt(ruleForm.cooldown) || 168 })} className="text-xs font-medium px-3 py-1.5 bg-brand-600 text-white rounded-lg hover:bg-brand-700">Save</button>
-                    <button onClick={() => setRuleForm(null)} className="text-xs text-gray-500 px-2 py-1.5">Cancel</button>
+                    <button onClick={() => setRuleForm(null)} className="text-xs text-zinc-500 px-2 py-1.5">Cancel</button>
                   </div>
                 </div>
               </div>
@@ -838,12 +838,12 @@ export default function SettingsPage() {
         <Section title="Outbound Webhooks" description="Receive Vantage events in Zapier, Make, or any HTTP endpoint">
           <div className="space-y-3">
             {((ws?.settings?.webhook_subscriptions as WebhookSubscription[] | undefined) ?? []).map((sub: WebhookSubscription) => (
-              <div key={sub.id} className="flex items-center justify-between gap-3 py-2 border-b border-gray-50 last:border-0">
+              <div key={sub.id} className="flex items-center justify-between gap-3 py-2 border-b border-zinc-50 last:border-0">
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-mono text-gray-700 truncate">{sub.url}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{sub.events.join(", ")}</p>
+                  <p className="text-xs font-mono text-zinc-700 truncate">{sub.url}</p>
+                  <p className="text-xs text-zinc-400 mt-0.5">{sub.events.join(", ")}</p>
                 </div>
-                <button onClick={() => deleteWebhook.mutate(sub.id)} className="text-gray-300 hover:text-red-400 flex-shrink-0">
+                <button onClick={() => deleteWebhook.mutate(sub.id)} className="text-zinc-300 hover:text-red-400 flex-shrink-0">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -853,7 +853,7 @@ export default function SettingsPage() {
                 value={webhookUrl}
                 onChange={e => setWebhookUrl(e.target.value)}
                 placeholder="https://hooks.zapier.com/..."
-                className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
+                className="flex-1 text-sm border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
               />
               <button
                 onClick={() => webhookUrl.trim() && addWebhook.mutate()}
@@ -864,7 +864,7 @@ export default function SettingsPage() {
                 Add
               </button>
             </div>
-            <p className="text-xs text-gray-400">Events: signal.critical, draft.created, draft.approved, agent.run_complete, and more. Signed with HMAC-SHA256.</p>
+            <p className="text-xs text-zinc-400">Events: signal.critical, draft.created, draft.approved, agent.run_complete, and more. Signed with HMAC-SHA256.</p>
           </div>
         </Section>
       )}
@@ -878,7 +878,7 @@ export default function SettingsPage() {
               (healthData.data.score ?? 0) >= 80 ? "text-green-600" :
               (healthData.data.score ?? 0) >= 60 ? "text-amber-600" : "text-red-600"
             )}>
-              {healthData.data.score}<span className="text-base font-normal text-gray-400">/{healthData.data.max}</span>
+              {healthData.data.score}<span className="text-base font-normal text-zinc-400">/{healthData.data.max}</span>
             </div>
             <span className={cn(
               "text-xs px-2 py-1 rounded-full font-medium capitalize",
@@ -893,8 +893,8 @@ export default function SettingsPage() {
                 {c.ok
                   ? <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                   : <XCircle className="w-4 h-4 text-red-400 flex-shrink-0" />}
-                <span className={cn("text-xs flex-1", c.ok ? "text-gray-600" : "text-gray-700 font-medium")}>{c.name}</span>
-                {!c.ok && <span className="text-[10px] text-gray-400 truncate max-w-[200px]">{c.fix}</span>}
+                <span className={cn("text-xs flex-1", c.ok ? "text-zinc-600" : "text-zinc-700 font-medium")}>{c.name}</span>
+                {!c.ok && <span className="text-[10px] text-zinc-400 truncate max-w-[200px]">{c.fix}</span>}
               </div>
             ))}
           </div>
@@ -930,13 +930,13 @@ export default function SettingsPage() {
                   </button>
                 </div>
               ) : (
-                <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-500">
+                <div className="p-4 bg-zinc-50 border border-zinc-200 rounded-xl text-sm text-zinc-500">
                   No template uploaded. Upload a .docx proposal to use as the structural reference.
                 </div>
               )}
 
               <div className="space-y-2">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-zinc-500">
                   Upload your best reference proposal (.docx). The AI will inherit its formatting, styles, and structure.
                   Claude will write new content on top using this deal&apos;s account data.
                 </p>
@@ -964,7 +964,7 @@ export default function SettingsPage() {
                     }}
                   />
                   <span className={`inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-xl border transition-colors ${
-                    templateUploading ? "opacity-50 cursor-not-allowed border-gray-200 text-gray-400" : "border-brand-300 text-brand-700 hover:bg-brand-50 cursor-pointer"
+                    templateUploading ? "opacity-50 cursor-not-allowed border-zinc-200 text-zinc-400" : "border-brand-300 text-brand-700 hover:bg-brand-50 cursor-pointer"
                   }`}>
                     {templateUploading ? "Uploading…" : "Upload .docx Template"}
                   </span>
@@ -986,13 +986,13 @@ export default function SettingsPage() {
           <div className="space-y-3">
             {ws?.settings?.sender_name ? (
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div><span className="text-xs text-gray-500 block mb-0.5">Name</span><span className="font-medium">{ws.settings.sender_name as string}</span></div>
-                <div><span className="text-xs text-gray-500 block mb-0.5">Title</span><span>{(ws.settings.sender_title as string) || "-"}</span></div>
-                <div><span className="text-xs text-gray-500 block mb-0.5">Company</span><span>{(ws.settings.sender_company as string) || "-"}</span></div>
-                <div><span className="text-xs text-gray-500 block mb-0.5">Seller domains</span><span>{((ws.settings.seller_domains as string[]) ?? []).join(", ") || "-"}</span></div>
+                <div><span className="text-xs text-zinc-500 block mb-0.5">Name</span><span className="font-medium">{ws.settings.sender_name as string}</span></div>
+                <div><span className="text-xs text-zinc-500 block mb-0.5">Title</span><span>{(ws.settings.sender_title as string) || "-"}</span></div>
+                <div><span className="text-xs text-zinc-500 block mb-0.5">Company</span><span>{(ws.settings.sender_company as string) || "-"}</span></div>
+                <div><span className="text-xs text-zinc-500 block mb-0.5">Seller domains</span><span>{((ws.settings.seller_domains as string[]) ?? []).join(", ") || "-"}</span></div>
               </div>
             ) : (
-              <p className="text-sm text-gray-400">Not configured. Agents will use placeholder names in generated emails.</p>
+              <p className="text-sm text-zinc-400">Not configured. Agents will use placeholder names in generated emails.</p>
             )}
             <button onClick={openSenderEdit} className="text-sm text-brand-600 hover:underline font-medium">
               {ws?.settings?.sender_name ? "Edit sender →" : "Configure sender →"}
@@ -1007,16 +1007,16 @@ export default function SettingsPage() {
               { key: "seller_domains", label: "Seller email domains", placeholder: "acmecorp.com, acme.io" },
             ].map(f => (
               <div key={f.key}>
-                <label className="text-xs font-medium text-gray-700 block mb-1">{f.label}</label>
+                <label className="text-xs font-medium text-zinc-700 block mb-1">{f.label}</label>
                 <input
                   type="text"
                   value={(senderDraft as Record<string, string>)[f.key] ?? ""}
                   onChange={e => setSenderDraft(d => ({ ...d, [f.key]: e.target.value }))}
                   placeholder={f.placeholder}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
+                  className="w-full text-xs border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
                 />
                 {f.key === "seller_domains" && (
-                  <p className="text-xs text-gray-400 mt-1">Comma-separated. These domains are excluded from buyer analysis.</p>
+                  <p className="text-xs text-zinc-400 mt-1">Comma-separated. These domains are excluded from buyer analysis.</p>
                 )}
               </div>
             ))}
@@ -1025,7 +1025,7 @@ export default function SettingsPage() {
                 className="px-4 py-1.5 bg-brand-600 text-white text-xs rounded-lg hover:bg-brand-700 disabled:opacity-50">
                 {senderSaving ? "Saving..." : "Save"}
               </button>
-              <button onClick={() => setSenderEditing(false)} className="px-4 py-1.5 border border-gray-200 text-gray-600 text-xs rounded-lg hover:bg-gray-50">
+              <button onClick={() => setSenderEditing(false)} className="px-4 py-1.5 border border-zinc-200 text-zinc-600 text-xs rounded-lg hover:bg-zinc-50">
                 Cancel
               </button>
             </div>
@@ -1040,15 +1040,15 @@ export default function SettingsPage() {
             {icpProfile.product_name ? (
               <>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><span className="text-xs text-gray-500 block mb-0.5">Product</span><span className="font-medium">{icpProfile.product_name}</span></div>
-                  <div><span className="text-xs text-gray-500 block mb-0.5">Ideal Customer</span><span>{icpProfile.ideal_customer || "-"}</span></div>
+                  <div><span className="text-xs text-zinc-500 block mb-0.5">Product</span><span className="font-medium">{icpProfile.product_name}</span></div>
+                  <div><span className="text-xs text-zinc-500 block mb-0.5">Ideal Customer</span><span>{icpProfile.ideal_customer || "-"}</span></div>
                 </div>
                 {icpProfile.product_description && (
-                  <p className="text-sm text-gray-600">{icpProfile.product_description}</p>
+                  <p className="text-sm text-zinc-600">{icpProfile.product_description}</p>
                 )}
                 {(icpProfile.differentiators ?? []).length > 0 && (
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Differentiators</p>
+                    <p className="text-xs text-zinc-500 mb-1">Differentiators</p>
                     <div className="flex flex-wrap gap-1.5">
                       {(icpProfile.differentiators ?? []).map((d, i) => (
                         <span key={i} className="text-xs bg-brand-50 text-brand-700 px-2 py-0.5 rounded-full">{d}</span>
@@ -1058,7 +1058,7 @@ export default function SettingsPage() {
                 )}
                 {(icpProfile.competitors ?? []).length > 0 && (
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Main Competitors</p>
+                    <p className="text-xs text-zinc-500 mb-1">Main Competitors</p>
                     <div className="flex flex-wrap gap-1.5">
                       {(icpProfile.competitors ?? []).map((c, i) => (
                         <span key={i} className="text-xs bg-red-50 text-red-700 px-2 py-0.5 rounded-full">{c}</span>
@@ -1068,7 +1068,7 @@ export default function SettingsPage() {
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-400">No ICP configured. Agents are using default context. Configure to get personalised drafts for your product.</p>
+              <p className="text-sm text-zinc-400">No ICP configured. Agents are using default context. Configure to get personalised drafts for your product.</p>
             )}
             <button
               onClick={() => { setIcpDraft({ ...icpProfile }); setIcpEditing(true); }}
@@ -1085,19 +1085,19 @@ export default function SettingsPage() {
               { key: "product_description", label: "Product description",   placeholder: "What you sell, who it's for, top 3 capabilities" },
             ].map(f => (
               <div key={f.key}>
-                <label className="text-xs font-medium text-gray-700 block mb-1">{f.label}</label>
+                <label className="text-xs font-medium text-zinc-700 block mb-1">{f.label}</label>
                 {f.key === "product_description" ? (
                   <textarea
                     value={(icpDraft as Record<string, string>)[f.key] ?? ""}
                     onChange={e => setIcpDraft(d => ({ ...d, [f.key]: e.target.value }))}
                     placeholder={f.placeholder} rows={3}
-                    className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:border-brand-400"
+                    className="w-full text-xs border border-zinc-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:border-brand-400"
                   />
                 ) : (
                   <input type="text" value={(icpDraft as Record<string, string>)[f.key] ?? ""}
                     onChange={e => setIcpDraft(d => ({ ...d, [f.key]: e.target.value }))}
                     placeholder={f.placeholder}
-                    className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
+                    className="w-full text-xs border border-zinc-200 rounded-lg px-3 py-2 focus:outline-none focus:border-brand-400"
                   />
                 )}
               </div>
@@ -1107,12 +1107,12 @@ export default function SettingsPage() {
               { key: "competitors",     label: "Main competitors (one per line)", placeholder: "Voxel AI\nChooch AI\nIntenseye" },
             ].map(f => (
               <div key={f.key}>
-                <label className="text-xs font-medium text-gray-700 block mb-1">{f.label}</label>
+                <label className="text-xs font-medium text-zinc-700 block mb-1">{f.label}</label>
                 <textarea
                   value={((icpDraft as Record<string, string[]>)[f.key] ?? []).join("\n")}
                   onChange={e => setIcpDraft(d => ({ ...d, [f.key]: e.target.value.split("\n").map(s => s.trim()).filter(Boolean) }))}
                   placeholder={f.placeholder} rows={3}
-                  className="w-full text-xs border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:border-brand-400"
+                  className="w-full text-xs border border-zinc-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:border-brand-400"
                 />
               </div>
             ))}
@@ -1121,7 +1121,7 @@ export default function SettingsPage() {
                 className="text-xs font-medium px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-40 transition-colors">
                 {icpSaving ? "Saving..." : "Save ICP"}
               </button>
-              <button onClick={() => setIcpEditing(false)} className="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
+              <button onClick={() => setIcpEditing(false)} className="text-xs text-zinc-400 hover:text-zinc-600">Cancel</button>
             </div>
           </div>
         )}
@@ -1130,20 +1130,20 @@ export default function SettingsPage() {
       {/* ── Automation Rules Execution Log ──────────────────────────────────────── */}
       {isAdmin && (rulesLogData?.data ?? []).length > 0 && (
         <Section title="Rules Execution Log" description="Last 50 automation rule firings">
-          <div className="divide-y divide-gray-50 max-h-64 overflow-y-auto">
+          <div className="divide-y divide-zinc-50 max-h-64 overflow-y-auto">
             {(rulesLogData?.data ?? []).map(entry => (
               <div key={entry.id} className="flex items-start gap-3 py-2.5">
                 <Zap className="w-3.5 h-3.5 text-brand-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-gray-800 truncate">{entry.account_name}</span>
-                    <span className="text-xs text-gray-400">·</span>
-                    <span className="text-xs text-gray-600 truncate">{entry.rule_name}</span>
-                    <span className="text-xs text-gray-400 ml-auto flex-shrink-0">
+                    <span className="text-xs font-medium text-zinc-800 truncate">{entry.account_name}</span>
+                    <span className="text-xs text-zinc-400">·</span>
+                    <span className="text-xs text-zinc-600 truncate">{entry.rule_name}</span>
+                    <span className="text-xs text-zinc-400 ml-auto flex-shrink-0">
                       {entry.occurred_at ? new Date(entry.occurred_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ""}
                     </span>
                   </div>
-                  {entry.action_taken && <p className="text-xs text-gray-400 truncate mt-0.5">{entry.action_taken}</p>}
+                  {entry.action_taken && <p className="text-xs text-zinc-400 truncate mt-0.5">{entry.action_taken}</p>}
                 </div>
               </div>
             ))}
@@ -1152,7 +1152,7 @@ export default function SettingsPage() {
       )}
 
       {/* Security footer */}
-      <div className="flex items-center gap-2 text-xs text-gray-400">
+      <div className="flex items-center gap-2 text-xs text-zinc-400">
         <Shield className="w-3.5 h-3.5" />
         <span>All data is encrypted at rest and in transit. Auth via WorkOS · SOC2-ready audit log active.</span>
       </div>

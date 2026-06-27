@@ -24,10 +24,10 @@ import { type DealFilterState, filterAndSortDeals, loadFilters, saveFilters, has
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 const FORECAST_STYLES: Record<string, string> = {
-  "Commit":     "bg-emerald-50 text-emerald-700 border-emerald-200",
-  "Best Case":  "bg-sky-50 text-sky-700 border-sky-200",
-  "Pipeline":   "bg-violet-50 text-violet-700 border-violet-200",
-  "Omit":       "bg-gray-100 text-gray-500 border-gray-200",
+  "Commit":     "forecast-commit",
+  "Best Case":  "forecast-bestcase",
+  "Pipeline":   "forecast-pipeline",
+  "Omit":       "forecast-omit",
 };
 
 const MEDDPICC_LABELS: Record<string, string> = {
@@ -67,23 +67,22 @@ function fmtRelative(s: string | null | undefined) {
 }
 
 function healthColor(score: number | null | undefined) {
-  if (score == null) return "bg-gray-300";
-  if (score >= 0.7) return "bg-emerald-400";
-  if (score >= 0.4) return "bg-amber-400";
-  if (score >= 0.2) return "bg-orange-400";
-  return "bg-red-500";
+  if (score == null) return "bg-zinc-300";
+  if (score >= 0.7) return "bg-zinc-800";
+  if (score >= 0.4) return "bg-zinc-500";
+  return "bg-zinc-300";
 }
 
 function meddpiccColor(score: number) {
-  if (score >= 0.6) return "bg-emerald-400";
-  if (score >= 0.3) return "bg-amber-400";
-  return "bg-red-400";
+  if (score >= 0.6) return "bg-zinc-800";
+  if (score >= 0.3) return "bg-zinc-500";
+  return "bg-zinc-300";
 }
 
 function momentumIcon(momentum: string | undefined) {
   if (momentum === "improving") return <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />;
   if (momentum === "declining") return <TrendingDown className="w-3.5 h-3.5 text-red-500" />;
-  return <Minus className="w-3.5 h-3.5 text-gray-400" />;
+  return <Minus className="w-3.5 h-3.5 text-zinc-400" />;
 }
 
 // Extract stakeholders mentioned in signal details
@@ -125,19 +124,19 @@ function DealRow({ account, isSelected, onClick }: {
     <button
       onClick={onClick}
       className={cn(
-        "w-full text-left px-3 py-2.5 border-b border-gray-100 transition-colors flex items-center gap-3",
-        isSelected ? "bg-indigo-50 border-l-2 border-l-indigo-500" : "hover:bg-gray-50 border-l-2 border-l-transparent"
+        "w-full text-left px-3 py-2.5 border-b border-zinc-100 transition-colors flex items-center gap-3",
+        isSelected ? "bg-zinc-50 border-l-2 border-l-zinc-800" : "hover:bg-zinc-50 border-l-2 border-l-transparent"
       )}
     >
       <span className={cn("w-2 h-2 rounded-full flex-shrink-0", healthColor(account.health_score))} />
       <div className="flex-1 min-w-0">
-        <p className="text-[13px] font-medium text-gray-900 truncate" title={account.name}>{cleanDealName(account.name)}</p>
+        <p className="text-[13px] font-medium text-zinc-900 truncate" title={account.name}>{cleanDealName(account.name)}</p>
         <div className="flex items-center gap-1.5 mt-0.5">
-          <span className="text-[10px] text-gray-400">{account.stage ?? "–"}</span>
+          <span className="text-[10px] text-zinc-400">{account.stage ?? "–"}</span>
           {account.deal_amount ? (
-            <span className="text-[10px] text-gray-400">· {fmtAmount(account.deal_amount)}</span>
+            <span className="text-[10px] text-zinc-400">· {fmtAmount(account.deal_amount)}</span>
           ) : null}
-          <span className="text-[10px] text-gray-400 truncate">
+          <span className="text-[10px] text-zinc-400 truncate">
             · {swept ? `swept ${swept}` : "not swept yet"}
           </span>
         </div>
@@ -169,25 +168,25 @@ function MEDDPICCBar({ label, score, gap }: { label: string; score: number; gap?
   return (
     <div className="mb-2">
       <div className="flex items-center gap-2 cursor-pointer group" onClick={() => gap && setOpen(o => !o)}>
-        <span className="text-[11px] font-medium text-gray-600 w-40 flex-shrink-0">{label}</span>
-        <div className="flex-1 bg-gray-100 rounded-full h-1.5 overflow-hidden">
+        <span className="text-[11px] font-medium text-zinc-600 w-40 flex-shrink-0">{label}</span>
+        <div className="flex-1 bg-zinc-100 rounded-full h-1.5 overflow-hidden">
           <div
             className={cn("h-1.5 rounded-full transition-all", meddpiccColor(score))}
             style={{ width: `${Math.round(score * 100)}%` }}
           />
         </div>
-        <span className={cn("text-[11px] font-semibold tabular-nums w-8 text-right flex-shrink-0", score < 0.3 ? "text-red-600" : score < 0.6 ? "text-amber-600" : "text-emerald-600")}>
+        <span className={cn("text-[11px] font-semibold tabular-nums w-8 text-right flex-shrink-0", score < 0.3 ? "text-zinc-400" : score < 0.6 ? "text-zinc-600" : "text-zinc-900")}>
           {Math.round(score * 100)}%
         </span>
         {gap && (
-          <span className="text-gray-300 group-hover:text-gray-500 transition-colors flex-shrink-0">
+          <span className="text-zinc-300 group-hover:text-zinc-500 transition-colors flex-shrink-0">
             {open ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
           </span>
         )}
       </div>
       {open && gap && (
         <div className="mt-1.5 ml-40 pl-2 border-l-2 border-red-200">
-          <p className="text-[11px] text-gray-600 leading-relaxed">{gap}</p>
+          <p className="text-[11px] text-zinc-600 leading-relaxed">{gap}</p>
         </div>
       )}
     </div>
@@ -218,7 +217,7 @@ function WhyCard({ title, present, evidence }: { title: string; present: boolean
         </span>
       </div>
       {open && (
-        <p className="mt-2 text-[11px] text-gray-600 leading-relaxed border-t border-current border-opacity-20 pt-2">
+        <p className="mt-2 text-[11px] text-zinc-600 leading-relaxed border-t border-current border-opacity-20 pt-2">
           {evidence}
         </p>
       )}
@@ -319,23 +318,23 @@ function DealDossier({ account }: { account: AccountListItem }) {
   }
 
   return (
-    <div className="h-full overflow-y-auto bg-gray-50">
+    <div className="h-full overflow-y-auto bg-zinc-50">
 
       {/* ── Sticky Header ──────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10">
+      <div className="bg-white border-b border-zinc-200 px-6 py-4 sticky top-0 z-10">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-lg font-bold text-gray-900">{account.name}</h2>
+              <h2 className="text-lg font-bold text-zinc-900">{account.name}</h2>
               {forecastCategory && (
                 <span className={cn("text-xs px-2 py-0.5 rounded-full border font-semibold", FORECAST_STYLES[forecastCategory] ?? FORECAST_STYLES["Pipeline"])}>
                   {forecastCategory}
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3 mt-1.5 flex-wrap text-sm text-gray-500">
-              <span className="bg-gray-100 rounded-full px-2.5 py-0.5 text-xs font-medium text-gray-600">{account.stage ?? "–"}</span>
-              {account.deal_amount && <span className="font-semibold text-gray-700">{fmtAmount(account.deal_amount)}</span>}
+            <div className="flex items-center gap-3 mt-1.5 flex-wrap text-sm text-zinc-500">
+              <span className="bg-zinc-100 rounded-full px-2.5 py-0.5 text-xs font-medium text-zinc-600">{account.stage ?? "–"}</span>
+              {account.deal_amount && <span className="font-semibold text-zinc-700">{fmtAmount(account.deal_amount)}</span>}
               {closeDate && <span className="flex items-center gap-1 text-xs"><Clock className="w-3 h-3" /> Close {closeDate}</span>}
             </div>
             {account.signals_summary[0] && (
@@ -347,14 +346,14 @@ function DealDossier({ account }: { account: AccountListItem }) {
           </div>
           <Link
             href={`/account/${id}`}
-            className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg px-3 py-2 transition-colors whitespace-nowrap"
+            className="flex-shrink-0 flex items-center gap-1 text-xs font-semibold text-zinc-700 hover:text-zinc-700 bg-zinc-50 hover:bg-zinc-100 rounded-lg px-3 py-2 transition-colors whitespace-nowrap"
           >
             War Room <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
         {/* Vitals bar */}
-        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100">
+        <div className="flex items-center gap-4 mt-3 pt-3 border-t border-zinc-100">
           <VitalStat
             icon={<Activity className="w-3.5 h-3.5" />}
             label="Health"
@@ -387,7 +386,7 @@ function DealDossier({ account }: { account: AccountListItem }) {
             icon={momentumIcon(momentum)}
             label="Momentum"
             value={momentum ? momentum.charAt(0).toUpperCase() + momentum.slice(1) : "–"}
-            color={momentum === "improving" ? "text-emerald-600" : momentum === "declining" ? "text-red-600" : "text-gray-600"}
+            color={momentum === "improving" ? "text-emerald-600" : momentum === "declining" ? "text-red-600" : "text-zinc-600"}
           />
           {winProbability != null && (
             <VitalStat
@@ -402,7 +401,7 @@ function DealDossier({ account }: { account: AccountListItem }) {
               icon={<Clock className="w-3.5 h-3.5" />}
               label="Days silent"
               value={String(daysSince)}
-              color={daysSince > 30 ? "text-red-600" : daysSince > 14 ? "text-amber-600" : "text-gray-700"}
+              color={daysSince > 30 ? "text-red-600" : daysSince > 14 ? "text-amber-600" : "text-zinc-700"}
             />
           )}
         </div>
@@ -412,9 +411,9 @@ function DealDossier({ account }: { account: AccountListItem }) {
 
         {/* ── AI Narrative ─────────────────────────────────────────── */}
         {dealNarrative && (
-          <Section title="AI Deal Story" icon={<Zap className="w-3.5 h-3.5 text-indigo-500" />}>
-            <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3">
-              <p className="text-sm text-indigo-900 leading-relaxed">{dealNarrative}</p>
+          <Section title="AI Deal Story" icon={<Zap className="w-3.5 h-3.5 text-zinc-500" />}>
+            <div className="bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3">
+              <p className="text-sm text-zinc-900 leading-relaxed">{dealNarrative}</p>
             </div>
           </Section>
         )}
@@ -428,25 +427,25 @@ function DealDossier({ account }: { account: AccountListItem }) {
         )}
 
         {/* ── People ───────────────────────────────────────────────── */}
-        <Section title="People & Contacts" icon={<Users className="w-3.5 h-3.5 text-indigo-500" />} count={stakeholders.length}>
+        <Section title="People & Contacts" icon={<Users className="w-3.5 h-3.5 text-zinc-500" />} count={stakeholders.length}>
           {stakeholders.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-4">No contacts extracted yet. Run agents on this account to populate.</p>
+            <p className="text-sm text-zinc-400 text-center py-4">No contacts extracted yet. Run agents on this account to populate.</p>
           ) : (
             <div className="grid grid-cols-1 gap-2">
               {stakeholders.map(s => (
                 <div key={s.name} className={cn(
                   "flex items-center gap-3 bg-white border rounded-xl px-3.5 py-2.5",
-                  s.status === "dark" ? "border-red-200 bg-red-50" : "border-gray-200"
+                  s.status === "dark" ? "border-red-200 bg-red-50" : "border-zinc-200"
                 )}>
                   <div className={cn(
                     "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-[11px] font-bold",
-                    s.status === "dark" ? "bg-red-100 text-red-700" : "bg-indigo-100 text-indigo-700"
+                    s.status === "dark" ? "bg-red-100 text-red-700" : "bg-zinc-100 text-zinc-700"
                   )}>
                     {s.name.split(" ").map(w => w[0]).join("").slice(0, 2)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900">{s.name}</p>
-                    <p className="text-[11px] text-gray-500 truncate">{s.role}</p>
+                    <p className="text-sm font-semibold text-zinc-900">{s.name}</p>
+                    <p className="text-[11px] text-zinc-500 truncate">{s.role}</p>
                   </div>
                   <span className={cn(
                     "text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0",
@@ -461,25 +460,25 @@ function DealDossier({ account }: { account: AccountListItem }) {
         </Section>
 
         {/* ── Communication ────────────────────────────────────────── */}
-        <Section title="Communication" icon={<Mail className="w-3.5 h-3.5 text-indigo-500" />}>
+        <Section title="Communication" icon={<Mail className="w-3.5 h-3.5 text-zinc-500" />}>
           <div className="grid grid-cols-3 gap-2 mb-3">
-            <CommStat label="Sent / Approved" value={approvedDrafts.length} color="text-indigo-700" bg="bg-indigo-50 border-indigo-100" />
+            <CommStat label="Sent / Approved" value={approvedDrafts.length} color="text-zinc-700" bg="bg-zinc-50 border-zinc-200" />
             <CommStat label="Pending review" value={pendingDrafts.length} color="text-orange-700" bg="bg-orange-50 border-orange-100" />
-            <CommStat label="Declined" value={declinedDrafts.length} color="text-gray-600" bg="bg-gray-50 border-gray-100" />
+            <CommStat label="Declined" value={declinedDrafts.length} color="text-zinc-600" bg="bg-zinc-50 border-zinc-100" />
           </div>
           {approvedDrafts.length > 0 && (
             <div className="space-y-2">
-              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Recent sent</p>
+              <p className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">Recent sent</p>
               {approvedDrafts.slice(0, 3).map(d => (
-                <div key={d.id} className="bg-white border border-gray-200 rounded-xl px-3.5 py-2.5">
+                <div key={d.id} className="bg-white border border-zinc-200 rounded-xl px-3.5 py-2.5">
                   <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="text-xs font-semibold text-gray-700">
+                    <span className="text-xs font-semibold text-zinc-700">
                       {draftTypeLabel(d.type ?? "email")}
                     </span>
-                    <span className="text-[10px] text-gray-400">{fmtDate(d.reviewed_at ?? d.created_at)}</span>
+                    <span className="text-[10px] text-zinc-400">{fmtDate(d.reviewed_at ?? d.created_at)}</span>
                   </div>
-                  {d.subject_line && <p className="text-[11px] text-gray-500 mb-1">{d.subject_line}</p>}
-                  <p className="text-[11px] text-gray-600 line-clamp-2 leading-relaxed">{stripMarkdown(d.content ?? "")}</p>
+                  {d.subject_line && <p className="text-[11px] text-zinc-500 mb-1">{d.subject_line}</p>}
+                  <p className="text-[11px] text-zinc-600 line-clamp-2 leading-relaxed">{stripMarkdown(d.content ?? "")}</p>
                 </div>
               ))}
             </div>
@@ -488,13 +487,13 @@ function DealDossier({ account }: { account: AccountListItem }) {
         </Section>
 
         {/* ── Meetings ─────────────────────────────────────────────── */}
-        <Section title="Meeting Log" icon={<Calendar className="w-3.5 h-3.5 text-indigo-500" />} count={meetings.length}>
+        <Section title="Meeting Log" icon={<Calendar className="w-3.5 h-3.5 text-zinc-500" />} count={meetings.length}>
           {meetingsLoading ? (
             <Skeleton className="h-32 rounded-xl" />
           ) : meetings.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-xl px-4 py-5 text-center">
-              <p className="text-sm text-gray-400">No meeting transcripts yet.</p>
-              <p className="text-xs text-gray-300 mt-1">Connect Fireflies.ai or upload a transcript to see meeting intelligence.</p>
+            <div className="bg-white border border-zinc-200 rounded-xl px-4 py-5 text-center">
+              <p className="text-sm text-zinc-400">No meeting transcripts yet.</p>
+              <p className="text-xs text-zinc-300 mt-1">Connect Fireflies.ai or upload a transcript to see meeting intelligence.</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -506,13 +505,13 @@ function DealDossier({ account }: { account: AccountListItem }) {
         </Section>
 
         {/* ── MEDDPICC Scorecard ───────────────────────────────────── */}
-        <Section title="MEDDPICC Scorecard" icon={<BarChart2 className="w-3.5 h-3.5 text-indigo-500" />}>
-          <div className="bg-white border border-gray-200 rounded-xl px-4 py-4">
+        <Section title="MEDDPICC Scorecard" icon={<BarChart2 className="w-3.5 h-3.5 text-zinc-500" />}>
+          <div className="bg-white border border-zinc-200 rounded-xl px-4 py-4">
             {/* Overall */}
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-              <span className="text-sm font-semibold text-gray-700">Overall qualification</span>
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-zinc-100">
+              <span className="text-sm font-semibold text-zinc-700">Overall qualification</span>
               <div className="flex items-center gap-3">
-                <div className="w-32 bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div className="w-32 bg-zinc-100 rounded-full h-2 overflow-hidden">
                   <div
                     className={cn("h-2 rounded-full", meddpiccColor(meddpiccOverall ?? 0))}
                     style={{ width: `${Math.round((meddpiccOverall ?? 0) * 100)}%` }}
@@ -536,7 +535,7 @@ function DealDossier({ account }: { account: AccountListItem }) {
         </Section>
 
         {/* ── 3 Whys ───────────────────────────────────────────────── */}
-        <Section title="The 3 Whys" icon={<MessageSquare className="w-3.5 h-3.5 text-indigo-500" />}>
+        <Section title="The 3 Whys" icon={<MessageSquare className="w-3.5 h-3.5 text-zinc-500" />}>
           <div className="space-y-2">
             {[
               { key: "why_change", title: "Why Change?" },
@@ -552,7 +551,7 @@ function DealDossier({ account }: { account: AccountListItem }) {
 
         {/* ── Risk Vectors ─────────────────────────────────────────── */}
         {Object.keys(riskVectors).length > 0 && (
-          <Section title="Risk Vectors" icon={<AlertTriangle className="w-3.5 h-3.5 text-indigo-500" />}>
+          <Section title="Risk Vectors" icon={<AlertTriangle className="w-3.5 h-3.5 text-zinc-500" />}>
             <div className="flex flex-wrap gap-2">
               {Object.entries(riskVectors).map(([k, v]) => (
                 <div key={k} className={cn(
@@ -572,22 +571,22 @@ function DealDossier({ account }: { account: AccountListItem }) {
 
         {/* ── Signal Themes ────────────────────────────────────────── */}
         {signalThemes.length > 0 && (
-          <Section title="Signal Clusters" icon={<Zap className="w-3.5 h-3.5 text-indigo-500" />} count={signalThemes.length}>
+          <Section title="Signal Clusters" icon={<Zap className="w-3.5 h-3.5 text-zinc-500" />} count={signalThemes.length}>
             <div className="space-y-2">
               {signalThemes.map((t, i) => (
                 <div key={i} className={cn(
                   "bg-white border rounded-xl px-4 py-3",
-                  t.severity === "critical" ? "border-red-200" : t.severity === "high" ? "border-orange-200" : "border-gray-200"
+                  t.severity === "critical" ? "border-red-200" : t.severity === "high" ? "border-orange-200" : "border-zinc-200"
                 )}>
                   <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-sm font-semibold text-gray-800">{t.theme}</p>
+                    <p className="text-sm font-semibold text-zinc-800">{t.theme}</p>
                     <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded-full",
                       t.severity === "critical" ? "bg-red-100 text-red-700" : t.severity === "high" ? "bg-orange-100 text-orange-700" : "bg-amber-100 text-amber-700"
                     )}>
                       {t.signal_count} signals
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 leading-relaxed">{t.summary}</p>
+                  <p className="text-xs text-zinc-600 leading-relaxed">{t.summary}</p>
                 </div>
               ))}
             </div>
@@ -596,23 +595,23 @@ function DealDossier({ account }: { account: AccountListItem }) {
 
         {/* ── Full Signal Feed ─────────────────────────────────────── */}
         {stateSignals.length > 0 && (
-          <Section title="All Signals" icon={<Activity className="w-3.5 h-3.5 text-indigo-500" />} count={stateSignals.length}>
-            <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100 overflow-hidden">
+          <Section title="All Signals" icon={<Activity className="w-3.5 h-3.5 text-zinc-500" />} count={stateSignals.length}>
+            <div className="bg-white border border-zinc-200 rounded-xl divide-y divide-zinc-100 overflow-hidden">
               {stateSignals.map((sig, i) => {
-                const dotColor = sig.urgency === "critical" ? "bg-red-500" : sig.urgency === "high" ? "bg-orange-400" : sig.urgency === "medium" ? "bg-amber-400" : "bg-emerald-400";
+                const dotColor = sig.urgency === "critical" ? "bg-red-500" : sig.urgency === "high" ? "bg-zinc-700" : sig.urgency === "medium" ? "bg-zinc-400" : "bg-zinc-300";
                 return (
                   <div key={i} className="flex items-start gap-3 px-4 py-3">
                     <span className={cn("w-2 h-2 rounded-full flex-shrink-0 mt-1.5", dotColor)} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="text-xs font-semibold text-gray-700">{signalLabel(sig.type)}</p>
+                        <p className="text-xs font-semibold text-zinc-700">{signalLabel(sig.type)}</p>
                         {sig.detected_at && (
-                          <span className="text-[10px] text-gray-400 flex-shrink-0">{fmtRelative(sig.detected_at)}</span>
+                          <span className="text-[10px] text-zinc-400 flex-shrink-0">{fmtRelative(sig.detected_at)}</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5 leading-relaxed line-clamp-2">{sig.detail}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5 leading-relaxed line-clamp-2">{sig.detail}</p>
                       {sig.meddpicc_component && (
-                        <span className="mt-1 inline-block text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-medium">
+                        <span className="mt-1 inline-block text-[10px] text-zinc-700 bg-zinc-50 px-1.5 py-0.5 rounded font-medium">
                           {sig.meddpicc_component}
                         </span>
                       )}
@@ -626,15 +625,15 @@ function DealDossier({ account }: { account: AccountListItem }) {
 
         {/* ── Agent Run History ────────────────────────────────────── */}
         {episodic.length > 0 && (
-          <Section title="Agent Run History" icon={<Clock className="w-3.5 h-3.5 text-indigo-500" />} count={episodic.length}>
+          <Section title="Agent Run History" icon={<Clock className="w-3.5 h-3.5 text-zinc-500" />} count={episodic.length}>
             <div className="space-y-2">
               {[...episodic].reverse().slice(0, 5).map((run, i) => (
-                <div key={i} className="bg-white border border-gray-200 rounded-xl px-4 py-3">
+                <div key={i} className="bg-white border border-zinc-200 rounded-xl px-4 py-3">
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="text-xs font-semibold text-gray-700">{run.date as string}</span>
+                    <span className="text-xs font-semibold text-zinc-700">{run.date as string}</span>
                     <div className="flex items-center gap-2">
                       {(run.meddpicc_score as number) != null && (
-                        <span className="text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-medium">
+                        <span className="text-[10px] text-zinc-700 bg-zinc-50 px-1.5 py-0.5 rounded font-medium">
                           MEDDPICC {fmtPct(run.meddpicc_score as number)}
                         </span>
                       )}
@@ -646,11 +645,11 @@ function DealDossier({ account }: { account: AccountListItem }) {
                         </span>
                       )}
                       {(run.signals_detected as number) > 0 && (
-                        <span className="text-[10px] text-gray-500">{run.signals_detected as number} signals</span>
+                        <span className="text-[10px] text-zinc-500">{run.signals_detected as number} signals</span>
                       )}
                     </div>
                   </div>
-                  <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">{run.key_changes as string}</p>
+                  <p className="text-xs text-zinc-600 leading-relaxed line-clamp-3">{run.key_changes as string}</p>
                 </div>
               ))}
             </div>
@@ -669,9 +668,9 @@ function DealDossier({ account }: { account: AccountListItem }) {
 function VitalStat({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color?: string }) {
   return (
     <div className="flex flex-col items-center gap-0.5 min-w-0">
-      <div className={cn("flex items-center gap-1 text-gray-400", color)}>{icon}</div>
-      <span className={cn("text-sm font-bold tabular-nums", color ?? "text-gray-800")}>{value}</span>
-      <span className="text-[10px] text-gray-400 leading-none whitespace-nowrap">{label}</span>
+      <div className={cn("flex items-center gap-1 text-zinc-400", color)}>{icon}</div>
+      <span className={cn("text-sm font-bold tabular-nums", color ?? "text-zinc-800")}>{value}</span>
+      <span className="text-[10px] text-zinc-400 leading-none whitespace-nowrap">{label}</span>
     </div>
   );
 }
@@ -681,9 +680,9 @@ function Section({ title, icon, count, children }: { title: string; icon: React.
     <div>
       <div className="flex items-center gap-2 mb-3">
         {icon}
-        <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{title}</span>
+        <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">{title}</span>
         {count != null && count > 0 && (
-          <span className="text-[10px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-full font-semibold">{count}</span>
+          <span className="text-[10px] text-zinc-700 bg-zinc-50 px-1.5 py-0.5 rounded-full font-semibold">{count}</span>
         )}
       </div>
       {children}
@@ -695,7 +694,7 @@ function CommStat({ label, value, color, bg }: { label: string; value: number; c
   return (
     <div className={cn("rounded-xl border px-3 py-2.5 text-center", bg)}>
       <p className={cn("text-2xl font-bold tabular-nums", color)}>{value}</p>
-      <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">{label}</p>
+      <p className="text-[10px] text-zinc-500 mt-0.5 leading-tight">{label}</p>
     </div>
   );
 }
@@ -703,57 +702,57 @@ function CommStat({ label, value, color, bg }: { label: string; value: number; c
 function MeetingCard({ transcript }: { transcript: Transcript }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden">
       <button
-        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-zinc-50 transition-colors"
         onClick={() => setOpen(o => !o)}
       >
-        <Calendar className="w-4 h-4 text-indigo-400 flex-shrink-0" />
+        <Calendar className="w-4 h-4 text-zinc-400 flex-shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-800 truncate">{transcript.title ?? "Meeting"}</p>
+          <p className="text-sm font-semibold text-zinc-800 truncate">{transcript.title ?? "Meeting"}</p>
           <div className="flex items-center gap-2 mt-0.5">
-            {transcript.date && <span className="text-[11px] text-gray-400">{fmtDate(transcript.date)}</span>}
-            {transcript.duration_minutes && <span className="text-[11px] text-gray-400">· {transcript.duration_minutes}min</span>}
+            {transcript.date && <span className="text-[11px] text-zinc-400">{fmtDate(transcript.date)}</span>}
+            {transcript.duration_minutes && <span className="text-[11px] text-zinc-400">· {transcript.duration_minutes}min</span>}
             {transcript.participants.length > 0 && (
-              <span className="text-[11px] text-gray-400">· {transcript.participants.length} attendees</span>
+              <span className="text-[11px] text-zinc-400">· {transcript.participants.length} attendees</span>
             )}
           </div>
         </div>
-        {open ? <ChevronUp className="w-4 h-4 text-gray-400 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />}
+        {open ? <ChevronUp className="w-4 h-4 text-zinc-400 flex-shrink-0" /> : <ChevronDown className="w-4 h-4 text-zinc-400 flex-shrink-0" />}
       </button>
 
       {open && (
-        <div className="px-4 pb-4 border-t border-gray-100 pt-3 space-y-3">
+        <div className="px-4 pb-4 border-t border-zinc-100 pt-3 space-y-3">
           {transcript.participants.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Attendees</p>
+              <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Attendees</p>
               <div className="flex flex-wrap gap-1.5">
                 {transcript.participants.map(p => (
-                  <span key={p} className="text-[11px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full font-medium">{p}</span>
+                  <span key={p} className="text-[11px] bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded-full font-medium">{p}</span>
                 ))}
               </div>
             </div>
           )}
           {transcript.summary && (
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Summary</p>
-              <p className="text-xs text-gray-700 leading-relaxed">{transcript.summary}</p>
+              <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Summary</p>
+              <p className="text-xs text-zinc-700 leading-relaxed">{transcript.summary}</p>
             </div>
           )}
           {(transcript.commitments?.length || transcript.action_items.length) > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Action items</p>
+              <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Action items</p>
               <ul className="space-y-1">
                 {(transcript.commitments?.length
                   ? transcript.commitments
                   : transcript.action_items.map(a => ({ text: a, owner: "unknown" as const, owner_name: null }))
                 ).map((c, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-700">
+                  <li key={i} className="flex items-start gap-2 text-xs text-zinc-700">
                     <span className={cn(
                       "text-[9px] font-semibold px-1.5 py-0.5 rounded-full border flex-shrink-0 mt-0.5",
-                      c.owner === "us" ? "bg-indigo-50 text-indigo-700 border-indigo-200" :
+                      c.owner === "us" ? "bg-zinc-50 text-zinc-700 border-zinc-200" :
                       c.owner === "buyer" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
-                      "bg-gray-50 text-gray-500 border-gray-200"
+                      "bg-zinc-50 text-zinc-500 border-zinc-200"
                     )}>
                       {c.owner === "us" ? "Us" : c.owner === "buyer" ? "Buyer" : "—"}
                     </span>
@@ -765,18 +764,18 @@ function MeetingCard({ transcript }: { transcript: Transcript }) {
           )}
           {Object.keys(transcript.speaker_stats).length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Talk time</p>
+              <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">Talk time</p>
               <div className="space-y-1">
                 {Object.entries(transcript.speaker_stats).slice(0, 5).map(([speaker, stats]) => (
                   <div key={speaker} className="flex items-center gap-2">
-                    <span className="text-[11px] text-gray-600 w-32 truncate">{speaker}</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-1 overflow-hidden">
+                    <span className="text-[11px] text-zinc-600 w-32 truncate">{speaker}</span>
+                    <div className="flex-1 bg-zinc-100 rounded-full h-1 overflow-hidden">
                       <div
-                        className="h-1 bg-indigo-400 rounded-full"
+                        className="h-1 bg-zinc-700 rounded-full"
                         style={{ width: `${stats.talk_time_pct ?? 0}%` }}
                       />
                     </div>
-                    <span className="text-[10px] text-gray-400 w-8 text-right">{stats.talk_time_pct ?? 0}%</span>
+                    <span className="text-[10px] text-zinc-400 w-8 text-right">{stats.talk_time_pct ?? 0}%</span>
                   </div>
                 ))}
               </div>
@@ -792,13 +791,13 @@ function MeetingCard({ transcript }: { transcript: Transcript }) {
 
 function EmptyDossier() {
   return (
-    <div className="h-full flex items-center justify-center bg-gray-50">
+    <div className="h-full flex items-center justify-center bg-zinc-50">
       <div className="text-center max-w-xs px-6">
-        <div className="w-14 h-14 bg-white border border-gray-200 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-sm">
-          <FileText className="w-6 h-6 text-indigo-400" />
+        <div className="w-14 h-14 bg-white border border-zinc-200 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-sm">
+          <FileText className="w-6 h-6 text-zinc-400" />
         </div>
-        <p className="text-sm font-semibold text-gray-800">Select a deal</p>
-        <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+        <p className="text-sm font-semibold text-zinc-800">Select a deal</p>
+        <p className="text-xs text-zinc-400 mt-2 leading-relaxed">
           Contacts, emails, meetings, MEDDPICC scorecard, and AI analysis in one place.
         </p>
       </div>
@@ -865,10 +864,10 @@ function DealsInner() {
     <div className="flex h-full">
 
       {/* ── Left panel ─────────────────────────────────────────────── */}
-      <div className="w-72 flex-shrink-0 border-r border-gray-100 bg-white flex flex-col">
+      <div className="w-72 flex-shrink-0 border-r border-zinc-100 bg-white flex flex-col">
 
         {/* Search + filters + sort (shared engine) */}
-        <div className="px-3 pt-3 pb-2 border-b border-gray-100">
+        <div className="px-3 pt-3 pb-2 border-b border-zinc-100">
           <DealFilterBar
             accounts={allAccounts}
             state={filters}
@@ -878,8 +877,8 @@ function DealsInner() {
         </div>
 
         {/* Count + controls */}
-        <div className="px-3 py-1.5 border-b border-gray-100 flex items-center justify-between gap-2">
-          <p className="text-[10px] text-gray-400">
+        <div className="px-3 py-1.5 border-b border-zinc-100 flex items-center justify-between gap-2">
+          <p className="text-[10px] text-zinc-400">
             {displayed.length} of {allAccounts.length} deals{hasActiveFilters(filters) || highIntentOnly ? " · filtered" : ""}
           </p>
           <div className="flex items-center gap-1.5">
@@ -908,12 +907,12 @@ function DealsInner() {
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
             <div className="space-y-0">
-              {[1,2,3,4,5,6,7,8].map(i => <Skeleton key={i} className="h-14 rounded-none border-b border-gray-100" />)}
+              {[1,2,3,4,5,6,7,8].map(i => <Skeleton key={i} className="h-14 rounded-none border-b border-zinc-100" />)}
             </div>
           ) : displayed.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-              <AlertTriangle className="w-8 h-8 text-gray-200 mb-3" />
-              <p className="text-sm font-medium text-gray-600">No deals found</p>
+              <AlertTriangle className="w-8 h-8 text-zinc-200 mb-3" />
+              <p className="text-sm font-medium text-zinc-600">No deals found</p>
             </div>
           ) : (
             displayed.map(account => (
@@ -944,7 +943,7 @@ export default function DealsPage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center h-full">
-        <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <DealsInner />

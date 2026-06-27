@@ -11,8 +11,9 @@ ACCOUNT_ID   = "b116b053-9076-45d4-a3be-449445158749"
 
 async def run():
     settings = get_settings()
-    print(f"Anthropic model bulk : {settings.anthropic_model_bulk}")
-    print(f"Anthropic model quality: {settings.anthropic_model_quality}")
+    print(f"LLM provider         : {settings.llm_provider}")
+    print(f"Bulk model           : {settings.openai_model_bulk if settings.llm_provider == 'openai' else settings.anthropic_model_bulk}")
+    print(f"Quality model        : {settings.openai_model_quality if settings.llm_provider == 'openai' else settings.anthropic_model_quality}")
     print(f"Running agents on account {ACCOUNT_ID}...\n")
 
     async with AsyncSessionLocal() as db:

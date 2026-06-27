@@ -133,7 +133,7 @@ function IntelligenceInner() {
   const timelineBins = [
     { label: "Immediate", desc: "≤30 days",    color: "bg-red-400"    },
     { label: "Near-term", desc: "31–90 days",  color: "bg-amber-400"  },
-    { label: "Mid-term",  desc: "91–180 days", color: "bg-indigo-400" },
+    { label: "Mid-term",  desc: "91–180 days", color: "bg-zinc-500" },
     { label: "Long-term", desc: ">180 days",   color: "bg-zinc-300"   },
     { label: "No Date",   desc: "Not set",     color: "bg-zinc-200"   },
   ].map((bin, i) => ({
@@ -196,7 +196,7 @@ function IntelligenceInner() {
           value={String(competitiveData?.data?.total_competitive_deals ?? "–")}
           sub={`${competitors.length} unique competitor${competitors.length !== 1 ? "s" : ""}`}
           icon={Shield}
-          accent="text-indigo-500"
+          accent="text-zinc-500"
         />
       </div>
 
@@ -418,7 +418,7 @@ function IntelligenceInner() {
                 )}>
                   {deal.momentum === "declining" ? "Declining" : "Stalling"}
                 </span>
-                <span className="text-xs text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                <span className="text-xs text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                   Open →
                 </span>
               </a>
@@ -436,7 +436,7 @@ export default function IntelligencePage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center h-full py-24">
-        <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <IntelligenceInner />

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Inbox, Eye, MessageSquare, Settings, BarChart3, LogOut, TrendingUp, X, Building2, ChevronDown, BookOpen, Sparkles,
+  Inbox, Eye, MessageSquare, Settings, BarChart3, LogOut, TrendingUp, X, Building2, ChevronDown, BookOpen, Brain,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { authApi, draftsApi, setPreferredWorkspace, type CurrentUser, type WorkspaceSummary } from "@/lib/api";
@@ -15,13 +15,13 @@ import { useState as useSt } from "react";
 function VantageMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true">
-      <rect width="32" height="32" rx="8" fill="#6366F1" />
+      <rect width="32" height="32" rx="8" fill="#18181B" />
       <path
         d="M16 10.5C12.1 10.5 8.5 14 8.5 16c0 2 3.6 5.5 7.5 5.5s7.5-3.5 7.5-5.5c0-2-3.6-5.5-7.5-5.5z"
         fill="white"
         fillOpacity="0.95"
       />
-      <circle cx="16" cy="16" r="2.8" fill="#6366F1" />
+      <circle cx="16" cy="16" r="2.8" fill="#18181B" />
       <circle cx="16" cy="16" r="1.2" fill="white" />
     </svg>
   );
@@ -36,7 +36,7 @@ const CORE_NAV = [
   { href: "/watchtower",   icon: Eye,           label: "Watchtower" },
   { href: "/deals",        icon: BookOpen,      label: "Deal Book"  },
   { href: "/forecast",     icon: TrendingUp,    label: "Forecast"   },
-  { href: "/intelligence", icon: Sparkles,      label: "Intelligence" },
+  { href: "/intelligence", icon: Brain,         label: "Intelligence" },
   { href: "/assistant",    icon: MessageSquare, label: "Assistant"  },
   { href: "/analytics",    icon: BarChart3,     label: "Analytics"  },
 ];

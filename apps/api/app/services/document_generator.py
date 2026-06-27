@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime, timezone, date
 from typing import Optional
 
-import anthropic
+
 import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -52,7 +52,7 @@ def _ws_sender(data: dict) -> dict:
         "product": settings.get("product_description") or settings.get("product_name") or "our product",
     }
 
-HAIKU_MODEL = "claude-haiku-4-5-20251001"
+
 
 
 # ── Data loader ───────────────────────────────────────────────────────────────
@@ -172,8 +172,7 @@ async def _claude_sections(data: dict) -> dict:
     Returns a dict of section_key -> text.
     Cost: ~$0.02-0.05 per proposal.
     """
-    settings = get_settings()
-    client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+    from app.integrations.llm import bulk_model, complete_text
 
     name     = data["name"]
     stage    = data["stage"]
@@ -253,14 +252,14 @@ Write the following proposal sections as a JSON object. Each value must be plain
 
 Return only valid JSON. No extra text."""
 
-    response = await client.messages.create(
-        model=HAIKU_MODEL,
+    response = await complete_text(
+        system_prompt=DOCUMENT_VOICE_RULES,
+        user_message=prompt,
+        model=bulk_model(),
         max_tokens=1200,
-        system=DOCUMENT_VOICE_RULES,
-        messages=[{"role": "user", "content": prompt}],
     )
 
-    raw = response.content[0].text.strip()
+    raw = response.text.strip()
     # Strip markdown code fences if present
     if raw.startswith("```"):
         raw = raw.split("```")[1]
@@ -532,8 +531,7 @@ async def _claude_deck_content(data: dict) -> dict:
     Claude Haiku writes the 5 personalized sections of the deck.
     All other slides use workspace-configured content.
     """
-    settings = get_settings()
-    client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+    from app.integrations.llm import bulk_model, complete_text
 
     name   = data["name"]
     stage  = data["stage"]
@@ -601,13 +599,13 @@ Return JSON only. No markdown. No extra text.
   "next_step_3": "Third action. Start with a verb."
 }}"""
 
-    response = await client.messages.create(
-        model=HAIKU_MODEL,
+    response = await complete_text(
+        system_prompt=DOCUMENT_VOICE_RULES,
+        user_message=prompt,
+        model=bulk_model(),
         max_tokens=1000,
-        system=DOCUMENT_VOICE_RULES,
-        messages=[{"role": "user", "content": prompt}],
     )
-    raw = response.content[0].text.strip()
+    raw = response.text.strip()
     if raw.startswith("```"):
         raw = raw.split("```")[1]
         if raw.startswith("json"): raw = raw[4:]

@@ -39,6 +39,7 @@ const NAV_ITEMS: { href: string; label: string; showBadge?: boolean }[] = [
   { href: "/deals",        label: "Deal Book" },
   { href: "/forecast",     label: "Forecast" },
   { href: "/intelligence", label: "Intelligence" },
+  { href: "/assistant",    label: "Assistant" },
   { href: "/analytics",    label: "Analytics" },
 ];
 
@@ -167,14 +168,20 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
         : opts.stageFilter
           ? `${count ?? "?"} ${opts.stageFilter} accounts`
           : `${count ?? "top 20"} accounts`;
-      toast.success(`Agents queued for ${label}.`);
-      setTimeout(() => {
+      const toastId = toast.loading(`Agents running on ${label}… (~2 min)`);
+      let elapsed = 0;
+      const poll = setInterval(() => {
+        elapsed += 20;
         qc.invalidateQueries({ queryKey: ["accounts"] });
         qc.invalidateQueries({ queryKey: ["drafts"] });
-        qc.invalidateQueries({ queryKey: ["pov",    accountIdFromPath] });
+        qc.invalidateQueries({ queryKey: ["pov", accountIdFromPath] });
         qc.invalidateQueries({ queryKey: ["signals", accountIdFromPath] });
-        setIsRefreshing(false);
-      }, 30000);
+        if (elapsed >= 120) {
+          clearInterval(poll);
+          toast.success("Agents finished — check drafts and War Room for updates.", { id: toastId });
+          setIsRefreshing(false);
+        }
+      }, 20_000);
     } catch {
       toast.error("Could not start agent run.");
       setIsRefreshing(false);

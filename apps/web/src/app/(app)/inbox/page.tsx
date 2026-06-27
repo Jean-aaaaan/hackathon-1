@@ -18,6 +18,7 @@ import { cn, signalLabel, draftTypeLabel, formatCompactCurrency, cleanDealName, 
 import { DealFilterBar } from "@/components/deal-filter-bar";
 import { type DealFilterState, filterAndSortDeals, loadFilters, saveFilters, hasActiveFilters, dealPriority } from "@/lib/deal-filters";
 import { MarkdownContent } from "@/components/markdown-content";
+import { MorningBrief } from "@/components/inbox/morning-brief";
 import { toast } from "sonner";
 
 // ── Urgency helpers ───────────────────────────────────────────────────────────
@@ -70,9 +71,9 @@ const FORECAST_STYLES: Record<string, string> = {
 };
 
 function meddpiccBarColor(score: number) {
-  if (score >= 0.6) return "bg-emerald-400";
-  if (score >= 0.3) return "bg-amber-400";
-  return "bg-red-400";
+  if (score >= 0.6) return "bg-zinc-800";
+  if (score >= 0.3) return "bg-zinc-500";
+  return "bg-zinc-300";
 }
 
 // ── Deal card (left panel) ───────────────────────────────────────────────────
@@ -116,8 +117,8 @@ function DealCard({
         </p>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {account.pending_drafts > 0 && (
-            <span className="text-[11px] text-zinc-400 tabular-nums">
-              {account.pending_drafts}d
+            <span className="text-[11px] text-zinc-500 tabular-nums">
+              {account.pending_drafts} draft{account.pending_drafts !== 1 ? "s" : ""}
             </span>
           )}
           <span className={cn("dot w-1.5 h-1.5", URGENCY_DOT[level])} />
@@ -377,9 +378,9 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
 
               {/* Top risk */}
               {topRisk && (
-                <div className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 px-5 py-4">
-                  <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-800 leading-relaxed">{topRisk}</p>
+                <div className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-zinc-50 px-5 py-4">
+                  <AlertTriangle className="w-4 h-4 text-zinc-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-zinc-600 leading-relaxed">{topRisk}</p>
                 </div>
               )}
 
@@ -392,7 +393,7 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
                     {overall != null && (
                       <span className={cn(
                         "text-sm font-bold tabular-nums ml-1",
-                        overall < 0.3 ? "text-red-600" : overall < 0.6 ? "text-amber-600" : "text-emerald-600"
+                        overall < 0.3 ? "text-zinc-400" : overall < 0.6 ? "text-zinc-600" : "text-zinc-900"
                       )}>
                         {formatPct(overall)}
                       </span>
@@ -400,9 +401,9 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
                     {gapRisk && (
                       <span className={cn(
                         "text-[11px] font-semibold px-2 py-0.5 rounded-full border ml-auto",
-                        gapRisk === "critical" ? "bg-red-100 text-red-700 border-red-200" :
-                        gapRisk === "high" ? "bg-orange-100 text-orange-700 border-orange-200" :
-                        "bg-amber-100 text-amber-700 border-amber-200"
+                        gapRisk === "critical" ? "bg-zinc-900 text-white border-zinc-900" :
+                        gapRisk === "high" ? "bg-zinc-700 text-white border-zinc-700" :
+                        "bg-zinc-100 text-zinc-600 border-zinc-200"
                       )}>
                         {gapRisk} gap risk
                       </span>
@@ -434,7 +435,7 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
                             </span>
                             <span className={cn(
                               "text-xs font-bold tabular-nums flex-shrink-0",
-                              score < 0.3 ? "text-red-600" : score < 0.6 ? "text-amber-600" : "text-emerald-600"
+                              score < 0.3 ? "text-zinc-400" : score < 0.6 ? "text-zinc-600" : "text-zinc-900"
                             )}>
                               {pct}%
                             </span>
@@ -708,6 +709,7 @@ function InboxInner() {
 
   const [selectedAccount, setSelectedAccount] = useState<AccountListItem | null>(null);
   const [quickFilter, setQuickFilter] = useState<QuickFilter>("all");
+  const [briefDismissed, setBriefDismissed] = useState(false);
   const [showRest, setShowRest] = useState(false);
   // Shared engine — Today defaults to dollar-weighted priority ranking
   const [filters, setFilters] = useState<DealFilterState>(() => loadFilters("today", { sort: "priority" }));
@@ -775,6 +777,14 @@ function InboxInner() {
   const draftsCount  = openAccounts.filter(a => (a.pending_drafts ?? 0) > 0).length;
   const urgentCount  = openAccounts.filter(a => (a.urgency_score ?? 0) >= 0.7).length;
 
+  // When drafts are waiting, default to the Drafts tab (morning job #1).
+  useEffect(() => {
+    if (pendingCount > 0 && quickFilter === "all") {
+      setQuickFilter("drafts");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingCount > 0]);
+
   // Auto-select the queue's first item — the prime real estate should never
   // show "Select a deal" when the agent already knows what matters most.
   useEffect(() => {
@@ -827,7 +837,20 @@ function InboxInner() {
     (selectedAccount.pending_drafts === 0 || pendingCount === 0);
 
   return (
-    <div className="flex h-full min-h-0">
+    <div className="flex flex-col h-full min-h-0">
+      {!briefDismissed && pendingCount > 0 && (
+        <MorningBrief
+          accounts={openAccounts}
+          pendingDrafts={pendingCount}
+          onDismiss={() => setBriefDismissed(true)}
+          onSelectAccount={(id) => {
+            const found = openAccounts.find(a => a.id === id);
+            if (found) setSelectedAccount(found);
+            setQuickFilter("drafts");
+          }}
+        />
+      )}
+      <div className="flex flex-1 min-h-0">
 
       {/* ── Left panel — narrower when War Room preview owns the right side */}
       <div className={cn(
@@ -949,6 +972,7 @@ function InboxInner() {
         ) : (
           <EmptyPanel pendingCount={pendingCount} />
         )}
+      </div>
       </div>
     </div>
   );

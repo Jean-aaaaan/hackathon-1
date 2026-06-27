@@ -55,31 +55,31 @@
     @apply bg-amber-50 border border-amber-200 rounded-xl p-4;
   }
 
-  /* Urgency left-stripe variant */
-  .card-urgent          { border-left-width: 3px; }
-  .card-urgent-critical { @apply card-urgent border-l-red-400; }
-  .card-urgent-high     { @apply card-urgent border-l-orange-400; }
-  .card-urgent-medium   { @apply card-urgent border-l-amber-400; }
-  .card-urgent-low      { @apply card-urgent border-l-emerald-300; }
+  /* Urgency left-stripe — single subtle indicator */
+  .card-urgent          { border-left-width: 2px; }
+  .card-urgent-critical { @apply card-urgent border-l-zinc-800; }
+  .card-urgent-high     { @apply card-urgent border-l-zinc-500; }
+  .card-urgent-medium   { @apply card-urgent border-l-zinc-300; }
+  .card-urgent-low      { @apply card-urgent border-l-zinc-200; }
 
-  /* ── Urgency dots ──────────────────────────────────────────────────── */
+  /* ── Urgency dots — red only for critical ──────────────────────────── */
   .dot          { @apply w-2 h-2 rounded-full flex-shrink-0 inline-block; }
-  .dot-critical { background: #EF4444; animation: urgency-pulse 2s ease-in-out infinite; }
-  .dot-high     { background: #F97316; }
-  .dot-medium   { background: #F59E0B; }
-  .dot-low      { background: #10B981; }
+  .dot-critical { background: #EF4444; }
+  .dot-high     { background: #3f3f46; }
+  .dot-medium   { background: #a1a1aa; }
+  .dot-low      { background: #d4d4d8; }
 
-  /* ── Urgency text ──────────────────────────────────────────────────── */
+  /* ── Urgency text — zinc only ──────────────────────────────────────── */
   .urgency-critical { @apply text-red-600; }
-  .urgency-high     { @apply text-orange-600; }
-  .urgency-medium   { @apply text-amber-600; }
-  .urgency-low      { @apply text-emerald-600; }
+  .urgency-high     { @apply text-zinc-800; }
+  .urgency-medium   { @apply text-zinc-500; }
+  .urgency-low      { @apply text-zinc-400; }
 
-  /* ── Forecast badges ───────────────────────────────────────────────── */
-  .forecast-commit   { @apply bg-emerald-50 text-emerald-700 border border-emerald-200; }
-  .forecast-bestcase { @apply bg-sky-50 text-sky-700 border border-sky-200; }
+  /* ── Forecast badges — monochrome ──────────────────────────────────── */
+  .forecast-commit   { @apply bg-zinc-900 text-white border border-zinc-900; }
+  .forecast-bestcase { @apply bg-zinc-700 text-white border border-zinc-700; }
   .forecast-pipeline { @apply bg-zinc-100 text-zinc-600 border border-zinc-200; }
-  .forecast-omit     { @apply bg-zinc-100 text-zinc-400 border border-zinc-200; }
+  .forecast-omit     { @apply bg-zinc-50 text-zinc-400 border border-zinc-200; }
 
   /* ── Pill tabs ─────────────────────────────────────────────────────── */
   .tab-bar         { @apply flex gap-0.5 bg-zinc-100 p-0.5 rounded-md w-fit; }

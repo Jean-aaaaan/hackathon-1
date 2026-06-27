@@ -3,23 +3,23 @@ import { Zap } from "lucide-react";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-10 w-full max-w-sm text-center">
+    <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+      <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-10 w-full max-w-sm text-center">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
           <div className="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-semibold text-gray-900">Vantage</span>
+          <span className="text-xl font-semibold text-zinc-900">Vantage</span>
         </div>
 
-        <h1 className="text-lg font-semibold text-gray-900 mb-1">Sign in to Vantage</h1>
-        <p className="text-sm text-gray-500 mb-8">Per-Account Agent Platform</p>
+        <h1 className="text-lg font-semibold text-zinc-900 mb-1">Sign in to Vantage</h1>
+        <p className="text-sm text-zinc-500 mb-8">Per-Account Agent Platform</p>
 
         {/* Sign in with Google (via WorkOS) */}
         <a
           href="/api/auth/login"
-          className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+          className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-colors"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -30,9 +30,9 @@ export default function LoginPage() {
           Continue with Google
         </a>
 
-        <p className="text-xs text-gray-400 mt-6">
+        <p className="text-xs text-zinc-400 mt-6">
           Sign in to access your workspace.{" "}
-          <span className="text-gray-500">Contact your admin to be added.</span>
+          <span className="text-zinc-500">Contact your admin to be added.</span>
         </p>
       </div>
     </div>

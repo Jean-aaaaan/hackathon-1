@@ -8,7 +8,7 @@ from typing import AsyncGenerator
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
-import anthropic
+
 import structlog
 
 from app.config import get_settings
@@ -156,15 +156,15 @@ async def help_chat(
         system += f"\n\nThe user is currently on page: {body.page}. Tailor your answer to their current context if relevant."
 
     async def stream() -> AsyncGenerator[str, None]:
-        client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+        from app.integrations.llm import bulk_model, stream_text
         try:
-            async with client.messages.stream(
-                model=settings.anthropic_model_bulk,  # Haiku — fast + cheap for help
-                max_tokens=512,
-                system=system,
+            async for text, _usage in stream_text(
+                system_prompt=system,
                 messages=[{"role": "user", "content": body.message}],
-            ) as stream_ctx:
-                async for text in stream_ctx.text_stream:
+                model=bulk_model(),
+                max_tokens=512,
+            ):
+                if text:
                     yield f"data: {json.dumps({'type': 'delta', 'text': text})}\n\n"
             yield f"data: {json.dumps({'type': 'done'})}\n\n"
         except Exception as e:

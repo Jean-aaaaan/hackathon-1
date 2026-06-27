@@ -24,7 +24,7 @@ import {
   Zap, AlertTriangle, Clock, TrendingUp, TrendingDown, Minus,
   CheckCircle, XCircle, Send, MessageSquare, BarChart3, Activity,
   ChevronDown, ChevronUp, ExternalLink, RefreshCw, User, Bot,
-  StickyNote, Sparkles, Shield, Target, HelpCircle, GraduationCap,
+  StickyNote, Shield, Target, HelpCircle, GraduationCap,
   CalendarDays, FileText, Download, X, Phone, Mail,
 } from "lucide-react";
 
@@ -39,16 +39,16 @@ interface ChatMessage {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const URGENCY_BAR: Record<string, string> = {
-  critical: "bg-red-500", high: "bg-orange-400",
-  medium: "bg-yellow-400", low: "bg-green-400",
+  critical: "bg-red-500", high: "bg-zinc-700",
+  medium: "bg-zinc-400", low: "bg-zinc-300",
 };
 
 const EVENT_TYPE_STYLE: Record<string, { label: string; color: string; dot: string }> = {
-  signal:         { label: "Signal",     color: "text-orange-600", dot: "bg-orange-400" },
-  interaction:    { label: "Interaction",color: "text-blue-600",   dot: "bg-blue-400"   },
-  draft_created:  { label: "Draft",      color: "text-purple-600", dot: "bg-purple-400" },
-  draft_reviewed: { label: "Reviewed",   color: "text-green-600",  dot: "bg-green-400"  },
-  crm_change:     { label: "CRM Update", color: "text-gray-600",   dot: "bg-gray-400"   },
+  signal:         { label: "Signal",     color: "text-zinc-700", dot: "bg-zinc-800" },
+  interaction:    { label: "Interaction",color: "text-zinc-600", dot: "bg-zinc-500" },
+  draft_created:  { label: "Draft",      color: "text-zinc-600", dot: "bg-zinc-400" },
+  draft_reviewed: { label: "Reviewed",   color: "text-zinc-500", dot: "bg-zinc-300" },
+  crm_change:     { label: "CRM Update", color: "text-zinc-400", dot: "bg-zinc-200" },
 };
 
 const MEDDPICC_LABELS: Record<string, string> = {
@@ -88,12 +88,12 @@ function DealStory({ text }: { text: string }) {
   const isLong = text.length > LIMIT;
   return (
     <div>
-      <p className="text-sm text-gray-700 leading-relaxed">
+      <p className="text-sm text-zinc-700 leading-relaxed">
         {isLong && !expanded ? text.slice(0, LIMIT).trimEnd() + "…" : text}
       </p>
       {isLong && (
         <button onClick={() => setExpanded(v => !v)}
-          className="text-xs text-brand-600 hover:text-brand-700 mt-1 font-medium">
+          className="text-xs text-zinc-500 hover:text-brand-700 mt-1 font-medium">
           {expanded ? "Show less" : "Read more"}
         </button>
       )}
@@ -107,25 +107,25 @@ function SignalRow({ signal, onAck }: { signal: Signal; onAck: (id: string) => v
   const [expanded, setExpanded] = React.useState(false);
   const typeLabel = signalLabel(signal.type);
   const urgency = signal.urgency ?? urgencyLevel(signal.urgency_score);
-  const dotColor = { critical: "bg-red-500", high: "bg-orange-400", medium: "bg-yellow-400", low: "bg-gray-300" }[urgency] ?? "bg-gray-300";
+  const dotColor = { critical: "bg-red-500", high: "bg-zinc-700", medium: "bg-zinc-400", low: "bg-zinc-300" }[urgency] ?? "bg-zinc-300";
 
   return (
     <div className="group" onClick={() => setExpanded(v => !v)}>
-      <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
+      <div className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-zinc-100 cursor-pointer transition-colors">
         <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0 mt-px", dotColor)} />
-        <span className="text-xs text-gray-700 flex-1 truncate" title={typeLabel}>{typeLabel}</span>
-        <span className="text-[10px] text-gray-400 whitespace-nowrap">
+        <span className="text-xs text-zinc-700 flex-1 truncate" title={typeLabel}>{typeLabel}</span>
+        <span className="text-[10px] text-zinc-400 whitespace-nowrap">
           {signal.created_at ? formatDistanceToNow(new Date(signal.created_at), { addSuffix: true }) : ""}
         </span>
         {!signal.acknowledged && (
           <button onClick={e => { e.stopPropagation(); onAck(signal.id); }}
             className="opacity-0 group-hover:opacity-60 hover:!opacity-100 transition-opacity flex-shrink-0">
-            <CheckCircle className="w-3 h-3 text-gray-500" />
+            <CheckCircle className="w-3 h-3 text-zinc-500" />
           </button>
         )}
       </div>
       {expanded && signal.detail && (
-        <p className="text-xs text-gray-500 leading-relaxed px-5 pb-1.5">{signal.detail}</p>
+        <p className="text-xs text-zinc-500 leading-relaxed px-5 pb-1.5">{signal.detail}</p>
       )}
     </div>
   );
@@ -147,26 +147,26 @@ function SignalTypeGroupRow({ signals, onAck }: { signals: Signal[]; onAck: (id:
     const rank = { critical: 3, high: 2, medium: 1, low: 0 }[u] ?? 0;
     return rank > acc.rank ? { rank, u } : acc;
   }, { rank: -1, u: "low" });
-  const dotColor = { critical: "bg-red-500", high: "bg-orange-400", medium: "bg-yellow-400", low: "bg-gray-300" }[worst.u] ?? "bg-gray-300";
+  const dotColor = { critical: "bg-red-500", high: "bg-zinc-700", medium: "bg-zinc-400", low: "bg-zinc-300" }[worst.u] ?? "bg-zinc-300";
 
   return (
     <div>
       <div
         onClick={() => setExpanded(v => !v)}
-        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors"
+        className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-zinc-100 cursor-pointer transition-colors"
       >
         <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0 mt-px", dotColor)} />
-        <span className="text-xs text-gray-700 truncate" title={typeLabel}>{typeLabel}</span>
-        <span className="text-[10px] font-semibold text-gray-500 bg-gray-100 rounded-full px-1.5 py-px flex-shrink-0">
+        <span className="text-xs text-zinc-700 truncate" title={typeLabel}>{typeLabel}</span>
+        <span className="text-[10px] font-semibold text-zinc-500 bg-zinc-100 rounded-full px-1.5 py-px flex-shrink-0">
           ×{sorted.length}
         </span>
-        <span className="text-[10px] text-gray-400 whitespace-nowrap ml-auto">
+        <span className="text-[10px] text-zinc-400 whitespace-nowrap ml-auto">
           {latest.created_at ? formatDistanceToNow(new Date(latest.created_at), { addSuffix: true }) : ""}
         </span>
-        {expanded ? <ChevronUp className="w-3 h-3 text-gray-400 flex-shrink-0" /> : <ChevronDown className="w-3 h-3 text-gray-400 flex-shrink-0" />}
+        {expanded ? <ChevronUp className="w-3 h-3 text-zinc-400 flex-shrink-0" /> : <ChevronDown className="w-3 h-3 text-zinc-400 flex-shrink-0" />}
       </div>
       {expanded && (
-        <div className="ml-2 border-l border-gray-100 pl-1">
+        <div className="ml-2 border-l border-zinc-100 pl-1">
           {sorted.map(s => <SignalRow key={s.id} signal={s} onAck={onAck} />)}
         </div>
       )}
@@ -188,9 +188,9 @@ function SignalGroup({ label, dotColor, count, signals, defaultExpanded, onAck }
       <button onClick={() => setOpen(v => !v)}
         className="w-full flex items-center gap-2 py-1.5 text-left">
         <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", dotColor)} />
-        <span className="text-xs font-medium text-gray-600 flex-1">{label}</span>
-        <span className="text-xs tabular-nums text-gray-400 font-medium">{count}</span>
-        {open ? <ChevronUp className="w-3 h-3 text-gray-400" /> : <ChevronDown className="w-3 h-3 text-gray-400" />}
+        <span className="text-xs font-medium text-zinc-600 flex-1">{label}</span>
+        <span className="text-xs tabular-nums text-zinc-400 font-medium">{count}</span>
+        {open ? <ChevronUp className="w-3 h-3 text-zinc-400" /> : <ChevronDown className="w-3 h-3 text-zinc-400" />}
       </button>
       {open && (
         <div className="ml-3 space-y-0.5">
@@ -218,9 +218,9 @@ function SignalGroup({ label, dotColor, count, signals, defaultExpanded, onAck }
 // ── Transcript card (History tab) ─────────────────────────────────────────────
 
 const OWNER_CHIP: Record<string, string> = {
-  us:      "bg-indigo-50 text-indigo-700 border-indigo-200",
-  buyer:   "bg-emerald-50 text-emerald-700 border-emerald-200",
-  unknown: "bg-gray-50 text-gray-500 border-gray-200",
+  us:      "bg-zinc-900 text-white border-zinc-900",
+  buyer:   "bg-zinc-100 text-zinc-700 border-zinc-200",
+  unknown: "bg-zinc-50 text-zinc-500 border-zinc-200",
 };
 
 function TranscriptCard({ transcript: t }: { transcript: Transcript }) {
@@ -230,42 +230,42 @@ function TranscriptCard({ transcript: t }: { transcript: Transcript }) {
     .slice(0, 5);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-4">
+    <div className="bg-white rounded-2xl border border-zinc-200 p-4">
       <button onClick={() => setOpen(o => !o)} className="w-full text-left">
         <div className="flex items-start gap-2">
-          <Phone className="w-3.5 h-3.5 text-brand-600 mt-0.5 flex-shrink-0" />
+          <Phone className="w-3.5 h-3.5 text-zinc-500 mt-0.5 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-800 truncate">{t.title}</p>
-            <p className="text-xs text-gray-400">
+            <p className="text-sm font-medium text-zinc-800 truncate">{t.title}</p>
+            <p className="text-xs text-zinc-400">
               {t.date ? format(new Date(t.date), "MMM d, yyyy") : ""}
               {t.duration_minutes ? ` · ${t.duration_minutes}min` : ""}
               {t.attendees?.length ? ` · ${t.attendees.length} attendees` : ""}
               {t.talk_ratio_rep != null ? ` · rep talked ${Math.round(t.talk_ratio_rep * 100)}%` : ""}
             </p>
           </div>
-          {open ? <ChevronUp className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 mt-1" /> : <ChevronDown className="w-3.5 h-3.5 text-gray-400 flex-shrink-0 mt-1" />}
+          {open ? <ChevronUp className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0 mt-1" /> : <ChevronDown className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0 mt-1" />}
         </div>
         {!open && t.summary && (
-          <p className="text-xs text-gray-500 leading-relaxed pl-5 mt-1 line-clamp-2">{t.summary}</p>
+          <p className="text-xs text-zinc-500 leading-relaxed pl-5 mt-1 line-clamp-2">{t.summary}</p>
         )}
       </button>
 
       {open && (
         <div className="pl-5 mt-2 space-y-3">
-          {t.summary && <p className="text-xs text-gray-600 leading-relaxed">{t.summary}</p>}
+          {t.summary && <p className="text-xs text-zinc-600 leading-relaxed">{t.summary}</p>}
 
           {/* Talk-time bars */}
           {speakers.length > 0 && (
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Talk time</p>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1.5">Talk time</p>
               <div className="space-y-1">
                 {speakers.map(([name, s]) => (
                   <div key={name} className="flex items-center gap-2">
-                    <span className="text-[11px] text-gray-600 w-28 truncate flex-shrink-0">{name}</span>
-                    <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <span className="text-[11px] text-zinc-600 w-28 truncate flex-shrink-0">{name}</span>
+                    <div className="flex-1 h-1.5 bg-zinc-100 rounded-full overflow-hidden">
                       <div className="h-full bg-brand-400 rounded-full" style={{ width: `${Math.min(100, s.talk_time_pct ?? 0)}%` }} />
                     </div>
-                    <span className="text-[10px] text-gray-400 w-9 text-right flex-shrink-0">{Math.round(s.talk_time_pct ?? 0)}%</span>
+                    <span className="text-[10px] text-zinc-400 w-9 text-right flex-shrink-0">{Math.round(s.talk_time_pct ?? 0)}%</span>
                   </div>
                 ))}
               </div>
@@ -275,14 +275,14 @@ function TranscriptCard({ transcript: t }: { transcript: Transcript }) {
           {/* Action items with owner chips */}
           {(t.commitments?.length ? t.commitments : (t.action_items ?? []).map(a => ({ text: a, owner: "unknown" as const, owner_name: null }))).length > 0 && (
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Action items</p>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1.5">Action items</p>
               <div className="space-y-1">
                 {(t.commitments?.length ? t.commitments : (t.action_items ?? []).map(a => ({ text: a, owner: "unknown" as const, owner_name: null }))).map((c, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className={cn("text-[9px] font-semibold px-1.5 py-0.5 rounded-full border flex-shrink-0 mt-0.5", OWNER_CHIP[c.owner] ?? OWNER_CHIP.unknown)}>
                       {c.owner === "us" ? "Us" : c.owner === "buyer" ? "Buyer" : "—"}
                     </span>
-                    <p className="text-xs text-gray-600 leading-snug">{c.text}</p>
+                    <p className="text-xs text-zinc-600 leading-snug">{c.text}</p>
                   </div>
                 ))}
               </div>
@@ -292,9 +292,9 @@ function TranscriptCard({ transcript: t }: { transcript: Transcript }) {
           {/* Buyer questions */}
           {(t.buyer_questions ?? []).length > 0 && (
             <div>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Buyer questions</p>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1.5">Buyer questions</p>
               {(t.buyer_questions ?? []).map((q, i) => (
-                <p key={i} className="text-xs text-gray-600 leading-snug mb-0.5">
+                <p key={i} className="text-xs text-zinc-600 leading-snug mb-0.5">
                   <span className="font-semibold">{q.speaker}:</span> “{q.text}”
                 </p>
               ))}
@@ -306,7 +306,7 @@ function TranscriptCard({ transcript: t }: { transcript: Transcript }) {
               href={t.transcript_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+              className="inline-flex items-center gap-1 text-xs font-medium text-zinc-500 hover:text-brand-700"
             >
               Open in Fireflies <ExternalLink className="w-3 h-3" />
             </a>
@@ -320,22 +320,22 @@ function TranscriptCard({ transcript: t }: { transcript: Transcript }) {
 // ── Timeline row ──────────────────────────────────────────────────────────────
 
 function TimelineRow({ event }: { event: TimelineEvent }) {
-  const style = EVENT_TYPE_STYLE[event.event_type] ?? { label: event.event_type, color: "text-gray-500", dot: "bg-gray-300" };
+  const style = EVENT_TYPE_STYLE[event.event_type] ?? { label: event.event_type, color: "text-zinc-500", dot: "bg-zinc-300" };
   const ts = event.occurred_at ? format(new Date(event.occurred_at), "MMM d, h:mm a") : "";
   return (
     <div className="flex items-start gap-3 py-2.5">
       <div className="flex flex-col items-center">
         <div className={cn("w-2 h-2 rounded-full mt-1 flex-shrink-0", style.dot)} />
-        <div className="w-px flex-1 bg-gray-100 mt-1" />
+        <div className="w-px flex-1 bg-zinc-100 mt-1" />
       </div>
       <div className="flex-1 min-w-0 pb-2">
         <div className="flex items-center gap-2 flex-wrap">
           <span className={cn("text-xs font-semibold uppercase tracking-wide", style.color)}>{style.label}</span>
-          {event.subtype && <span className="text-xs text-gray-500">{event.subtype}</span>}
-          <span className="text-xs text-gray-400 ml-auto">{ts}</span>
+          {event.subtype && <span className="text-xs text-zinc-500">{event.subtype}</span>}
+          <span className="text-xs text-zinc-400 ml-auto">{ts}</span>
         </div>
         {event.description && (
-          <p className="text-sm text-gray-700 mt-0.5 line-clamp-2">{event.description}</p>
+          <p className="text-sm text-zinc-700 mt-0.5 line-clamp-2">{event.description}</p>
         )}
       </div>
     </div>
@@ -369,15 +369,15 @@ function TimelineActionCard({
   return (
     <div className={cn(
       "bg-white rounded-xl border overflow-hidden transition-all",
-      action.status === "overdue" ? "border-l-4 border-l-red-400 border-gray-200" :
-      action.status === "today" ? "border-l-4 border-l-brand-500 border-gray-200" :
-      "border-gray-200"
+      action.status === "overdue" ? "border-l-4 border-l-red-400 border-zinc-200" :
+      action.status === "today" ? "border-l-4 border-l-brand-500 border-zinc-200" :
+      "border-zinc-200"
     )}>
       <button onClick={() => setExpanded(v => !v)}
-        className="w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-gray-50 transition-colors">
+        className="w-full text-left px-4 py-3 flex items-start gap-3 hover:bg-zinc-50 transition-colors">
         <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5",
-          isUrgent ? "bg-brand-50" : "bg-gray-50")}>
-          <Icon className={cn("w-3.5 h-3.5", isUrgent ? "text-brand-600" : "text-gray-400")} />
+          isUrgent ? "bg-brand-50" : "bg-zinc-50")}>
+          <Icon className={cn("w-3.5 h-3.5", isUrgent ? "text-zinc-500" : "text-zinc-400")} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
@@ -387,22 +387,22 @@ function TimelineActionCard({
             {action.status === "today" && (
               <span className="text-[10px] font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded-full">Today</span>
             )}
-            <span className="text-[10px] text-gray-400 ml-auto">{formatDate(action.due_date)}</span>
+            <span className="text-[10px] text-zinc-400 ml-auto">{formatDate(action.due_date)}</span>
           </div>
-          <p className="text-sm font-medium text-gray-900">{action.title}</p>
+          <p className="text-sm font-medium text-zinc-900">{action.title}</p>
           {action.reasoning && !expanded && (
-            <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{action.reasoning}</p>
+            <p className="text-xs text-zinc-500 mt-0.5 line-clamp-2">{action.reasoning}</p>
           )}
         </div>
-        {expanded ? <ChevronUp className="w-4 h-4 text-gray-300 flex-shrink-0 mt-1" /> : <ChevronDown className="w-4 h-4 text-gray-300 flex-shrink-0 mt-1" />}
+        {expanded ? <ChevronUp className="w-4 h-4 text-zinc-300 flex-shrink-0 mt-1" /> : <ChevronDown className="w-4 h-4 text-zinc-300 flex-shrink-0 mt-1" />}
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-100 bg-gray-50 px-4 py-3 space-y-3">
-          {action.reasoning && <p className="text-xs text-gray-600 leading-relaxed">{action.reasoning}</p>}
+        <div className="border-t border-zinc-100 bg-zinc-50 px-4 py-3 space-y-3">
+          {action.reasoning && <p className="text-xs text-zinc-600 leading-relaxed">{action.reasoning}</p>}
           {content?.type === "draft" && content.content && (
-            <div className="bg-white border border-gray-200 rounded-lg p-3">
-              {content.subject_line && <p className="text-xs font-semibold text-gray-500 mb-1.5">Subject: {content.subject_line}</p>}
+            <div className="bg-white border border-zinc-200 rounded-lg p-3">
+              {content.subject_line && <p className="text-xs font-semibold text-zinc-500 mb-1.5">Subject: {content.subject_line}</p>}
               <div className="text-xs line-clamp-5"><MarkdownContent content={content.content} /></div>
             </div>
           )}
@@ -412,7 +412,7 @@ function TimelineActionCard({
               <CheckCircle className="w-3.5 h-3.5" /> Done
             </button>
             <button onClick={() => onPatch({ actionId: action.id, body: { action: "skip" } })}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-white border border-zinc-200 text-zinc-600 rounded-lg hover:bg-zinc-50 transition-colors">
               Defer
             </button>
           </div>
@@ -470,27 +470,27 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-zinc-200 overflow-hidden">
       <button onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left">
+        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 transition-colors text-left">
         <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0",
-          statusColors[draft.status] ?? "bg-gray-100 text-gray-600")}>
+          statusColors[draft.status] ?? "bg-zinc-100 text-zinc-600")}>
           {draft.status.replace("_", " ")}
         </span>
-        <span className="text-sm font-medium text-gray-800 flex-1">{draftTypeLabel(draft.type)}</span>
+        <span className="text-sm font-medium text-zinc-800 flex-1">{draftTypeLabel(draft.type)}</span>
         {(draft as any).target_contact && (
-          <span className="text-xs text-gray-400 truncate max-w-[100px]">{(draft as any).target_contact}</span>
+          <span className="text-xs text-zinc-400 truncate max-w-[100px]">{(draft as any).target_contact}</span>
         )}
         {draft.created_at && (
-          <span className="text-xs text-gray-400">{formatDistanceToNow(new Date(draft.created_at), { addSuffix: true })}</span>
+          <span className="text-xs text-zinc-400">{formatDistanceToNow(new Date(draft.created_at), { addSuffix: true })}</span>
         )}
-        {expanded ? <ChevronUp className="w-4 h-4 text-gray-300" /> : <ChevronDown className="w-4 h-4 text-gray-300" />}
+        {expanded ? <ChevronUp className="w-4 h-4 text-zinc-300" /> : <ChevronDown className="w-4 h-4 text-zinc-300" />}
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-100 px-4 py-3 bg-gray-50 space-y-3">
+        <div className="border-t border-zinc-100 px-4 py-3 bg-zinc-50 space-y-3">
           {(draft as any).subject_line && (
-            <p className="text-xs font-semibold text-gray-500">Subject: {(draft as any).subject_line}</p>
+            <p className="text-xs font-semibold text-zinc-500">Subject: {(draft as any).subject_line}</p>
           )}
           <div>
             <MarkdownContent content={draft.content ?? ""} />
@@ -510,7 +510,7 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
                 </button>
               )}
               <button onClick={() => setDeclining(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 text-gray-600 text-xs font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-200 text-zinc-600 text-xs font-medium rounded-lg hover:bg-zinc-50 transition-colors">
                 <XCircle className="w-3.5 h-3.5" /> Decline
               </button>
             </div>
@@ -519,7 +519,7 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
           {sendingOpen && (
             <div className="border border-brand-200 rounded-lg bg-brand-50 p-3 space-y-2">
               <p className="text-xs font-semibold text-brand-800">Save to Outlook Drafts</p>
-              <p className="text-xs text-brand-600/70">You review and send from Outlook.</p>
+              <p className="text-xs text-zinc-500/70">You review and send from Outlook.</p>
               <input type="email" value={sendTo} onChange={e => setSendTo(e.target.value)}
                 placeholder="To: recipient@company.com"
                 className="w-full text-xs border border-brand-200 rounded px-2.5 py-1.5 bg-white focus:outline-none focus:border-brand-400" />
@@ -531,7 +531,7 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
                   className="px-3 py-1.5 bg-brand-600 text-white text-xs font-medium rounded-lg hover:bg-brand-700 disabled:opacity-40 transition-colors">
                   {sending ? "Saving..." : "Save to Drafts"}
                 </button>
-                <button onClick={() => setSendingOpen(false)} className="text-xs text-gray-500">Cancel</button>
+                <button onClick={() => setSendingOpen(false)} className="text-xs text-zinc-500">Cancel</button>
               </div>
             </div>
           )}
@@ -552,7 +552,7 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
                     className={cn("text-xs px-2.5 py-1 rounded-full border transition-colors",
                       declineCategory === cat.value
                         ? "bg-red-600 text-white border-red-600"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-red-300")}>
+                        : "bg-white text-zinc-600 border-zinc-200 hover:border-red-300")}>
                     {cat.label}
                   </button>
                 ))}
@@ -566,7 +566,7 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
                   Submit
                 </button>
                 <button onClick={() => { setDeclining(false); setDeclineCategory(""); }}
-                  className="text-xs text-gray-500">Cancel</button>
+                  className="text-xs text-zinc-500">Cancel</button>
               </div>
             </div>
           )}
@@ -643,18 +643,18 @@ function ChatPanel({ accountId, accountName, contextSeed, onClose }: {
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/20 z-40" onClick={onClose} />
       {/* Panel */}
-      <div className="fixed right-0 top-0 bottom-0 w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-gray-200">
+      <div className="fixed right-0 top-0 bottom-0 w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-zinc-200">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+        <div className="px-5 py-4 border-b border-zinc-100 flex items-center gap-3">
           <div className="w-8 h-8 rounded-xl bg-brand-100 flex items-center justify-center">
-            <Bot className="w-4 h-4 text-brand-600" />
+            <Bot className="w-4 h-4 text-zinc-500" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-gray-900">AI Agent</p>
-            <p className="text-xs text-gray-400">{accountName}</p>
+            <p className="text-sm font-semibold text-zinc-900">AI Agent</p>
+            <p className="text-xs text-zinc-400">{accountName}</p>
           </div>
-          {streaming && <span className="text-xs text-brand-600 ml-auto animate-pulse">Thinking…</span>}
-          <button onClick={onClose} className="ml-auto text-gray-400 hover:text-gray-600 transition-colors">
+          {streaming && <span className="text-xs text-zinc-500 ml-auto animate-pulse">Thinking…</span>}
+          <button onClick={onClose} className="ml-auto text-zinc-400 hover:text-zinc-600 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -665,12 +665,12 @@ function ChatPanel({ accountId, accountName, contextSeed, onClose }: {
             <div key={i} className={cn("flex gap-2.5", msg.role === "user" ? "justify-end" : "justify-start")}>
               {msg.role === "assistant" && (
                 <div className="w-6 h-6 rounded-full bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Bot className="w-3 h-3 text-brand-600" />
+                  <Bot className="w-3 h-3 text-zinc-500" />
                 </div>
               )}
               <div className={cn(
                 "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                msg.role === "user" ? "bg-brand-600 text-white rounded-tr-sm" : "bg-gray-100 text-gray-800 rounded-tl-sm"
+                msg.role === "user" ? "bg-brand-600 text-white rounded-tr-sm" : "bg-zinc-100 text-zinc-800 rounded-tl-sm"
               )}>
                 {msg.role === "user" ? msg.content : msg.content ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
@@ -687,20 +687,20 @@ function ChatPanel({ accountId, accountName, contextSeed, onClose }: {
                   }}>{msg.content}</ReactMarkdown>
                 ) : (streaming && i === messages.length - 1 ? (
                   <span className="inline-flex gap-0.5">
-                    {[0, 150, 300].map(d => <span key={d} className="w-1 h-1 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: `${d}ms` }} />)}
+                    {[0, 150, 300].map(d => <span key={d} className="w-1 h-1 bg-zinc-400 rounded-full animate-bounce" style={{ animationDelay: `${d}ms` }} />)}
                   </span>
                 ) : null)}
                 {msg.citations && msg.citations.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-gray-200">
+                  <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-zinc-200">
                     {msg.citations.map((c, ci) => (
-                      <span key={ci} title={c.text || undefined} className="text-xs bg-white border border-gray-200 text-gray-500 px-1.5 py-0.5 rounded cursor-help">{c.source}</span>
+                      <span key={ci} title={c.text || undefined} className="text-xs bg-white border border-zinc-200 text-zinc-500 px-1.5 py-0.5 rounded cursor-help">{c.source}</span>
                     ))}
                   </div>
                 )}
               </div>
               {msg.role === "user" && (
-                <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <User className="w-3 h-3 text-gray-600" />
+                <div className="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <User className="w-3 h-3 text-zinc-600" />
                 </div>
               )}
             </div>
@@ -713,7 +713,7 @@ function ChatPanel({ accountId, accountName, contextSeed, onClose }: {
           <div className="px-5 pb-2 flex flex-wrap gap-1.5">
             {["What's blocking this deal?", "Draft a follow-up", "Key stakeholders?"].map(p => (
               <button key={p} onClick={() => handleSend(p)}
-                className="text-xs text-brand-600 border border-brand-200 px-2.5 py-1 rounded-full hover:bg-brand-50 transition-colors">
+                className="text-xs text-zinc-500 border border-brand-200 px-2.5 py-1 rounded-full hover:bg-brand-50 transition-colors">
                 {p}
               </button>
             ))}
@@ -721,8 +721,8 @@ function ChatPanel({ accountId, accountName, contextSeed, onClose }: {
         )}
 
         {/* Input */}
-        <div className="px-5 pb-5 pt-2 border-t border-gray-100">
-          <div className="flex items-end gap-2 bg-gray-50 rounded-xl border border-gray-200 px-3 py-2.5 focus-within:border-brand-300 transition-colors">
+        <div className="px-5 pb-5 pt-2 border-t border-zinc-100">
+          <div className="flex items-end gap-2 bg-zinc-50 rounded-xl border border-zinc-200 px-3 py-2.5 focus-within:border-brand-300 transition-colors">
             <textarea
               value={input}
               onChange={e => setInput(e.target.value)}
@@ -1104,7 +1104,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-gray-50">
+    <div className="flex-1 flex flex-col overflow-hidden bg-zinc-50">
 
       <WarRoomHeader
         accountName={accountName}
@@ -1135,7 +1135,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
       <div className="flex-1 flex overflow-hidden">
 
         {/* ── Sidebar ─────────────────────────────────────────────────────── */}
-        <div className="w-72 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col overflow-y-auto">
+        <div className="w-72 flex-shrink-0 bg-white border-r border-zinc-200 flex flex-col overflow-y-auto">
           <div className="p-4 space-y-4">
 
             {/* Do Now card */}
@@ -1172,15 +1172,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
             {/* Deal story */}
             {narrative && (
               <div className="space-y-1.5">
-                <div className="flex items-center gap-1.5">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Deal Story</p>
-                  <span className="inline-flex items-center gap-0.5 text-[9px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-full px-1.5 py-0.5">
-                    <Sparkles className="w-2.5 h-2.5" />AI
-                  </span>
-                </div>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Deal Story</p>
                 <div className="space-y-1.5">
                   {narrative.split(/(?<=\.)\s+/).filter(Boolean).map((sentence, i) => (
-                    <p key={i} className="text-xs text-gray-700 leading-relaxed">{sentence}</p>
+                    <p key={i} className="text-xs text-zinc-700 leading-relaxed">{sentence}</p>
                   ))}
                 </div>
               </div>
@@ -1188,7 +1183,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
             {/* Health metrics */}
             <div className="space-y-1">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Health</p>
+              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Health</p>
               <div className="flex items-center gap-2 flex-wrap">
                 {(meddpiccData.overall_score ?? healthScore) != null && (
                   <span className={cn("text-xs font-semibold tabular-nums",
@@ -1199,7 +1194,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                 )}
                 {urgencyScore != null && (
                   <>
-                    <span className="text-gray-200">·</span>
+                    <span className="text-zinc-200">·</span>
                     <span className={cn("text-xs font-semibold tabular-nums",
                       urgencyScore >= 0.85 ? "text-red-600" : urgencyScore >= 0.6 ? "text-orange-600" : "text-emerald-600")}>
                       {fmtPct(urgencyScore)} urgency
@@ -1212,23 +1207,23 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
             {/* Signals */}
             {signals.length > 0 && (
               <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Signals</p>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Signals</p>
                 <SignalGroup label="Critical" dotColor="bg-red-500" count={criticalSignals.length} signals={criticalSignals} defaultExpanded={criticalSignals.length > 0} onAck={id => ackMutation.mutate(id)} />
                 <SignalGroup label="Warning"  dotColor="bg-amber-400" count={warningSignals.length}  signals={warningSignals}  defaultExpanded={false} onAck={id => ackMutation.mutate(id)} />
-                <SignalGroup label="Activity" dotColor="bg-gray-300"  count={activitySignals.length} signals={activitySignals} defaultExpanded={false} onAck={id => ackMutation.mutate(id)} />
+                <SignalGroup label="Activity" dotColor="bg-zinc-300"  count={activitySignals.length} signals={activitySignals} defaultExpanded={false} onAck={id => ackMutation.mutate(id)} />
               </div>
             )}
 
             {/* Engagement */}
             {activitySummary && (
               <div className="space-y-1">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Engagement</p>
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Engagement</p>
                 <div className="space-y-1.5">
                   {(activitySummary.last_inbound_reply_date || activitySummary.days_since_last_inbound != null) && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Last reply</span>
+                      <span className="text-xs text-zinc-400">Last reply</span>
                       <span className={cn("text-xs font-medium",
-                        (activitySummary.days_since_last_inbound ?? 0) > 14 ? "text-orange-600" : "text-gray-700")}>
+                        (activitySummary.days_since_last_inbound ?? 0) > 14 ? "text-orange-600" : "text-zinc-700")}>
                         {activitySummary.days_since_last_inbound != null
                           ? `${activitySummary.days_since_last_inbound}d ago`
                           : activitySummary.last_inbound_reply_date}
@@ -1237,16 +1232,16 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   )}
                   {activitySummary.email_exchange_count > 0 && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Emails</span>
-                      <span className="text-xs font-medium text-gray-700">
+                      <span className="text-xs text-zinc-400">Emails</span>
+                      <span className="text-xs font-medium text-zinc-700">
                         {activitySummary.total_emails_received} in · {activitySummary.total_emails_sent} out
                       </span>
                     </div>
                   )}
                   {activitySummary.total_meetings > 0 && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Meetings</span>
-                      <span className="text-xs font-medium text-gray-700">
+                      <span className="text-xs text-zinc-400">Meetings</span>
+                      <span className="text-xs font-medium text-zinc-700">
                         {activitySummary.total_meetings}
                         {activitySummary.total_fireflies_transcripts > 0 ? ` (${activitySummary.total_fireflies_transcripts} recorded)` : ""}
                       </span>
@@ -1254,9 +1249,9 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   )}
                   {transcriptsData?.intel?.last_call_date != null && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Last call</span>
+                      <span className="text-xs text-zinc-400">Last call</span>
                       <span className={cn("text-xs font-medium",
-                        (transcriptsData.intel.days_since_last_call ?? 0) > 21 ? "text-orange-600" : "text-gray-700")}>
+                        (transcriptsData.intel.days_since_last_call ?? 0) > 21 ? "text-orange-600" : "text-zinc-700")}>
                         {transcriptsData.intel.days_since_last_call != null
                           ? `${transcriptsData.intel.days_since_last_call}d ago`
                           : "—"}
@@ -1266,8 +1261,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   )}
                   {activitySummary.deal_created_at && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">Created</span>
-                      <span className="text-xs font-medium text-gray-700">
+                      <span className="text-xs text-zinc-400">Created</span>
+                      <span className="text-xs font-medium text-zinc-700">
                         {new Date(activitySummary.deal_created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                       </span>
                     </div>
@@ -1279,9 +1274,9 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
             {/* No data state */}
             {signals.length === 0 && !topAction && !narrative && (
               <div className="py-8 text-center">
-                <p className="text-sm text-gray-400">No intelligence yet.</p>
+                <p className="text-sm text-zinc-400">No intelligence yet.</p>
                 <button onClick={() => runAgentMutation.mutate()}
-                  className="mt-2 text-xs text-brand-600 hover:text-brand-700 font-medium">
+                  className="mt-2 text-xs text-zinc-500 hover:text-brand-700 font-medium">
                   Run Agent to analyse this deal
                 </button>
               </div>
@@ -1307,43 +1302,43 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                 <div className="space-y-6">
 
                   {/* Next step */}
-                  <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                  <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                     <div className="flex items-center gap-2 mb-3">
-                      <Target className="w-4 h-4 text-brand-600" />
-                      <p className="text-sm font-semibold text-gray-800">Next Step</p>
+                      <Target className="w-4 h-4 text-zinc-500" />
+                      <p className="text-sm font-semibold text-zinc-800">Next Step</p>
                       {nextStepData?.source && (
-                        <span className="text-xs text-gray-400 ml-1">
+                        <span className="text-xs text-zinc-400 ml-1">
                           {nextStepData.source === "rep" ? "You set this" : "AI suggested"}
                         </span>
                       )}
                       {nextStepData?.due_date && (
-                        <span className="text-xs text-gray-400 ml-auto">Due {formatDate(nextStepData.due_date)}</span>
+                        <span className="text-xs text-zinc-400 ml-auto">Due {formatDate(nextStepData.due_date)}</span>
                       )}
                       <button onClick={() => { setNsEditing(true); setNsText(nextStepData?.text ?? ""); setNsDate(nextStepData?.due_date ?? ""); }}
-                        className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+                        className="text-xs text-zinc-400 hover:text-zinc-600 transition-colors">
                         Edit
                       </button>
                     </div>
                     {nsEditing ? (
                       <div className="space-y-2">
                         <textarea value={nsText} onChange={e => setNsText(e.target.value)} rows={2}
-                          className="w-full text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none" />
+                          className="w-full text-sm border border-zinc-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none" />
                         <div className="flex items-center gap-2">
                           <input type="date" value={nsDate} onChange={e => setNsDate(e.target.value)}
-                            className="text-sm border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:border-brand-400" />
+                            className="text-sm border border-zinc-200 rounded-xl px-3 py-2 focus:outline-none focus:border-brand-400" />
                           <button onClick={() => { setNsSaving(true); nsSetMutation.mutate(); }}
                             disabled={nsSaving || !nsText.trim()}
                             className="px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 disabled:opacity-40 transition-colors">
                             {nsSaving ? "Saving…" : "Save"}
                           </button>
-                          <button onClick={() => setNsEditing(false)} className="text-sm text-gray-400 hover:text-gray-600">Cancel</button>
+                          <button onClick={() => setNsEditing(false)} className="text-sm text-zinc-400 hover:text-zinc-600">Cancel</button>
                         </div>
                       </div>
                     ) : nextStepData?.text ? (
-                      <p className="text-sm text-gray-700 leading-relaxed">{nextStepData.text}</p>
+                      <p className="text-sm text-zinc-700 leading-relaxed">{nextStepData.text}</p>
                     ) : (
                       <button onClick={() => setNsEditing(true)}
-                        className="text-sm text-gray-400 hover:text-brand-600 transition-colors">
+                        className="text-sm text-zinc-400 hover:text-zinc-500 transition-colors">
                         + Set next step
                       </button>
                     )}
@@ -1389,7 +1384,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                       {upcomingPlanActions.length > 0 && (
                         <div className="space-y-2">
-                          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Coming Up</p>
+                          <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Coming Up</p>
                           {upcomingPlanActions.map((a: TimelineAction) => (
                             <TimelineActionCard key={a.id} action={a} onPatch={patchActionMutation.mutate} />
                           ))}
@@ -1398,12 +1393,12 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                       {completedPlanActions.length > 0 && (
                         <div className="space-y-1 opacity-60">
-                          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Completed</p>
+                          <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Completed</p>
                           {completedPlanActions.slice(0, 5).map((a: TimelineAction) => (
-                            <div key={a.id} className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-gray-100">
+                            <div key={a.id} className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-zinc-100">
                               <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
-                              <span className="text-sm text-gray-600 line-through">{a.title}</span>
-                              <span className="text-xs text-gray-400 ml-auto">{a.completed_at ? format(new Date(a.completed_at), "MMM d") : ""}</span>
+                              <span className="text-sm text-zinc-600 line-through">{a.title}</span>
+                              <span className="text-xs text-zinc-400 ml-auto">{a.completed_at ? format(new Date(a.completed_at), "MMM d") : ""}</span>
                             </div>
                           ))}
                         </div>
@@ -1414,7 +1409,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   {/* Drafts to review */}
                   {pendingDrafts.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-[11px] font-bold text-brand-600 uppercase tracking-widest">Drafts to Review</p>
+                      <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">Drafts to Review</p>
                       {pendingDrafts.map(draft => (
                         <DraftCard
                           key={draft.id}
@@ -1430,7 +1425,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   {/* Other drafts */}
                   {drafts.filter(d => d.status !== "pending").length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">All Drafts</p>
+                      <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">All Drafts</p>
                       {drafts.filter(d => d.status !== "pending").map(draft => (
                         <DraftCard
                           key={draft.id}
@@ -1446,7 +1441,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   {overduePlanActions.length === 0 && upcomingPlanActions.length === 0 && pendingDrafts.length === 0 && !actionPlanLoading && (
                     <div className="text-center py-12">
                       <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-3" />
-                      <p className="text-sm text-gray-500">All clear. Run Agent to generate new actions.</p>
+                      <p className="text-sm text-zinc-500">All clear. Run Agent to generate new actions.</p>
                     </div>
                   )}
 
@@ -1457,24 +1452,24 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                     const generating = docs.filter((d: GeneratedDocument) => d.status === "generating");
                     if (docs.length === 0) return null;
                     return (
-                      <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                      <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-sm font-semibold text-gray-800">Documents</p>
-                          <button onClick={() => setGenerateOpen(v => !v)} className="text-xs font-medium text-indigo-600 hover:text-indigo-700">
+                          <p className="text-sm font-semibold text-zinc-800">Documents</p>
+                          <button onClick={() => setGenerateOpen(v => !v)} className="text-xs font-medium text-zinc-700 hover:text-zinc-700">
                             Generate new ▾
                           </button>
                         </div>
                         {generating.length > 0 && generating.map((d: GeneratedDocument) => (
-                          <div key={d.id} className="flex items-center gap-2 py-2 border-b border-gray-100 last:border-0">
-                            <div className="w-3.5 h-3.5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
-                            <span className="text-xs text-gray-600">{d.title} - generating</span>
+                          <div key={d.id} className="flex items-center gap-2 py-2 border-b border-zinc-100 last:border-0">
+                            <div className="w-3.5 h-3.5 border-2 border-zinc-800 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                            <span className="text-xs text-zinc-600">{d.title} - generating</span>
                           </div>
                         ))}
                         {ready.map((d: GeneratedDocument) => (
-                          <div key={d.id} className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
-                            <FileText className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
-                            <span className="text-xs text-gray-700 flex-1 truncate">{d.title}</span>
-                            <button onClick={() => handleDownloadDoc(d)} className="text-xs font-medium text-indigo-600 hover:text-indigo-700 flex-shrink-0">
+                          <div key={d.id} className="flex items-center gap-3 py-2 border-b border-zinc-100 last:border-0">
+                            <FileText className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
+                            <span className="text-xs text-zinc-700 flex-1 truncate">{d.title}</span>
+                            <button onClick={() => handleDownloadDoc(d)} className="text-xs font-medium text-zinc-700 hover:text-zinc-700 flex-shrink-0">
                               Download
                             </button>
                           </div>
@@ -1490,11 +1485,11 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                 <div className="space-y-4">
                   {/* MEDDPICC */}
                   {Object.keys(meddpiccData).length > 0 && (
-                    <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                    <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <BarChart3 className="w-4 h-4 text-brand-600" />
-                        <p className="text-sm font-semibold text-gray-800">MEDDPICC Qualification</p>
-                        <span className="ml-auto text-sm font-bold text-gray-700">{fmtPct(meddpiccData.overall_score)}</span>
+                        <BarChart3 className="w-4 h-4 text-zinc-500" />
+                        <p className="text-sm font-semibold text-zinc-800">MEDDPICC Qualification</p>
+                        <span className="ml-auto text-sm font-bold text-zinc-700">{fmtPct(meddpiccData.overall_score)}</span>
                         {meddpiccData.gap_risk && (
                           <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
                             meddpiccData.gap_risk === "critical" ? "bg-red-100 text-red-700" :
@@ -1511,19 +1506,19 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                           const val = typeof raw === "number" ? raw : 0;
                           const pct = Math.round(val * 100);
                           const barColor = val >= 0.6
-                            ? "bg-gradient-to-r from-emerald-400 to-emerald-500"
+                            ? "bg-zinc-800"
                             : val >= 0.3
-                            ? "bg-gradient-to-r from-amber-400 to-amber-500"
-                            : "bg-gradient-to-r from-red-400 to-red-500";
+                            ? "bg-zinc-500"
+                            : "bg-zinc-300";
                           const textColor = val >= 0.6 ? "text-emerald-600" : val >= 0.3 ? "text-amber-600" : "text-red-500";
                           const isGap = val < 0.5;
                           return (
                             <div key={k} className="flex items-center gap-2">
-                              <span className="text-[10px] font-black text-gray-300 w-3 flex-shrink-0 font-mono">{letters[idx]}</span>
-                              <span className={cn("text-xs w-32 flex-shrink-0 truncate", isGap ? "text-red-600 font-semibold" : "text-gray-500")}>
+                              <span className="text-[10px] font-black text-zinc-300 w-3 flex-shrink-0 font-mono">{letters[idx]}</span>
+                              <span className={cn("text-xs w-32 flex-shrink-0 truncate", isGap ? "text-red-600 font-semibold" : "text-zinc-500")}>
                                 {MEDDPICC_LABELS[k]}
                               </span>
-                              <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                              <div className="flex-1 bg-zinc-100 rounded-full h-2 overflow-hidden">
                                 <div
                                   className={cn("h-full rounded-full transition-all duration-700", barColor)}
                                   style={{ width: `${pct}%` }}
@@ -1541,10 +1536,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                   {/* Risk vectors */}
                   {Object.keys(riskVectors).length > 0 && (
-                    <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                    <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <Shield className="w-4 h-4 text-brand-600" />
-                        <p className="text-sm font-semibold text-gray-800">Risk Vectors</p>
+                        <Shield className="w-4 h-4 text-zinc-500" />
+                        <p className="text-sm font-semibold text-zinc-800">Risk Vectors</p>
                       </div>
                       <div className="grid grid-cols-5 gap-2">
                         {["champion","economic","timeline","competition","stakeholder"].map(k => {
@@ -1553,7 +1548,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                             level === "high" ? "bg-orange-50 border-orange-200 text-orange-700" :
                             level === "medium" ? "bg-amber-50 border-amber-200 text-amber-700" :
                             level === "low" ? "bg-green-50 border-green-200 text-green-700" :
-                            "bg-gray-50 border-gray-200 text-gray-500";
+                            "bg-zinc-50 border-zinc-200 text-zinc-500";
                           return (
                             <div key={k} className={cn("flex flex-col items-center gap-1 px-1.5 py-2.5 rounded-xl border text-center", style)}>
                               <span className="text-[10px] font-semibold leading-tight">{RISK_LABELS[k]}</span>
@@ -1735,10 +1730,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                   {/* 3 Whys */}
                   {Object.keys(threeWhys).length > 0 && (
-                    <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                    <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <Target className="w-4 h-4 text-brand-600" />
-                        <p className="text-sm font-semibold text-gray-800">3 Whys</p>
+                        <Target className="w-4 h-4 text-zinc-500" />
+                        <p className="text-sm font-semibold text-zinc-800">3 Whys</p>
                       </div>
                       <div className="space-y-3">
                         {[
@@ -1776,13 +1771,13 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                   {/* Grounding */}
                   {groundingConf != null && (
-                    <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                    <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                       <div className="flex items-center gap-2 mb-2">
-                        <Shield className="w-4 h-4 text-brand-600" />
-                        <p className="text-sm font-semibold text-gray-800">Data Grounding</p>
-                        <span className="ml-auto text-sm font-bold text-gray-700">{fmtPct(groundingConf)}</span>
+                        <Shield className="w-4 h-4 text-zinc-500" />
+                        <p className="text-sm font-semibold text-zinc-800">Data Grounding</p>
+                        <span className="ml-auto text-sm font-bold text-zinc-700">{fmtPct(groundingConf)}</span>
                       </div>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-zinc-500">
                         {groundingConf >= 0.7 ? "High confidence. Most claims verified against CRM and call data." :
                          groundingConf >= 0.4 ? "Moderate confidence. Some claims need verification." :
                          "Low confidence. Run agent sweep to improve data quality."}
@@ -1792,29 +1787,29 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                   {/* Deal analysis — narrative + risks */}
                   {(narrative || povRisks.length > 0) && (
-                    <div className="bg-white rounded-2xl border border-gray-200 p-5">
+                    <div className="bg-white rounded-2xl border border-zinc-200 p-5">
                       <div className="flex items-center gap-2 mb-4">
-                        <FileText className="w-4 h-4 text-brand-600" />
-                        <p className="text-sm font-semibold text-gray-800">Deal Analysis</p>
+                        <FileText className="w-4 h-4 text-zinc-500" />
+                        <p className="text-sm font-semibold text-zinc-800">Deal Analysis</p>
                       </div>
                       {narrative && (
                         <div className="mb-4">
-                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Narrative</p>
+                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Narrative</p>
                           <div className="space-y-2">
                             {narrative.split(/(?<=\.)\s+/).filter(Boolean).map((sentence, i) => (
-                              <p key={i} className="text-sm text-gray-700 leading-relaxed">{sentence}</p>
+                              <p key={i} className="text-sm text-zinc-700 leading-relaxed">{sentence}</p>
                             ))}
                           </div>
                         </div>
                       )}
                       {povRisks.length > 0 && (
                         <div>
-                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Key Risks</p>
+                          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Key Risks</p>
                           <ul className="space-y-2">
                             {povRisks.map((risk, i) => (
                               <li key={i} className="flex items-start gap-2">
                                 <span className="text-red-400 mt-0.5 flex-shrink-0 text-xs">•</span>
-                                <p className="text-sm text-gray-700 leading-relaxed">{risk}</p>
+                                <p className="text-sm text-zinc-700 leading-relaxed">{risk}</p>
                               </li>
                             ))}
                           </ul>
@@ -1825,8 +1820,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                   {Object.keys(meddpiccData).length === 0 && (
                     <div className="text-center py-12">
-                      <BarChart3 className="w-8 h-8 text-gray-300 mx-auto mb-3" />
-                      <p className="text-sm text-gray-400">Run Agent to generate deal intelligence.</p>
+                      <BarChart3 className="w-8 h-8 text-zinc-300 mx-auto mb-3" />
+                      <p className="text-sm text-zinc-400">Run Agent to generate deal intelligence.</p>
                     </div>
                   )}
                 </div>
@@ -1837,17 +1832,17 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
               {activeCenter === "history" && (
                 <div className="space-y-6">
                   {/* Timeline */}
-                  <div className="bg-white rounded-2xl border border-gray-200 p-5">
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-3">Deal Timeline</p>
+                  <div className="bg-white rounded-2xl border border-zinc-200 p-5">
+                    <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mb-3">Deal Timeline</p>
                     {timeline.length === 0 ? (
-                      <p className="text-sm text-gray-400 py-4 text-center">No events yet</p>
+                      <p className="text-sm text-zinc-400 py-4 text-center">No events yet</p>
                     ) : timeline.map(e => <TimelineRow key={e.event_id} event={e} />)}
                   </div>
 
                   {/* Transcripts */}
                   {(transcriptsData?.data ?? []).length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Call Transcripts</p>
+                      <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Call Transcripts</p>
                       {(transcriptsData!.data ?? []).map((t: Transcript, i: number) => (
                         <TranscriptCard key={t.id ?? i} transcript={t} />
                       ))}
@@ -1856,14 +1851,14 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
 
                   {/* Notes */}
                   <div className="space-y-3">
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Notes</p>
-                    <div className="bg-white rounded-2xl border border-gray-200 p-4 space-y-2">
+                    <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Notes</p>
+                    <div className="bg-white rounded-2xl border border-zinc-200 p-4 space-y-2">
                       <textarea
                         value={noteInput}
                         onChange={e => setNoteInput(e.target.value)}
                         placeholder="Add a note… (Ctrl+Enter to save)"
                         rows={2}
-                        className="w-full text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none"
+                        className="w-full text-sm border border-zinc-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none"
                         onKeyDown={e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); handleSaveNote(); } }}
                       />
                       <button onClick={handleSaveNote} disabled={!noteInput.trim() || savingNote}
@@ -1872,10 +1867,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                       </button>
                     </div>
                     {notes.map((n: AccountNote, i: number) => (
-                      <div key={n.id ?? i} className="bg-white rounded-2xl border border-gray-200 px-4 py-3">
-                        <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{n.notes}</p>
+                      <div key={n.id ?? i} className="bg-white rounded-2xl border border-zinc-200 px-4 py-3">
+                        <p className="text-sm text-zinc-700 leading-relaxed whitespace-pre-wrap">{n.notes}</p>
                         {n.occurred_at && (
-                          <p className="text-xs text-gray-400 mt-1">
+                          <p className="text-xs text-zinc-400 mt-1">
                             {formatDistanceToNow(new Date(n.occurred_at), { addSuffix: true })}
                           </p>
                         )}
@@ -1911,7 +1906,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
       {briefOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-100 flex items-center gap-3">
+            <div className="sticky top-0 bg-white px-6 py-4 border-b border-zinc-100 flex items-center gap-3">
               <FileText className="w-4 h-4 text-zinc-500" />
               <h2 className="text-base font-semibold text-zinc-900">Meeting Brief</h2>
               <span className="text-xs text-zinc-400 ml-1">{accountName}</span>
@@ -1928,20 +1923,20 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                 <>
                   {briefData.brief && (
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Brief</p>
-                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{briefData.brief}</p>
+                      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Brief</p>
+                      <p className="text-sm text-zinc-700 leading-relaxed whitespace-pre-wrap">{briefData.brief}</p>
                     </div>
                   )}
                   {briefData.stakeholders?.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Stakeholders</p>
+                      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Stakeholders</p>
                       <div className="space-y-1.5">
                         {briefData.stakeholders.map((s, i) => (
                           <div key={i} className="flex items-center gap-3 py-1.5">
-                            <User className="w-3.5 h-3.5 text-gray-400" />
-                            <span className="text-sm font-medium text-gray-800">{s.name}</span>
-                            {s.title && <span className="text-xs text-gray-400">{s.title}</span>}
-                            {s.role && <span className="text-xs text-brand-600 bg-brand-50 px-1.5 py-0.5 rounded">{s.role}</span>}
+                            <User className="w-3.5 h-3.5 text-zinc-400" />
+                            <span className="text-sm font-medium text-zinc-800">{s.name}</span>
+                            {s.title && <span className="text-xs text-zinc-400">{s.title}</span>}
+                            {s.role && <span className="text-xs text-zinc-500 bg-brand-50 px-1.5 py-0.5 rounded">{s.role}</span>}
                           </div>
                         ))}
                       </div>
@@ -1949,12 +1944,12 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   )}
                   {briefData.next_actions?.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Recommended Actions</p>
+                      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Recommended Actions</p>
                       <div className="space-y-1.5">
                         {briefData.next_actions.slice(0, 3).map((a, i) => (
                           <div key={i} className="flex items-start gap-2">
-                            <span className="text-xs font-bold text-brand-600 w-4 flex-shrink-0 mt-0.5">{i + 1}.</span>
-                            <p className="text-sm text-gray-700">{a.action}</p>
+                            <span className="text-xs font-bold text-zinc-500 w-4 flex-shrink-0 mt-0.5">{i + 1}.</span>
+                            <p className="text-sm text-zinc-700">{a.action}</p>
                           </div>
                         ))}
                       </div>
@@ -1962,7 +1957,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   )}
                 </>
               ) : (
-                <p className="text-sm text-gray-400 text-center py-8">Brief not available. Run Agent first.</p>
+                <p className="text-sm text-zinc-400 text-center py-8">Brief not available. Run Agent first.</p>
               )}
             </div>
           </div>
@@ -1974,28 +1969,28 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-base font-semibold text-gray-900">Override AI Forecast</h2>
-              <button onClick={() => setPovOverrideOpen(false)} className="ml-auto text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
+              <h2 className="text-base font-semibold text-zinc-900">Override AI Forecast</h2>
+              <button onClick={() => setPovOverrideOpen(false)} className="ml-auto text-zinc-400 hover:text-zinc-600"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 {["Pipeline","Best Case","Commit","Omit"].map(cat => (
                   <button key={cat} onClick={() => setOverrideCategory(cat)}
                     className={cn("py-2 text-sm font-medium rounded-xl border transition-colors",
-                      overrideCategory === cat ? "bg-brand-600 text-white border-brand-600" : "border-gray-200 text-gray-700 hover:bg-gray-50")}>
+                      overrideCategory === cat ? "bg-brand-600 text-white border-brand-600" : "border-zinc-200 text-zinc-700 hover:bg-zinc-50")}>
                     {cat}
                   </button>
                 ))}
               </div>
               <textarea value={overrideReason} onChange={e => setOverrideReason(e.target.value)}
                 placeholder="Reason for override…" rows={3}
-                className="w-full text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none" />
+                className="w-full text-sm border border-zinc-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none" />
               <div className="flex gap-2">
                 <button onClick={() => overridePovMutation.mutate()} disabled={!overrideCategory || !overrideReason.trim()}
                   className="flex-1 py-2 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 disabled:opacity-40 transition-colors">
                   Save Override
                 </button>
-                <button onClick={() => setPovOverrideOpen(false)} className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700">Cancel</button>
+                <button onClick={() => setPovOverrideOpen(false)} className="px-4 py-2 text-sm text-zinc-500 hover:text-zinc-700">Cancel</button>
               </div>
             </div>
           </div>
@@ -2007,19 +2002,19 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
             <div className="flex items-center gap-2 mb-4">
-              <h2 className="text-base font-semibold text-gray-900">Capture Deal Outcome</h2>
-              <button onClick={() => setWinLossOpen(false)} className="ml-auto text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
+              <h2 className="text-base font-semibold text-zinc-900">Capture Deal Outcome</h2>
+              <button onClick={() => setWinLossOpen(false)} className="ml-auto text-zinc-400 hover:text-zinc-600"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <button onClick={() => setWinLossOutcome("won")}
                   className={cn("py-3 text-sm font-semibold rounded-xl border-2 transition-colors",
-                    winLossOutcome === "won" ? "bg-emerald-600 text-white border-emerald-600" : "border-gray-200 text-gray-700 hover:border-emerald-300")}>
+                    winLossOutcome === "won" ? "bg-emerald-600 text-white border-emerald-600" : "border-zinc-200 text-zinc-700 hover:border-emerald-300")}>
                   Won
                 </button>
                 <button onClick={() => setWinLossOutcome("lost")}
                   className={cn("py-3 text-sm font-semibold rounded-xl border-2 transition-colors",
-                    winLossOutcome === "lost" ? "bg-red-600 text-white border-red-600" : "border-gray-200 text-gray-700 hover:border-red-300")}>
+                    winLossOutcome === "lost" ? "bg-red-600 text-white border-red-600" : "border-zinc-200 text-zinc-700 hover:border-red-300")}>
                   Lost
                 </button>
               </div>
@@ -2029,7 +2024,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                     {["price","champion","timing","competition","no_budget","product_gap","no_business_case","other"].map(r => (
                       <button key={r} onClick={() => setWinLossReason(r)}
                         className={cn("text-xs px-2.5 py-1 rounded-full border transition-colors",
-                          winLossReason === r ? "bg-brand-600 text-white border-brand-600" : "border-gray-200 text-gray-600 hover:border-brand-300")}>
+                          winLossReason === r ? "bg-brand-600 text-white border-brand-600" : "border-zinc-200 text-zinc-600 hover:border-brand-300")}>
                         {r.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}
                       </button>
                     ))}
@@ -2037,11 +2032,11 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   {winLossReason === "competition" && (
                     <input type="text" value={winLossCompetitor} onChange={e => setWinLossCompetitor(e.target.value)}
                       placeholder="Competitor name"
-                      className="w-full text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400" />
+                      className="w-full text-sm border border-zinc-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400" />
                   )}
                   <textarea value={winLossNotes} onChange={e => setWinLossNotes(e.target.value)}
                     placeholder="Notes (optional)" rows={2}
-                    className="w-full text-sm border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none" />
+                    className="w-full text-sm border border-zinc-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-brand-400 resize-none" />
                 </>
               )}
               <div className="flex gap-2">
@@ -2050,7 +2045,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   className="flex-1 py-2 bg-brand-600 text-white text-sm font-medium rounded-xl hover:bg-brand-700 disabled:opacity-40 transition-colors">
                   Save
                 </button>
-                <button onClick={() => setWinLossOpen(false)} className="px-4 py-2 text-sm text-gray-500">Cancel</button>
+                <button onClick={() => setWinLossOpen(false)} className="px-4 py-2 text-sm text-zinc-500">Cancel</button>
               </div>
             </div>
           </div>

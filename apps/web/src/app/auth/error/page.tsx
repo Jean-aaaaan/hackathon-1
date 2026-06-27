@@ -24,17 +24,17 @@ function AuthErrorInner() {
   const error = ERROR_MESSAGES[code];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+        <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-8 text-center">
           {/* Icon */}
           <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-5">
             <AlertTriangle className="w-7 h-7 text-red-500" />
           </div>
 
           {/* Error content */}
-          <h1 className="text-xl font-semibold text-gray-900 mb-2">{error.title}</h1>
-          <p className="text-sm text-gray-500 leading-relaxed mb-2">{error.description}</p>
+          <h1 className="text-xl font-semibold text-zinc-900 mb-2">{error.title}</h1>
+          <p className="text-sm text-zinc-500 leading-relaxed mb-2">{error.description}</p>
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
@@ -47,7 +47,7 @@ function AuthErrorInner() {
             </Link>
             <Link
               href="/inbox"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-zinc-200 text-zinc-600 text-sm font-medium rounded-xl hover:bg-zinc-50 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to inbox
@@ -55,7 +55,7 @@ function AuthErrorInner() {
           </div>
 
           {/* Support */}
-          <p className="text-xs text-gray-400 mt-5">
+          <p className="text-xs text-zinc-400 mt-5">
             Still having issues?{" "}
             <a href="mailto:support@vantage.ai" className="text-brand-600 hover:underline">
               Contact support
@@ -64,7 +64,7 @@ function AuthErrorInner() {
         </div>
 
         {/* Error code badge */}
-        <p className="text-center text-xs text-gray-300 mt-4">Error code: {code}</p>
+        <p className="text-center text-xs text-zinc-300 mt-4">Error code: {code}</p>
       </div>
     </div>
   );
@@ -73,7 +73,7 @@ function AuthErrorInner() {
 export default function AuthErrorPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
       </div>
     }>

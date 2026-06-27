@@ -304,7 +304,7 @@ async def get_usage(
                 COUNT(*) AS run_count
             FROM agent_runs
             WHERE workspace_id = :ws_id
-              AND created_at >= NOW() - INTERVAL '30 days'
+              AND started_at >= NOW() - INTERVAL '30 days'
         """),
         {"ws_id": current_user.workspace_id},
     )
@@ -1303,7 +1303,6 @@ async def analyze_voice_profile(
     Uses Outlook sent items if connected, falls back to HubSpot outbound emails.
     Stores the extracted voice profile in workspace.settings["voice_profile"].
     """
-    import anthropic as _anthropic
     from app.config import get_settings
 
     result = await db.execute(
@@ -1372,34 +1371,30 @@ async def analyze_voice_profile(
             detail="Not enough sent emails found (minimum 3 required). Connect Outlook or send more emails via HubSpot.",
         )
 
-    # Extract voice profile using Haiku
-    client = _anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
+    from app.integrations.llm import bulk_model, complete_text
     sample = "\n\n---\n\n".join(email_bodies[:30])
 
-    response = await client.messages.create(
-        model=settings.anthropic_model_bulk,
-        max_tokens=512,
-        system=(
+    response = await complete_text(
+        system_prompt=(
             "You are analyzing a sales rep's email writing style. "
             "Extract a voice profile from these sent emails. "
             "Respond with JSON only, no markdown wrapping."
         ),
-        messages=[{
-            "role": "user",
-            "content": (
-                f"Analyze these {len(email_bodies)} sent emails and extract the rep's voice profile.\n\n"
-                f"{sample}\n\n"
-                "Return JSON with these exact keys:\n"
-                '{"tone": "...", "avg_word_count": 45, "avg_sentence_length": 12, '
-                '"common_openers": ["...", "..."], "common_ctas": ["...", "..."], '
-                '"avoids": ["...", "..."], "signature_style": "..."}'
-            ),
-        }],
+        user_message=(
+            f"Analyze these {len(email_bodies)} sent emails and extract the rep's voice profile.\n\n"
+            f"{sample}\n\n"
+            "Return JSON with these exact keys:\n"
+            '{"tone": "...", "avg_word_count": 45, "avg_sentence_length": 12, '
+            '"common_openers": ["...", "..."], "common_ctas": ["...", "..."], '
+            '"avoids": ["...", "..."], "signature_style": "..."}'
+        ),
+        model=bulk_model(),
+        max_tokens=512,
     )
 
     try:
         import json as _json
-        voice_profile = _json.loads(response.content[0].text)
+        voice_profile = _json.loads(response.text)
     except Exception:
         raise HTTPException(status_code=500, detail="Failed to parse voice profile from AI response")
 

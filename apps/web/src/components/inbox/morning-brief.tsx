@@ -56,17 +56,17 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
-    <div data-testid="morning-brief" className="bg-white border-b border-zinc-100 border-l-4 border-l-indigo-500 px-5 py-4">
+    <div data-testid="morning-brief" className="bg-white border-b border-zinc-100 border-l-4 border-l-zinc-800 px-5 py-4">
       <div className="flex items-start gap-4">
         {/* Icon */}
-        <div className="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center flex-shrink-0">
+        <div className="w-9 h-9 bg-zinc-900 rounded-xl flex items-center justify-center flex-shrink-0">
           <Zap className="w-5 h-5 text-white" />
         </div>
 
         <div className="flex-1 min-w-0">
           {/* Headline */}
           <div className="flex items-center gap-2 mb-1">
-            <p className="text-sm font-semibold text-gray-900">{greeting}. Here&apos;s what needs your attention today.</p>
+            <p className="text-sm font-semibold text-zinc-900">{greeting}. Here&apos;s what needs your attention today.</p>
             {pendingDrafts > 0 && (
               <span className="text-xs bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded-full font-medium">
                 {pendingDrafts} draft{pendingDrafts > 1 ? "s" : ""} to review
@@ -75,8 +75,8 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
           </div>
 
           {/* Top action */}
-          <p className="text-sm text-gray-600 mb-3">
-            <span className="font-medium text-gray-800">{topAccount.name}</span> is your highest priority today
+          <p className="text-sm text-zinc-600 mb-3">
+            <span className="font-medium text-zinc-800">{topAccount.name}</span> is your highest priority today
             {topPreview && `: ${topPreview.charAt(0).toLowerCase() + topPreview.slice(1)}`}.
           </p>
 
@@ -90,19 +90,19 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
                   onClick={() => onSelectAccount(a.id)}
                   className={cn(
                     "flex items-center gap-2 bg-white border rounded-xl px-3 py-2 text-left hover:shadow-sm transition-all",
-                    i === 0 ? "border-brand-200 shadow-sm" : "border-gray-200"
+                    i === 0 ? "border-brand-200 shadow-sm" : "border-zinc-200"
                   )}
                 >
                   <div className="flex items-center gap-1.5">
                     <div className={cn("w-2 h-2 rounded-full flex-shrink-0", URGENCY_COLOR[level])} />
-                    <span className="text-sm font-medium text-gray-900">{a.name}</span>
+                    <span className="text-sm font-medium text-zinc-900">{a.name}</span>
                   </div>
                   {a.pending_drafts > 0 && (
                     <span className="text-xs bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full">
                       {a.pending_drafts}
                     </span>
                   )}
-                  <ArrowRight className="w-3.5 h-3.5 text-gray-300 ml-1" />
+                  <ArrowRight className="w-3.5 h-3.5 text-zinc-300 ml-1" />
                 </button>
               );
             })}
@@ -121,7 +121,7 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
         {/* Dismiss */}
         <button
           onClick={handleDismiss}
-          className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 mt-0.5"
+          className="text-zinc-400 hover:text-zinc-600 transition-colors flex-shrink-0 mt-0.5"
         >
           <X className="w-4 h-4" />
         </button>

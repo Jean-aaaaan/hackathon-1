@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import structlog
-import anthropic
+
 
 from app.models.account import Account, Draft
 from app.config import get_settings
@@ -254,7 +254,6 @@ class PlaysEngine:
     def __init__(self, db: AsyncSession):
         self.db = db
         self.settings = get_settings()
-        self.client = anthropic.AsyncAnthropic(api_key=self.settings.anthropic_api_key)
 
     async def evaluate_and_fire(
         self,
@@ -466,13 +465,14 @@ Write one {play.draft_type} draft. Reference the trigger condition specifically.
 """
 
         try:
-            response = await self.client.messages.create(
-                model=self.settings.anthropic_model_quality,
+            from app.integrations.llm import complete_text, quality_model
+            response = await complete_text(
+                system_prompt=PLAY_DRAFTER_SYSTEM_PROMPT,
+                user_message=user_message,
+                model=quality_model(),
                 max_tokens=1500,
-                system=PLAY_DRAFTER_SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": user_message}],
             )
-            text = polish_prose(response.content[0].text.strip())
+            text = polish_prose(response.text.strip())
             # Raw-text path (no tool schema): strip "Here is the draft:" preambles
             import re
             text = re.sub(r"^(Here is|Here's)[^\n]*:\s*\n+", "", text, flags=re.IGNORECASE)

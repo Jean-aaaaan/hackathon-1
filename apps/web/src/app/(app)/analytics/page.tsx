@@ -24,7 +24,7 @@ interface LineChartProps {
   className?: string;
 }
 
-function LineChart({ data, width = 640, height = 120, color = "#6366f1", fill, target, labels, className }: LineChartProps) {
+function LineChart({ data, width = 640, height = 120, color = "#18181B", fill, target, labels, className }: LineChartProps) {
   if (!data.length) return null;
 
   const min = Math.min(...data, 0);
@@ -69,7 +69,7 @@ function LineChart({ data, width = 640, height = 120, color = "#6366f1", fill, t
   );
 }
 
-function BarChart({ data, color = "#6366f1", height = 80 }: {
+function BarChart({ data, color = "#18181B", height = 80 }: {
   data: { label: string; value: number; value2?: number }[];
   color?: string;
   height?: number;
@@ -96,7 +96,7 @@ function BarChart({ data, color = "#6366f1", height = 80 }: {
                 className="rounded-sm transition-all"
                 style={{
                   height: `${(d.value2 / max) * (height - 16)}px`,
-                  backgroundColor: "#a5b4fc",
+                  backgroundColor: "#a1a1aa",
                   width: barW,
                   minHeight: 2,
                 }}
@@ -137,8 +137,8 @@ function KpiCard({
       )}
     >
       <div className="flex items-start justify-between mb-3">
-        <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center">
-          <Icon className="w-4 h-4 text-indigo-500" />
+        <div className="w-8 h-8 rounded-xl bg-zinc-50 flex items-center justify-center">
+          <Icon className="w-4 h-4 text-zinc-500" />
         </div>
         {trend && <TrendIcon className={cn("w-4 h-4", trendColor)} />}
       </div>
@@ -245,8 +245,8 @@ function DarTrendPanel({ days, setDays }: { days: number; setDays: (d: number) =
           data={darValues}
           labels={labels}
           target={60}
-          color="#6366f1"
-          fill="#6366f1"
+          color="#18181B"
+          fill="#18181B"
           height={140}
         />
       )}
@@ -261,16 +261,16 @@ function DarTrendPanel({ days, setDays }: { days: number; setDays: (d: number) =
               value: p.generated,
               value2: p.approved,
             }))}
-            color="#6366f1"
+            color="#18181B"
             height={72}
           />
           <div className="flex items-center gap-3 mt-2">
             <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-sm bg-indigo-500" />
+              <div className="w-2.5 h-2.5 rounded-sm bg-zinc-500" />
               <span className="text-xs text-zinc-400">Generated</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-sm bg-indigo-300" />
+              <div className="w-2.5 h-2.5 rounded-sm bg-zinc-400" />
               <span className="text-xs text-zinc-400">Approved</span>
             </div>
           </div>
@@ -467,7 +467,7 @@ function RepPerformancePanel() {
                 <th className="text-right text-xs font-medium text-zinc-400 pb-2">Accounts</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-zinc-50">
               {reps.map((r, i) => (
                 <tr key={r.rep_id} className="hover:bg-zinc-50">
                   <td className="py-2.5">
@@ -494,8 +494,8 @@ function RepPerformancePanel() {
                       {r.dar_pct}%
                     </span>
                   </td>
-                  <td className="py-2.5 text-right text-gray-600">{r.approved}</td>
-                  <td className="py-2.5 text-right text-gray-600">{r.declined}</td>
+                  <td className="py-2.5 text-right text-zinc-600">{r.approved}</td>
+                  <td className="py-2.5 text-right text-zinc-600">{r.declined}</td>
                   <td className="py-2.5 text-right text-zinc-500">{r.pending}</td>
                   <td className="py-2.5 text-right text-zinc-500">{r.accounts_with_drafts}</td>
                 </tr>
@@ -535,7 +535,7 @@ function DraftPerformancePanel() {
         <div className="space-y-2">
           {perfRows.map(row => (
             <div key={row.type} className="flex items-center gap-3">
-              <div className="w-40 text-xs text-gray-600 truncate flex-shrink-0" title={draftTypeLabel(row.type)}>
+              <div className="w-40 text-xs text-zinc-600 truncate flex-shrink-0" title={draftTypeLabel(row.type)}>
                 {draftTypeLabel(row.type)}
               </div>
               <div className="flex-1 h-2 bg-zinc-100 rounded-full overflow-hidden">
@@ -579,7 +579,7 @@ function ForecastAccuracyPanel() {
   const catColor: Record<string, string> = {
     Commit:      "text-green-700 bg-green-50 border-green-200",
     "Best Case": "text-blue-700 bg-blue-50 border-blue-200",
-    Pipeline:    "text-gray-600 bg-zinc-50 border-zinc-200",
+    Pipeline:    "text-zinc-600 bg-zinc-50 border-zinc-200",
     Omit:        "text-red-600 bg-red-50 border-red-200",
   };
 
@@ -760,9 +760,9 @@ function AgentRoiPanel() {
     { label: "LLM cost (30d)",        value: `$${roi.cost_30d_usd.toFixed(2)}`,         color: "text-zinc-800" },
     { label: "Agent runs (30d)",       value: roi.run_count_30d.toString(),              color: "text-zinc-800" },
     { label: "Deals advanced (30d)",   value: roi.deals_advanced_30d.toString(),         color: "text-emerald-700" },
-    { label: "Cost / deal advanced",   value: fmt(roi.cost_per_deal_advanced_usd),       color: "text-indigo-700" },
+    { label: "Cost / deal advanced",   value: fmt(roi.cost_per_deal_advanced_usd),       color: "text-zinc-700" },
     { label: "Deals won (90d)",        value: roi.deals_won_90d.toString(),              color: "text-emerald-700" },
-    { label: "Cost / deal closed",     value: fmt(roi.cost_per_deal_won_usd),            color: "text-indigo-700" },
+    { label: "Cost / deal closed",     value: fmt(roi.cost_per_deal_won_usd),            color: "text-zinc-700" },
   ] : [];
 
   return (
@@ -899,7 +899,7 @@ function VelocityRow({ deal }: { deal: DealVelocityDeal }) {
   return (
     <div className="flex items-center gap-3 py-2 border-b border-zinc-50 last:border-0">
       <div className="flex-1 min-w-0">
-        <a href={`/account/${deal.account_id}`} className="text-xs font-medium text-zinc-800 hover:text-indigo-600 truncate block transition-colors">
+        <a href={`/account/${deal.account_id}`} className="text-xs font-medium text-zinc-800 hover:text-zinc-700 truncate block transition-colors">
           {deal.name}
         </a>
         <p className="text-[10px] text-zinc-400 truncate">{deal.stage}</p>
@@ -1032,8 +1032,8 @@ export default function AnalyticsPage() {
 
       {/* Pending drafts notice */}
       {overview && overview.drafts.pending > 0 && (
-        <div className="card border-l-[3px] border-l-indigo-400 p-4 flex items-center gap-3">
-          <BarChart3 className="w-5 h-5 text-indigo-500 flex-shrink-0" />
+        <div className="card border-l-[3px] border-l-zinc-600 p-4 flex items-center gap-3">
+          <BarChart3 className="w-5 h-5 text-zinc-500 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-zinc-800">
               {overview.drafts.pending} draft{overview.drafts.pending > 1 ? "s" : ""} awaiting review
@@ -1042,7 +1042,7 @@ export default function AnalyticsPage() {
               Reviewing pending drafts improves DAR and trains the agent for future runs.
             </p>
           </div>
-          <a href="/inbox" className="ml-auto text-sm font-medium text-indigo-600 hover:text-indigo-800 flex-shrink-0">
+          <a href="/inbox" className="ml-auto text-sm font-medium text-zinc-700 hover:text-zinc-800 flex-shrink-0">
             Review now →
           </a>
         </div>

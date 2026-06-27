@@ -53,10 +53,10 @@ function RadarChart({
         <line key={i} x1={cx} y1={cy} x2={px(1, i)} y2={py(1, i)} stroke="#e5e7eb" strokeWidth={1} />
       ))}
       {/* Data polygon */}
-      <polygon points={dataPath} fill="#6366f1" fillOpacity={0.15} stroke="#6366f1" strokeWidth={2} strokeLinejoin="round" />
+      <polygon points={dataPath} fill="#18181B" fillOpacity={0.12} stroke="#18181B" strokeWidth={2} strokeLinejoin="round" />
       {/* Data points */}
       {values.map((v, i) => (
-        <circle key={i} cx={px(v, i)} cy={py(v, i)} r={3} fill="#6366f1" />
+        <circle key={i} cx={px(v, i)} cy={py(v, i)} r={3} fill="#18181B" />
       ))}
       {/* Labels */}
       {labels.map((l, i) => {
@@ -116,20 +116,20 @@ function SignalCluster({ type, signals, amountAtRisk, onSelect, isSelected }: {
       className={cn(
         "w-full block text-left rounded-2xl border p-4 transition-all duration-150",
         isSelected
-          ? "bg-indigo-50 border-indigo-300 shadow-sm"
-          : "bg-white border-zinc-200 hover:border-indigo-200 hover:shadow-sm"
+          ? "bg-zinc-50 border-zinc-300 shadow-sm"
+          : "bg-white border-zinc-200 hover:border-zinc-200 hover:shadow-sm"
       )}
     >
       <div className="flex items-start justify-between mb-2.5">
         <span className={cn(
           "text-sm font-semibold capitalize leading-snug",
-          isSelected ? "text-indigo-900" : "text-zinc-800"
+          isSelected ? "text-zinc-900" : "text-zinc-800"
         )}>
           {signalLabel(type)}
         </span>
         <span className={cn(
           "text-xl font-bold tabular leading-none ml-2 flex-shrink-0",
-          isSelected ? "text-indigo-700" : "text-zinc-900"
+          isSelected ? "text-zinc-700" : "text-zinc-900"
         )}>
           {signals.length}
         </span>
@@ -186,8 +186,8 @@ function AccountRow({ account }: { account: AccountListItem }) {
   return (
     <tr className="hover:bg-zinc-50 transition-colors group">
       <td className="px-5 py-3">
-        <Link href={`/account/${account.id}`} className="group-hover:text-indigo-600 transition-colors">
-          <p className="font-medium text-zinc-900 group-hover:text-indigo-700">{account.name}</p>
+        <Link href={`/account/${account.id}`} className="group-hover:text-zinc-700 transition-colors">
+          <p className="font-medium text-zinc-900 group-hover:text-zinc-700">{account.name}</p>
           <p className="text-xs text-zinc-400">
             {account.deal_amount
               ? new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(account.deal_amount)
@@ -238,7 +238,7 @@ function AccountRow({ account }: { account: AccountListItem }) {
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Link
             href={`/account/${account.id}`}
-            className="text-xs font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+            className="text-xs font-medium text-zinc-700 hover:text-zinc-700 flex items-center gap-1"
           >
             <ExternalLink className="w-3 h-3" />
             War Room
@@ -336,7 +336,7 @@ function KanbanBoard({ accounts }: { accounts: AccountListItem[] }) {
                   {a.pending_drafts > 0 && (
                     <div className="flex justify-end mt-1.5">
                       <span
-                        className="text-[10px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded-full leading-none"
+                        className="text-[10px] font-bold bg-zinc-900 text-white px-1.5 py-0.5 rounded-full leading-none"
                         title={`${a.pending_drafts} draft${a.pending_drafts === 1 ? "" : "s"} awaiting review`}
                       >
                         {a.pending_drafts}
@@ -570,7 +570,7 @@ export default function WatchtowerPage() {
                 {selectedCluster && (
                   <button
                     onClick={() => setSelectedCluster(null)}
-                    className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                    className="text-xs text-zinc-700 hover:text-zinc-700 font-medium"
                   >
                     Clear filter ×
                   </button>
@@ -616,7 +616,7 @@ export default function WatchtowerPage() {
                         <button
                           onClick={() => handleActOnCluster(selectedCluster)}
                           disabled={actingOnCluster === selectedCluster}
-                          className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-40 transition-colors"
+                          className="flex items-center gap-1 text-xs font-medium px-2.5 py-1 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 disabled:opacity-40 transition-colors"
                         >
                           <Zap className="w-3 h-3" />
                           {actingOnCluster === selectedCluster ? "Queuing..." : "Act on this"}
@@ -645,7 +645,7 @@ export default function WatchtowerPage() {
                             <p className="text-sm font-medium text-zinc-900 truncate">{s.account?.name}</p>
                             <p className="text-xs text-zinc-400 truncate">{s.detail}</p>
                           </div>
-                          <span className="text-xs text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                          <span className="text-xs text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                             Open →
                           </span>
                         </Link>
@@ -672,7 +672,7 @@ export default function WatchtowerPage() {
                   </p>
                 </div>
               </div>
-              <div className="divide-y divide-gray-50">
+              <div className="divide-y divide-zinc-50">
                 {(stalledData?.data?.deals ?? []).map((deal: StalledDeal) => (
                   <div key={deal.id} className="flex items-center justify-between px-5 py-3 hover:bg-zinc-50 group">
                     <div className="flex-1 min-w-0">
@@ -702,7 +702,7 @@ export default function WatchtowerPage() {
                     </div>
                     <Link
                       href={`/account/${deal.id}`}
-                      className="ml-3 text-xs font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                      className="ml-3 text-xs font-medium text-zinc-700 hover:text-zinc-700 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                     >
                       <ExternalLink className="w-3 h-3" />
                       War Room
@@ -720,7 +720,7 @@ export default function WatchtowerPage() {
                 <h2 className="text-sm font-semibold text-zinc-900">Active Competitions</h2>
                 <p className="text-xs text-zinc-400 mt-0.5">Competitors detected in active deals (last 90 days)</p>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-0 divide-x divide-gray-100">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-0 divide-x divide-zinc-100">
                 {(competitiveData?.data?.competitors ?? []).slice(0, 5).map((c: CompetitorEntry) => (
                   <div key={c.competitor} className="px-5 py-4">
                     <p className="text-sm font-semibold text-zinc-900 truncate">{c.competitor}</p>
@@ -755,7 +755,7 @@ export default function WatchtowerPage() {
                       <th className="px-5 py-2.5" />
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody className="divide-y divide-zinc-50">
                     {sortedAccounts.slice(0, 25).map((account) => (
                       <AccountRow key={account.id} account={account} />
                     ))}
@@ -789,7 +789,7 @@ export default function WatchtowerPage() {
                       className={cn(
                         "text-xs px-2 py-0.5 rounded-full transition-colors capitalize",
                         signalFilter === f && !selectedCluster
-                          ? "bg-indigo-100 text-indigo-700 font-medium"
+                          ? "bg-zinc-100 text-zinc-700 font-medium"
                           : "text-zinc-400 hover:text-zinc-600"
                       )}
                     >
@@ -797,14 +797,14 @@ export default function WatchtowerPage() {
                     </button>
                   ))}
                   {selectedCluster && (
-                    <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-medium capitalize ml-1">
+                    <span className="text-xs bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded-full font-medium capitalize ml-1">
                       {signalLabel(selectedCluster)}
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto divide-y divide-gray-50">
+              <div className="flex-1 overflow-y-auto divide-y divide-zinc-50">
                 {displaySignals.length === 0 ? (
                   <div className="p-6 text-center text-zinc-400 text-sm">
                     {allSignals.length === 0 ? "No high-urgency signals" : "No signals match filter"}
@@ -821,7 +821,7 @@ export default function WatchtowerPage() {
                           )} />
                           <Link
                             href={`/account/${signal.account?.id}`}
-                            className="text-xs font-semibold text-zinc-900 hover:text-indigo-600 transition-colors truncate"
+                            className="text-xs font-semibold text-zinc-900 hover:text-zinc-700 transition-colors truncate"
                           >
                             {signal.account?.name}
                           </Link>
@@ -838,7 +838,7 @@ export default function WatchtowerPage() {
                       {!signal.acknowledged && (
                         <button
                           onClick={() => ackMutation.mutate(signal.id)}
-                          className="text-gray-200 hover:text-green-500 transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100"
+                          className="text-zinc-200 hover:text-green-500 transition-colors flex-shrink-0 opacity-0 group-hover:opacity-100"
                           title="Acknowledge"
                         >
                           <CheckCircle className="w-4 h-4" />
@@ -861,7 +861,7 @@ export default function WatchtowerPage() {
         <div className="p-6 space-y-6">
           {forecastLoading ? (
             <div className="flex items-center justify-center py-16">
-              <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-2 border-zinc-800 border-t-transparent rounded-full animate-spin" />
             </div>
           ) : forecast ? (
             <>
@@ -915,9 +915,9 @@ export default function WatchtowerPage() {
                       </thead>
                       <tbody>
                         {forecast.ai_vs_crm_deltas.map((delta: AiVsCrmDelta) => (
-                          <tr key={delta.account_id} className="border-b border-gray-50 last:border-0 hover:bg-zinc-50 transition-colors">
+                          <tr key={delta.account_id} className="border-b border-zinc-50 last:border-0 hover:bg-zinc-50 transition-colors">
                             <td className="px-4 py-3">
-                              <a href={`/account/${delta.account_id}`} className="font-medium text-zinc-900 hover:text-indigo-600 transition-colors">
+                              <a href={`/account/${delta.account_id}`} className="font-medium text-zinc-900 hover:text-zinc-700 transition-colors">
                                 {delta.name}
                               </a>
                               {delta.overridden && (
@@ -1034,7 +1034,7 @@ export default function WatchtowerPage() {
                           <p className="text-xs font-medium text-zinc-700">{Math.round(acc.urgency_score * 100)}% urgency</p>
                           <p className="text-xs text-zinc-400">{Math.round(acc.health_score * 100)}% health</p>
                         </div>
-                        <ExternalLink className="w-3.5 h-3.5 text-zinc-300 group-hover:text-indigo-500 transition-colors flex-shrink-0" />
+                        <ExternalLink className="w-3.5 h-3.5 text-zinc-300 group-hover:text-zinc-500 transition-colors flex-shrink-0" />
                       </a>
                     ))}
                   </div>
@@ -1112,7 +1112,7 @@ function PipelineReviewPanel({ review }: { review: PipelineReview }) {
                     href={`/account/${d.account_id}`}
                     className="flex items-baseline gap-2 group"
                   >
-                    <span className="text-xs font-medium text-zinc-800 group-hover:text-indigo-600 transition-colors flex-shrink-0">
+                    <span className="text-xs font-medium text-zinc-800 group-hover:text-zinc-700 transition-colors flex-shrink-0">
                       {cleanDealName(d.name)}
                     </span>
                     <span className="text-[11px] text-zinc-400 tabular flex-shrink-0">{fmtK(d.amount)}</span>

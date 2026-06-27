@@ -134,10 +134,10 @@ function AssistantInner() {
       {/* Chat panel */}
       <div className="flex flex-col flex-1">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-base font-semibold text-gray-900">Assistant</h1>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <h1 className="text-base font-semibold text-zinc-900">Assistant</h1>
+            <p className="text-xs text-zinc-500 mt-0.5">
               Answers sourced from your account data · Every fact has a citation
             </p>
           </div>
@@ -151,7 +151,7 @@ function AssistantInner() {
                 setMessages([]);
                 seededRef.current = false;
               }}
-              className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="text-sm border border-zinc-200 rounded-lg px-3 py-1.5 bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               <option value="">All accounts</option>
               {accounts.map(a => (
@@ -160,7 +160,7 @@ function AssistantInner() {
             </select>
 
             {/* Perplexity toggle */}
-            <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer select-none">
+            <label className="flex items-center gap-1.5 text-xs text-zinc-600 cursor-pointer select-none">
               <div className="relative">
                 <input
                   type="checkbox"
@@ -168,7 +168,7 @@ function AssistantInner() {
                   onChange={e => setUsePerplexity(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-8 h-4 bg-gray-200 peer-checked:bg-brand-500 rounded-full transition-colors" />
+                <div className="w-8 h-4 bg-zinc-200 peer-checked:bg-brand-500 rounded-full transition-colors" />
                 <div className="absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-4" />
               </div>
               <Zap className="w-3 h-3" />
@@ -184,13 +184,13 @@ function AssistantInner() {
               <div className="w-12 h-12 bg-brand-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Bot className="w-6 h-6 text-brand-600" />
               </div>
-              <p className="text-sm font-semibold text-gray-700 mb-1">
+              <p className="text-sm font-semibold text-zinc-700 mb-1">
                 {selectedAccountId && seedAccount
                   ? `Ask me anything about ${seedAccount.name}`
                   : "Start a conversation"
                 }
               </p>
-              <p className="text-xs text-gray-400 mb-6">
+              <p className="text-xs text-zinc-400 mb-6">
                 Answers are sourced from your account data. Every response cites where each fact came from.
               </p>
               <div className="grid grid-cols-2 gap-2 max-w-lg mx-auto">
@@ -206,7 +206,7 @@ function AssistantInner() {
                   <button
                     key={i}
                     onClick={() => handleSend(prompt)}
-                    className="text-left text-xs text-gray-600 border border-gray-200 rounded-xl px-3.5 py-2.5 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                    className="text-left text-xs text-zinc-600 border border-zinc-200 rounded-xl px-3.5 py-2.5 hover:bg-zinc-50 hover:border-zinc-300 transition-colors"
                   >
                     {prompt}
                   </button>
@@ -230,7 +230,7 @@ function AssistantInner() {
                     "rounded-2xl px-4 py-3 text-sm leading-relaxed",
                     msg.role === "user"
                       ? "bg-brand-600 text-white rounded-br-sm"
-                      : "bg-white border border-gray-200 text-gray-800 rounded-bl-sm"
+                      : "bg-white border border-zinc-200 text-zinc-800 rounded-bl-sm"
                   )}>
                   {msg.role === "user" ? (
                     msg.content
@@ -239,34 +239,34 @@ function AssistantInner() {
                       remarkPlugins={[remarkGfm]}
                       components={{
                         // Headings
-                        h1: ({ children }) => <h1 className="text-base font-bold text-gray-900 mt-3 mb-1.5 first:mt-0">{children}</h1>,
-                        h2: ({ children }) => <h2 className="text-sm font-bold text-gray-900 mt-3 mb-1.5 first:mt-0">{children}</h2>,
-                        h3: ({ children }) => <h3 className="text-sm font-semibold text-gray-800 mt-2.5 mb-1 first:mt-0">{children}</h3>,
+                        h1: ({ children }) => <h1 className="text-base font-bold text-zinc-900 mt-3 mb-1.5 first:mt-0">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-sm font-bold text-zinc-900 mt-3 mb-1.5 first:mt-0">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-sm font-semibold text-zinc-800 mt-2.5 mb-1 first:mt-0">{children}</h3>,
                         // Paragraphs
                         p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
                         // Lists
                         ul: ({ children }) => <ul className="mb-2 pl-4 space-y-0.5 list-disc">{children}</ul>,
                         ol: ({ children }) => <ol className="mb-2 pl-4 space-y-0.5 list-decimal">{children}</ol>,
-                        li: ({ children }) => <li className="text-gray-700">{children}</li>,
+                        li: ({ children }) => <li className="text-zinc-700">{children}</li>,
                         // Inline emphasis
-                        strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
-                        em: ({ children }) => <em className="italic text-gray-700">{children}</em>,
+                        strong: ({ children }) => <strong className="font-semibold text-zinc-900">{children}</strong>,
+                        em: ({ children }) => <em className="italic text-zinc-700">{children}</em>,
                         // Horizontal rule
-                        hr: () => <hr className="my-3 border-gray-200" />,
+                        hr: () => <hr className="my-3 border-zinc-200" />,
                         // Blockquote
                         blockquote: ({ children }) => (
-                          <blockquote className="border-l-2 border-brand-400 pl-3 my-2 text-gray-600 italic text-xs">
+                          <blockquote className="border-l-2 border-brand-400 pl-3 my-2 text-zinc-600 italic text-xs">
                             {children}
                           </blockquote>
                         ),
                         // Inline code & code blocks
                         code: ({ children, className }) =>
                           className ? (
-                            <pre className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 my-2 text-xs font-mono overflow-x-auto">
+                            <pre className="bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 my-2 text-xs font-mono overflow-x-auto">
                               <code>{children}</code>
                             </pre>
                           ) : (
-                            <code className="bg-gray-100 rounded px-1 py-0.5 text-xs font-mono text-gray-800">{children}</code>
+                            <code className="bg-zinc-100 rounded px-1 py-0.5 text-xs font-mono text-zinc-800">{children}</code>
                           ),
                         // Tables (GFM)
                         table: ({ children }) => (
@@ -274,14 +274,14 @@ function AssistantInner() {
                             <table className="min-w-full text-xs border-collapse">{children}</table>
                           </div>
                         ),
-                        th: ({ children }) => <th className="border border-gray-200 px-2 py-1 bg-gray-50 font-semibold text-left">{children}</th>,
-                        td: ({ children }) => <td className="border border-gray-200 px-2 py-1">{children}</td>,
+                        th: ({ children }) => <th className="border border-zinc-200 px-2 py-1 bg-zinc-50 font-semibold text-left">{children}</th>,
+                        td: ({ children }) => <td className="border border-zinc-200 px-2 py-1">{children}</td>,
                       }}
                     >
                       {msg.content}
                     </ReactMarkdown>
                   ) : msg.isStreaming ? (
-                    <span data-testid="typing-indicator" className="flex items-center gap-1.5 text-gray-400">
+                    <span data-testid="typing-indicator" className="flex items-center gap-1.5 text-zinc-400">
                       <Loader className="w-3.5 h-3.5 animate-spin" />
                       Thinking…
                     </span>
@@ -306,8 +306,8 @@ function AssistantInner() {
               </div>
 
               {msg.role === "user" && (
-                <div className="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <User className="w-4 h-4 text-gray-500" />
+                <div className="w-7 h-7 bg-zinc-200 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <User className="w-4 h-4 text-zinc-500" />
                 </div>
               )}
             </div>
@@ -316,7 +316,7 @@ function AssistantInner() {
         </div>
 
         {/* Input */}
-        <div className="bg-white border-t border-gray-200 px-6 py-4">
+        <div className="bg-white border-t border-zinc-200 px-6 py-4">
           <div className="flex gap-3">
             <input
               type="text"
@@ -328,7 +328,7 @@ function AssistantInner() {
                   ? `Ask about ${seedAccount.name}…`
                   : "Ask about any account, or search across your portfolio…"
               }
-              className="flex-1 text-sm border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+              className="flex-1 text-sm border border-zinc-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
             />
             <button
               onClick={() => handleSend()}
@@ -340,7 +340,7 @@ function AssistantInner() {
             </button>
           </div>
           {selectedAccountId && seedAccount && (
-            <p className="text-xs text-gray-400 mt-1.5 flex items-center gap-1">
+            <p className="text-xs text-zinc-400 mt-1.5 flex items-center gap-1">
               <Shield className="w-3 h-3" />
               Scoped to {seedAccount.name}. Click any source citation to see where each fact came from.
             </p>

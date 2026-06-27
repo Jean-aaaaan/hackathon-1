@@ -23,16 +23,16 @@ function StepIndicator({ current }: { current: Step }) {
           <div
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
               i < idx
-                ? "bg-emerald-500/20 text-emerald-400"
+                ? "bg-zinc-100 text-zinc-600"
                 : i === idx
-                ? "bg-brand-600 text-white"
-                : "bg-zinc-800 text-zinc-500"
+                ? "bg-zinc-900 text-white"
+                : "bg-zinc-100 text-zinc-400"
             }`}
           >
             {i < idx ? <CheckCircle2 className="w-3 h-3" /> : step.icon}
             <span className="hidden sm:inline">{step.label}</span>
           </div>
-          {i < STEPS.length - 1 && <ChevronRight className="w-3 h-3 text-zinc-600" />}
+          {i < STEPS.length - 1 && <ChevronRight className="w-3 h-3 text-zinc-300" />}
         </div>
       ))}
     </div>
@@ -69,12 +69,12 @@ function TagInput({
             }
           }}
           placeholder={placeholder}
-          className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-brand-500"
+          className="flex-1 bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900"
         />
         <button
           type="button"
           onClick={add}
-          className="p-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-zinc-300 transition-colors"
+          className="p-2 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-zinc-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -84,13 +84,13 @@ function TagInput({
           {value.map((tag) => (
             <span
               key={tag}
-              className="flex items-center gap-1 bg-zinc-700 text-zinc-200 text-xs px-2 py-1 rounded-md"
+              className="flex items-center gap-1 bg-zinc-100 text-zinc-700 text-xs px-2 py-1 rounded-md"
             >
               {tag}
               <button
                 type="button"
                 onClick={() => onChange(value.filter((t) => t !== tag))}
-                className="text-zinc-400 hover:text-zinc-200"
+                className="text-zinc-400 hover:text-zinc-700"
               >
                 <X className="w-3 h-3" />
               </button>
@@ -158,7 +158,6 @@ export default function OnboardingPage() {
 
         if (typeof icp.product_name === "string") setProductName(icp.product_name);
         if (typeof s.product_description === "string") {
-          // stored as "ProductName: description" — strip the prefix if present
           const raw = s.product_description;
           const sep = raw.indexOf(": ");
           setProductDesc(sep > -1 ? raw.slice(sep + 2) : raw);
@@ -171,7 +170,6 @@ export default function OnboardingPage() {
         if (typeof icp.typical_deal_size === "string") setDealSize(icp.typical_deal_size);
         if (typeof icp.sales_cycle_months === "string") setSalesCycle(icp.sales_cycle_months);
 
-        // Integrations
         if (data.integrations?.outlook?.connected) {
           setOutlookConnected(true);
           setOutlookEmail(data.integrations.outlook.user_email ?? "");
@@ -188,7 +186,6 @@ export default function OnboardingPage() {
         }
       })
       .catch(() => {
-        // No workspace yet — fresh onboarding, leave all fields empty
         setHasWorkspace(false);
         setIsUpdate(false);
       })
@@ -206,7 +203,6 @@ export default function OnboardingPage() {
     setError("");
 
     if (hasWorkspace) {
-      // Workspace already exists — no need to create, proceed directly
       setStep("product");
       return;
     }
@@ -314,18 +310,18 @@ export default function OnboardingPage() {
   };
 
   const inputCls =
-    "w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:border-brand-500";
-  const labelCls = "block text-xs font-medium text-zinc-400 mb-1";
+    "w-full bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900";
+  const labelCls = "block text-xs font-medium text-zinc-500 mb-1";
   const btnPrimary =
-    "flex items-center gap-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50";
+    "flex items-center gap-2 bg-zinc-900 hover:bg-zinc-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50";
   const btnSecondary =
-    "text-sm text-zinc-400 hover:text-zinc-200 transition-colors";
+    "text-sm text-zinc-400 hover:text-zinc-700 transition-colors";
 
   if (loading) {
     return (
       <div className="w-full max-w-xl flex items-center justify-center py-24">
-        <div className="flex flex-col items-center gap-3 text-zinc-500">
-          <div className="w-6 h-6 border-2 border-zinc-600 border-t-brand-500 rounded-full animate-spin" />
+        <div className="flex flex-col items-center gap-3 text-zinc-400">
+          <div className="w-6 h-6 border-2 border-zinc-200 border-t-zinc-900 rounded-full animate-spin" />
           <span className="text-sm">Loading your workspace...</span>
         </div>
       </div>
@@ -336,17 +332,17 @@ export default function OnboardingPage() {
     <div className="w-full max-w-xl">
       {/* Logo */}
       <div className="flex items-center gap-2.5 mb-6">
-        <div className="w-8 h-8 bg-brand-600 rounded-xl flex items-center justify-center">
+        <div className="w-8 h-8 bg-zinc-900 rounded-xl flex items-center justify-center">
           <Zap className="w-4 h-4 text-white" />
         </div>
-        <span className="text-lg font-semibold text-zinc-100">Vantage</span>
+        <span className="text-lg font-semibold text-zinc-900">Vantage</span>
       </div>
 
       <StepIndicator current={step} />
 
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8">
+      <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm">
         {error && (
-          <div className="mb-4 text-sm text-red-400 bg-red-950/40 border border-red-900/50 rounded-lg px-3 py-2">
+          <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
             {error}
           </div>
         )}
@@ -355,7 +351,7 @@ export default function OnboardingPage() {
         {step === "company" && (
           <div className="space-y-5">
             <div>
-              <h2 className="text-lg font-semibold text-zinc-100 mb-1">
+              <h2 className="text-lg font-semibold text-zinc-900 mb-1">
                 {isUpdate ? "Update your workspace" : "Set up your workspace"}
               </h2>
               <p className="text-sm text-zinc-500">
@@ -403,7 +399,7 @@ export default function OnboardingPage() {
                 onChange={setSellerDomains}
                 placeholder="acmecorp.com"
               />
-              <p className="text-xs text-zinc-600 mt-1">
+              <p className="text-xs text-zinc-400 mt-1">
                 Used to filter out your team from buyer participant analysis.
               </p>
             </div>
@@ -421,7 +417,7 @@ export default function OnboardingPage() {
         {step === "product" && (
           <div className="space-y-5">
             <div>
-              <h2 className="text-lg font-semibold text-zinc-100 mb-1">Your product</h2>
+              <h2 className="text-lg font-semibold text-zinc-900 mb-1">Your product</h2>
               <p className="text-sm text-zinc-500">
                 Agents use this context to research accounts and draft emails.
               </p>
@@ -442,7 +438,7 @@ export default function OnboardingPage() {
                 <input
                   value={dealSize}
                   onChange={(e) => setDealSize(e.target.value)}
-                  placeholder="$50K-$200K"
+                  placeholder="$50K–$200K"
                   className={inputCls}
                 />
               </div>
@@ -500,33 +496,33 @@ export default function OnboardingPage() {
         {step === "integrations" && (
           <div className="space-y-5">
             <div>
-              <h2 className="text-lg font-semibold text-zinc-100 mb-1">Connect your tools</h2>
+              <h2 className="text-lg font-semibold text-zinc-900 mb-1">Connect your tools</h2>
               <p className="text-sm text-zinc-500">All optional — can be configured later in Settings.</p>
             </div>
 
             <div className="space-y-3">
               {/* HubSpot */}
-              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 flex items-center justify-between">
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-200 flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-zinc-200">HubSpot</span>
-                    <span className="text-xs text-brand-400 bg-brand-900/30 px-2 py-0.5 rounded-full">Recommended</span>
+                    <span className="text-sm font-medium text-zinc-900">HubSpot</span>
+                    <span className="text-xs text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">Recommended</span>
                   </div>
                   <p className="text-xs text-zinc-500 mt-0.5">Sync deals and push approved emails directly.</p>
                 </div>
-                <a href="/api/auth/hubspot" className="text-xs text-brand-400 hover:text-brand-300 font-medium shrink-0">
-                  Connect
+                <a href="/api/auth/hubspot" className="text-xs text-zinc-700 hover:text-zinc-900 font-medium shrink-0">
+                  Connect →
                 </a>
               </div>
 
               {/* Outlook + Voice Profile */}
-              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 space-y-3">
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-200 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-zinc-200">Outlook</span>
+                      <span className="text-sm font-medium text-zinc-900">Outlook</span>
                       {outlookConnected && (
-                        <span className="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">
+                        <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-full">
                           {outlookEmail}
                         </span>
                       )}
@@ -534,16 +530,15 @@ export default function OnboardingPage() {
                     <p className="text-xs text-zinc-500 mt-0.5">Read sent emails to match your writing voice.</p>
                   </div>
                   {outlookConnected
-                    ? <span className="text-emerald-500 text-sm shrink-0">✓</span>
-                    : <button onClick={handleConnectOutlook} className="text-xs text-brand-400 hover:text-brand-300 font-medium shrink-0">Connect</button>
+                    ? <span className="text-zinc-700 text-sm shrink-0">✓</span>
+                    : <button onClick={handleConnectOutlook} className="text-xs text-zinc-700 hover:text-zinc-900 font-medium shrink-0">Connect →</button>
                   }
                 </div>
 
-                {/* Voice profile — only when Outlook connected */}
                 {outlookConnected && (
-                  <div className="border-t border-zinc-700 pt-3 flex items-center justify-between">
+                  <div className="border-t border-zinc-200 pt-3 flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-medium text-zinc-300">Email voice profile</div>
+                      <div className="text-xs font-medium text-zinc-700">Email voice profile</div>
                       <div className="text-xs text-zinc-500 mt-0.5">
                         {voiceResult
                           ? `${voiceResult.emails_analyzed} emails analyzed — agents will write in your tone`
@@ -553,14 +548,14 @@ export default function OnboardingPage() {
                     {!voiceResult
                       ? (
                         <button onClick={handleAnalyzeVoice} disabled={voiceAnalyzing}
-                          className="text-xs text-brand-400 hover:text-brand-300 font-medium disabled:opacity-50 shrink-0">
+                          className="text-xs text-zinc-700 hover:text-zinc-900 font-medium disabled:opacity-50 shrink-0">
                           {voiceAnalyzing ? "Analyzing..." : "Analyze"}
                         </button>
                       ) : (
                         <div className="flex items-center gap-3 shrink-0">
-                          <span className="text-xs text-emerald-500">✓ Done</span>
+                          <span className="text-xs text-zinc-600">✓ Done</span>
                           <button onClick={handleAnalyzeVoice} disabled={voiceAnalyzing}
-                            className="text-xs text-zinc-500 hover:text-zinc-300">
+                            className="text-xs text-zinc-400 hover:text-zinc-700">
                             Re-run
                           </button>
                         </div>
@@ -571,13 +566,13 @@ export default function OnboardingPage() {
               </div>
 
               {/* Fireflies */}
-              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 space-y-3">
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-200 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-zinc-200">Fireflies</span>
+                      <span className="text-sm font-medium text-zinc-900">Fireflies</span>
                       {firefliesConfigured && (
-                        <span className="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">Configured</span>
+                        <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-full">Configured</span>
                       )}
                     </div>
                     <p className="text-xs text-zinc-500 mt-0.5">Auto-ingest call transcripts for meeting intelligence.</p>
@@ -588,40 +583,40 @@ export default function OnboardingPage() {
                     <div className="flex gap-2">
                       <input type="password" value={firefliesKey} onChange={(e) => setFirefliesKey(e.target.value)}
                         placeholder="Fireflies API key"
-                        className="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-brand-500" />
+                        className="flex-1 bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900" />
                       <button onClick={handleSaveFireflies} disabled={firefliesSaving || !firefliesKey.trim()}
-                        className="text-xs px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-200 rounded-lg disabled:opacity-50 transition-colors shrink-0">
+                        className="text-xs px-3 py-1.5 bg-zinc-900 hover:bg-zinc-700 text-white rounded-lg disabled:opacity-50 transition-colors shrink-0">
                         {firefliesSaving ? "Saving..." : "Save"}
                       </button>
                     </div>
-                    <p className="text-xs text-zinc-600">
-                      Get your key at <span className="text-zinc-400">fireflies.ai → Settings → API</span>. Then register this webhook:
+                    <p className="text-xs text-zinc-400">
+                      Get your key at <span className="text-zinc-600">fireflies.ai → Settings → API</span>. Then register this webhook:
                     </p>
-                    <div className="flex items-center gap-2 bg-zinc-900 rounded-lg px-3 py-1.5">
-                      <code className="text-xs text-zinc-400 flex-1 truncate">
+                    <div className="flex items-center gap-2 bg-white border border-zinc-200 rounded-lg px-3 py-1.5">
+                      <code className="text-xs text-zinc-500 flex-1 truncate">
                         {(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000")}/webhooks/fireflies
                       </code>
                       <button
                         onClick={() => navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"}/webhooks/fireflies`)}
-                        className="text-xs text-zinc-500 hover:text-zinc-300 shrink-0">
+                        className="text-xs text-zinc-400 hover:text-zinc-700 shrink-0">
                         Copy
                       </button>
                     </div>
                   </div>
                 ) : (
                   <p className="text-xs text-zinc-500">
-                    Key saved. Register the webhook at <span className="text-zinc-400">fireflies.ai → Settings → Webhooks</span>.
+                    Key saved. Register the webhook at <span className="text-zinc-600">fireflies.ai → Settings → Webhooks</span>.
                   </p>
                 )}
               </div>
 
               {/* Microsoft Teams */}
-              <div className="p-4 bg-zinc-800 rounded-xl border border-zinc-700 space-y-3">
+              <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-200 space-y-3">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-zinc-200">Microsoft Teams</span>
+                    <span className="text-sm font-medium text-zinc-900">Microsoft Teams</span>
                     {teamsSaved && (
-                      <span className="text-xs text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">Saved</span>
+                      <span className="text-xs text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-full">Saved</span>
                     )}
                   </div>
                   <p className="text-xs text-zinc-500 mt-0.5">Signal alerts and morning briefs in your sales channel.</p>
@@ -630,9 +625,9 @@ export default function OnboardingPage() {
                   <div className="flex gap-2">
                     <input type="url" value={teamsWebhook} onChange={(e) => setTeamsWebhook(e.target.value)}
                       placeholder="https://outlook.office.com/webhook/..."
-                      className="flex-1 bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-brand-500" />
+                      className="flex-1 bg-white border border-zinc-200 rounded-lg px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900" />
                     <button onClick={handleSaveTeams} disabled={teamsSaving || !teamsWebhook.trim()}
-                      className="text-xs px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-200 rounded-lg disabled:opacity-50 transition-colors shrink-0">
+                      className="text-xs px-3 py-1.5 bg-zinc-900 hover:bg-zinc-700 text-white rounded-lg disabled:opacity-50 transition-colors shrink-0">
                       {teamsSaving ? "Saving..." : "Save"}
                     </button>
                   </div>
@@ -656,11 +651,11 @@ export default function OnboardingPage() {
         {step === "done" && (
           <div className="text-center space-y-4 py-4">
             <div className="flex justify-center">
-              <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center">
-                <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+              <div className="w-14 h-14 bg-zinc-100 rounded-full flex items-center justify-center">
+                <CheckCircle2 className="w-7 h-7 text-zinc-700" />
               </div>
             </div>
-            <h2 className="text-lg font-semibold text-zinc-100">
+            <h2 className="text-lg font-semibold text-zinc-900">
               {isUpdate ? "Settings updated" : "You're all set"}
             </h2>
             <p className="text-sm text-zinc-500 max-w-sm mx-auto">
@@ -678,7 +673,7 @@ export default function OnboardingPage() {
               </button>
               <button
                 onClick={() => router.push("/settings")}
-                className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors"
               >
                 Manage settings
               </button>

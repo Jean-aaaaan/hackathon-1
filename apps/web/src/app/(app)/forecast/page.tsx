@@ -81,7 +81,7 @@ function OverrideModal({
             onChange={e => setReason(e.target.value)}
             placeholder="e.g. Verbal commit from champion, contract in legal review"
             rows={3}
-            className="w-full text-xs border border-zinc-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-indigo-300"
+            className="w-full text-xs border border-zinc-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-zinc-300"
           />
         </div>
 
@@ -89,7 +89,7 @@ function OverrideModal({
           <button
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
-            className="flex-1 py-2 bg-indigo-600 text-white text-xs font-medium rounded-xl hover:bg-indigo-700 disabled:opacity-40 transition-colors"
+            className="flex-1 py-2 bg-zinc-900 text-white text-xs font-medium rounded-xl hover:bg-zinc-800 disabled:opacity-40 transition-colors"
           >
             {mutation.isPending ? "Saving..." : "Save Override"}
           </button>
@@ -140,7 +140,7 @@ function CategorySection({
             .map(acc => (
               <div key={acc.id} className="flex items-center gap-4 px-5 py-3 bg-white hover:bg-zinc-50 transition-colors">
                 <div className="flex-1 min-w-0">
-                  <a href={`/account/${acc.id}`} className="text-xs font-medium text-zinc-800 hover:text-indigo-600 truncate block transition-colors">
+                  <a href={`/account/${acc.id}`} className="text-xs font-medium text-zinc-800 hover:text-zinc-700 truncate block transition-colors">
                     {acc.name}
                   </a>
                   <div className="flex items-center gap-2 mt-0.5">
@@ -161,7 +161,7 @@ function CategorySection({
                 </span>
                 <button
                   onClick={() => onOverride({ ...acc, _category: category })}
-                  className="text-[10px] text-zinc-300 hover:text-indigo-600 transition-colors flex-shrink-0 border border-zinc-200 hover:border-indigo-300 rounded-lg px-2 py-1"
+                  className="text-[10px] text-zinc-300 hover:text-zinc-700 transition-colors flex-shrink-0 border border-zinc-200 hover:border-zinc-300 rounded-lg px-2 py-1"
                 >
                   Override
                 </button>
@@ -212,7 +212,7 @@ function DeltaTable({ rows }: { rows: AiVsCrmDelta[] }) {
             const crmS = CAT_STYLES[row.crm_category as Category] ?? CAT_STYLES.Pipeline;
             return (
               <div key={row.account_id} className="grid grid-cols-[1fr_100px_100px_100px_auto] gap-3 px-5 py-2.5 items-center">
-                <a href={`/account/${row.account_id}`} className="text-xs font-medium text-zinc-800 hover:text-indigo-600 truncate transition-colors">
+                <a href={`/account/${row.account_id}`} className="text-xs font-medium text-zinc-800 hover:text-zinc-700 truncate transition-colors">
                   {row.name}
                 </a>
                 <span className="text-xs text-zinc-500 tabular">{fmt(row.amount)}</span>
@@ -242,9 +242,9 @@ function WeekMovement({ rows }: { rows: WeekDelta[] }) {
   return (
     <div className="bg-white rounded-2xl border border-zinc-200 overflow-hidden">
       <div className="flex items-center gap-3 px-5 py-4 border-b border-zinc-100">
-        <TrendingUp className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+        <TrendingUp className="w-4 h-4 text-zinc-500 flex-shrink-0" />
         <span className="text-sm font-semibold text-zinc-800 flex-1">Moved this week</span>
-        <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-medium">{rows.length}</span>
+        <span className="text-xs bg-zinc-50 text-zinc-700 px-2 py-0.5 rounded-full font-medium">{rows.length}</span>
       </div>
       <div className="divide-y divide-zinc-50 max-h-80 overflow-y-auto">
         {rows.map(row => {
@@ -254,7 +254,7 @@ function WeekMovement({ rows }: { rows: WeekDelta[] }) {
           return (
             <div key={row.account_id} className="px-5 py-3">
               <div className="flex items-center gap-3">
-                <a href={`/account/${row.account_id}`} className="text-xs font-medium text-zinc-800 hover:text-indigo-600 truncate transition-colors flex-1 min-w-0">
+                <a href={`/account/${row.account_id}`} className="text-xs font-medium text-zinc-800 hover:text-zinc-700 truncate transition-colors flex-1 min-w-0">
                   {row.name}
                 </a>
                 <span className="text-xs text-zinc-500 tabular flex-shrink-0">{fmt(row.amount)}</span>
@@ -301,7 +301,7 @@ export default function ForecastPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-lg font-semibold text-zinc-900 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-indigo-500" />
+            <TrendingUp className="w-5 h-5 text-zinc-500" />
             AI Forecast
           </h1>
           <p className="text-xs text-zinc-400 mt-0.5">
@@ -329,7 +329,7 @@ export default function ForecastPage() {
                 onClick={() => setRepFilter(null)}
                 className={cn(
                   "text-xs font-medium px-3 py-1.5 rounded-full border transition-colors",
-                  !repFilter ? "bg-indigo-600 text-white border-indigo-600" : "text-zinc-500 border-zinc-200 hover:border-zinc-300"
+                  !repFilter ? "bg-zinc-900 text-white border-zinc-900" : "text-zinc-500 border-zinc-200 hover:border-zinc-300"
                 )}
               >
                 Whole team
@@ -340,7 +340,7 @@ export default function ForecastPage() {
                   onClick={() => setRepFilter(repFilter === r.id ? null : r.id)}
                   className={cn(
                     "text-xs font-medium px-3 py-1.5 rounded-full border transition-colors",
-                    repFilter === r.id ? "bg-indigo-600 text-white border-indigo-600" : "text-zinc-500 border-zinc-200 hover:border-zinc-300"
+                    repFilter === r.id ? "bg-zinc-900 text-white border-zinc-900" : "text-zinc-500 border-zinc-200 hover:border-zinc-300"
                   )}
                 >
                   {r.name} · {fmt(r.total_amount)}

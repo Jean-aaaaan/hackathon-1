@@ -29,8 +29,13 @@ class Settings(BaseSettings):
     workos_client_id: str
     workos_redirect_uri: str
 
-    # Anthropic
-    anthropic_api_key: str
+    # LLM provider: "openai" (hackathon credits) or "anthropic"
+    llm_provider: str = "openai"
+    openai_api_key: str = ""
+    openai_model_bulk: str = "gpt-4o-mini"
+    openai_model_quality: str = "gpt-4o"
+    # Anthropic (optional when llm_provider=openai)
+    anthropic_api_key: str = ""
     anthropic_model_bulk: str = "claude-haiku-4-5-20251001"
     anthropic_model_quality: str = "claude-sonnet-4-6"
 

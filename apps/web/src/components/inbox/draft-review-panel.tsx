@@ -120,7 +120,7 @@ export function DraftReviewPanel({ accountId, accountName, lastAgentRunAt }: Pro
             {stage && <span className="text-xs text-zinc-400">{stage}</span>}
             {amount && (
               <>
-                <span className="text-gray-200">·</span>
+                <span className="text-zinc-200">·</span>
                 <span className="text-xs text-zinc-400">
                   {formatCompactCurrency(amount)}
                 </span>
@@ -128,7 +128,7 @@ export function DraftReviewPanel({ accountId, accountName, lastAgentRunAt }: Pro
             )}
             {hasDivergence && (
               <>
-                <span className="text-gray-200">·</span>
+                <span className="text-zinc-200">·</span>
                 <span className="text-xs text-amber-600 font-medium">{pov!.delta.ai_vs_crm}</span>
               </>
             )}
@@ -157,7 +157,7 @@ export function DraftReviewPanel({ accountId, accountName, lastAgentRunAt }: Pro
                 "flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-colors",
                 activeTab === id
                   ? "border-zinc-900 text-zinc-900"
-                  : "border-transparent text-zinc-500 hover:text-zinc-700 hover:border-gray-300"
+                  : "border-transparent text-zinc-500 hover:text-zinc-700 hover:border-zinc-300"
               )}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -218,7 +218,7 @@ export function DraftReviewPanel({ accountId, accountName, lastAgentRunAt }: Pro
                     <button
                       onClick={() => runAgentsMutation.mutate()}
                       disabled={runAgentsMutation.isPending}
-                      className="inline-flex items-center gap-2 text-xs font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
+                      className="inline-flex items-center gap-2 text-xs font-medium bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors disabled:opacity-50"
                     >
                       <RefreshCw className={cn("w-3.5 h-3.5", runAgentsMutation.isPending && "animate-spin")} />
                       {runAgentsMutation.isPending ? "Queuing..." : "Run Agents Now"}
@@ -520,7 +520,7 @@ export function DraftReviewPanel({ accountId, accountName, lastAgentRunAt }: Pro
                           <span className="text-xs text-zinc-400">@ {action.target_contact}</span>
                         )}
                         {action.meddpicc_component && (
-                          <span className="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
+                          <span className="text-xs font-medium text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-full">
                             {action.meddpicc_component}
                           </span>
                         )}
@@ -637,7 +637,7 @@ function DraftCard({
           </span>
           {draft.play_triggered && (
             <span
-              className="text-xs font-medium bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full"
+              className="text-xs font-medium bg-zinc-100 text-zinc-600 px-2 py-0.5 rounded-full"
               title={draft.play_reason ?? undefined}
             >
               ▶ {draft.play_name ?? "Play"}
@@ -889,7 +889,7 @@ function NoPovState({ lastRun, onRunAgents, running }: { lastRun: string; onRunA
       <button
         onClick={onRunAgents}
         disabled={running}
-        className="inline-flex items-center gap-2 text-xs font-medium bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
+        className="inline-flex items-center gap-2 text-xs font-medium bg-zinc-900 text-white px-4 py-2 rounded-md hover:bg-zinc-800 transition-colors disabled:opacity-50"
       >
         <RefreshCw className={cn("w-3.5 h-3.5", running && "animate-spin")} />
         {running ? "Queuing..." : "Run Agents Now"}

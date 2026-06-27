@@ -23,8 +23,8 @@ export function MarkdownContent({ content }: { content: string }) {
     nodes.push(
       <ul key={`list-${key}`} className="space-y-0.5 my-1.5 ml-1">
         {listBuffer.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-gray-800 leading-relaxed">
-            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-400 flex-shrink-0" />
+          <li key={i} className="flex items-start gap-2 text-sm text-zinc-800 leading-relaxed">
+            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-zinc-400 flex-shrink-0" />
             <span>{renderInline(item)}</span>
           </li>
         ))}
@@ -42,11 +42,11 @@ export function MarkdownContent({ content }: { content: string }) {
       const [head, ...body] = rows;
       nodes.push(
         <div key={`table-${key}`} className="my-2 overflow-x-auto">
-          <table className="w-full text-xs border border-gray-200 rounded-lg overflow-hidden">
+          <table className="w-full text-xs border border-zinc-200 rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-gray-50">
+              <tr className="bg-zinc-50">
                 {head.map((c, i) => (
-                  <th key={i} className="text-left font-semibold text-gray-700 px-2.5 py-1.5 border-b border-gray-200">
+                  <th key={i} className="text-left font-semibold text-zinc-700 px-2.5 py-1.5 border-b border-zinc-200">
                     {renderInline(c)}
                   </th>
                 ))}
@@ -54,9 +54,9 @@ export function MarkdownContent({ content }: { content: string }) {
             </thead>
             <tbody>
               {body.map((cells, ri) => (
-                <tr key={ri} className={ri % 2 ? "bg-gray-50/50" : ""}>
+                <tr key={ri} className={ri % 2 ? "bg-zinc-50/50" : ""}>
                   {cells.map((c, ci) => (
-                    <td key={ci} className="text-gray-700 px-2.5 py-1.5 border-b border-gray-100 align-top leading-relaxed">
+                    <td key={ci} className="text-zinc-700 px-2.5 py-1.5 border-b border-zinc-100 align-top leading-relaxed">
                       {renderInline(c)}
                     </td>
                   ))}
@@ -76,7 +76,7 @@ export function MarkdownContent({ content }: { content: string }) {
       <div key={`quote-${key}`} className="my-2 border-l-2 border-amber-300 bg-amber-50/60 rounded-r-lg px-3 py-2 space-y-1">
         {quoteBuffer.map((q, i) =>
           q.trim() === "" ? <div key={i} className="h-1" /> : (
-            <p key={i} className="text-sm text-gray-700 leading-relaxed">{renderInline(q)}</p>
+            <p key={i} className="text-sm text-zinc-700 leading-relaxed">{renderInline(q)}</p>
           )
         )}
       </div>
@@ -113,7 +113,7 @@ export function MarkdownContent({ content }: { content: string }) {
     // horizontal rule
     if (/^[-_*]{3,}$/.test(trimmed)) {
       flushAll(String(idx));
-      nodes.push(<hr key={idx} className="my-2.5 border-gray-100" />);
+      nodes.push(<hr key={idx} className="my-2.5 border-zinc-100" />);
       return;
     }
 
@@ -121,7 +121,7 @@ export function MarkdownContent({ content }: { content: string }) {
     if (trimmed.startsWith("# ") || trimmed.startsWith("## ")) {
       flushAll(String(idx));
       nodes.push(
-        <h3 key={idx} className="text-sm font-bold text-gray-900 mt-3 mb-1 first:mt-0">
+        <h3 key={idx} className="text-sm font-bold text-zinc-900 mt-3 mb-1 first:mt-0">
           {renderInline(trimmed.replace(/^#{1,2}\s/, ""))}
         </h3>
       );
@@ -132,7 +132,7 @@ export function MarkdownContent({ content }: { content: string }) {
     if (trimmed.startsWith("### ")) {
       flushAll(String(idx));
       nodes.push(
-        <h4 key={idx} className="text-xs font-semibold text-gray-700 uppercase tracking-wide mt-2.5 mb-1">
+        <h4 key={idx} className="text-xs font-semibold text-zinc-700 uppercase tracking-wide mt-2.5 mb-1">
           {renderInline(trimmed.slice(4))}
         </h4>
       );
@@ -155,7 +155,7 @@ export function MarkdownContent({ content }: { content: string }) {
     // paragraph (may be "**Label:** value" style)
     flushAll(String(idx));
     nodes.push(
-      <p key={idx} className="text-sm text-gray-800 leading-relaxed">
+      <p key={idx} className="text-sm text-zinc-800 leading-relaxed">
         {renderInline(trimmed)}
       </p>
     );
@@ -173,10 +173,10 @@ function renderInline(text: string): React.ReactNode {
     <>
       {parts.map((part, i) => {
         if (part.startsWith("**") && part.endsWith("**")) {
-          return <strong key={i} className="font-semibold text-gray-900">{part.slice(2, -2)}</strong>;
+          return <strong key={i} className="font-semibold text-zinc-900">{part.slice(2, -2)}</strong>;
         }
         if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
-          return <code key={i} className="text-[12px] bg-gray-100 rounded px-1 py-0.5 font-mono">{part.slice(1, -1)}</code>;
+          return <code key={i} className="text-[12px] bg-zinc-100 rounded px-1 py-0.5 font-mono">{part.slice(1, -1)}</code>;
         }
         if (part.startsWith("*") && part.endsWith("*") && part.length > 2) {
           return <em key={i}>{part.slice(1, -1)}</em>;

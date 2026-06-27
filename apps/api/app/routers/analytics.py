@@ -71,7 +71,7 @@ async def get_overview(
     # Cost last 30 days
     result = await db.execute(text("""
         SELECT COALESCE(SUM(total_cost_usd), 0) FROM agent_runs
-        WHERE workspace_id = :ws AND created_at >= NOW() - INTERVAL '30 days'
+        WHERE workspace_id = :ws AND started_at >= NOW() - INTERVAL '30 days'
     """), {"ws": ws})
     cost_30d = float(result.scalar_one())
 
@@ -156,7 +156,7 @@ async def get_cost_trend(
     cutoff = datetime.now(timezone.utc) - timedelta(days=days)
     result = await db.execute(text("""
         SELECT
-            DATE(created_at) AS day,
+            DATE(started_at) AS day,
             COALESCE(SUM(total_cost_usd), 0) AS cost_usd,
             COALESCE(SUM(total_prompt_tokens), 0) AS prompt_tokens,
             COALESCE(SUM(total_completion_tokens), 0) AS completion_tokens,
@@ -165,8 +165,8 @@ async def get_cost_trend(
             COUNT(*) FILTER (WHERE trigger = 'manual') AS manual_runs
         FROM agent_runs
         WHERE workspace_id = :ws
-          AND created_at >= :cutoff
-        GROUP BY DATE(created_at)
+          AND started_at >= :cutoff
+        GROUP BY DATE(started_at)
         ORDER BY day ASC
     """), {"ws": ws, "cutoff": cutoff})
 

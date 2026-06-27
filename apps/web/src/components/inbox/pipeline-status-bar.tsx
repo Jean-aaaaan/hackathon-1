@@ -139,18 +139,18 @@ export function OnboardingBanner() {
   ];
 
   return (
-    <div className="mx-4 mt-3 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2.5 flex items-center gap-3 flex-shrink-0">
-      <Zap className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
+    <div className="mx-4 mt-3 rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2.5 flex items-center gap-3 flex-shrink-0">
+      <Zap className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
       <div className="flex items-center gap-2 flex-1 min-w-0 overflow-x-auto">
         {steps.map((step, i) => (
           <div key={step.label} className="flex items-center gap-1.5 flex-shrink-0">
-            {i > 0 && <div className="h-px w-3 bg-indigo-200 flex-shrink-0" />}
+            {i > 0 && <div className="h-px w-3 bg-zinc-200 flex-shrink-0" />}
             {step.done
               ? <CheckCircle className="w-3 h-3 text-emerald-500 flex-shrink-0" />
-              : <div className={cn("w-3 h-3 rounded-full border-2 flex-shrink-0", i === currentIdx ? "border-indigo-500" : "border-zinc-300")} />}
+              : <div className={cn("w-3 h-3 rounded-full border-2 flex-shrink-0", i === currentIdx ? "border-zinc-800" : "border-zinc-300")} />}
             <span className={cn(
               "text-[10px] whitespace-nowrap",
-              step.done ? "text-zinc-400 line-through" : i === currentIdx ? "text-indigo-700 font-medium" : "text-zinc-400"
+              step.done ? "text-zinc-400 line-through" : i === currentIdx ? "text-zinc-700 font-medium" : "text-zinc-400"
             )}>
               {step.label}
             </span>
@@ -158,7 +158,7 @@ export function OnboardingBanner() {
         ))}
       </div>
       {currentStep?.href && (
-        <a href={currentStep.href} className="flex-shrink-0 text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 whitespace-nowrap">
+        <a href={currentStep.href} className="flex-shrink-0 text-[11px] font-semibold text-zinc-700 hover:text-zinc-700 whitespace-nowrap">
           {currentStep.cta} →
         </a>
       )}

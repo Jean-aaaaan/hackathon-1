@@ -9,8 +9,8 @@ import re
 import uuid
 from datetime import datetime, timezone
 from typing import Optional, AsyncGenerator
-from anthropic import AsyncAnthropic
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.integrations.llm import complete_text, quality_model, stream_text
 from sqlalchemy import select, text, desc
 import structlog
 
@@ -71,9 +71,6 @@ class AssistantService:
     def __init__(self, db: AsyncSession):
         self.db = db
         self.settings = get_settings()
-        # Single client shared across stream_response + build_meeting_brief; both use the
-        # same api_key and there is no per-request state on AsyncAnthropic itself.
-        self._anthropic = AsyncAnthropic(api_key=self.settings.anthropic_api_key)
 
     async def stream_response(
         self,
@@ -119,18 +116,17 @@ class AssistantService:
         token_count = 0
 
         try:
-            async with self._anthropic.messages.stream(
-                model=self.settings.anthropic_model_quality,
-                max_tokens=2000,
-                system=system,
+            async for text_chunk, usage in stream_text(
+                system_prompt=system,
                 messages=messages,
-            ) as stream:
-                async for text_chunk in stream.text_stream:
+                model=quality_model(),
+                max_tokens=2000,
+            ):
+                if text_chunk:
                     full_response += text_chunk
                     yield {"type": "text", "text": text_chunk}
-
-                final = await stream.get_final_message()
-                token_count = final.usage.input_tokens + final.usage.output_tokens
+                elif usage:
+                    token_count = usage.input_tokens + usage.output_tokens
 
             # Extract citations from response
             citations = self._extract_citations(full_response, account)
@@ -218,14 +214,14 @@ One sentence.
 **Stakeholders**
 - Name: role, sentiment"""
 
-        response = await self._anthropic.messages.create(
-            model=self.settings.anthropic_model_quality,
+        response = await complete_text(
+            system_prompt=_build_system_prompt(seller_context),
+            user_message=prompt,
+            model=quality_model(),
             max_tokens=1500,
-            system=_build_system_prompt(seller_context),
-            messages=[{"role": "user", "content": prompt}],
         )
 
-        brief_text = strip_dashes(response.content[0].text)
+        brief_text = strip_dashes(response.text)
 
         return {
             "account_name": account.name,

@@ -34,14 +34,14 @@ export function AuditPanel({ accountId, factKey, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl border-l border-gray-200 z-50 flex flex-col">
+    <div className="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl border-l border-zinc-200 z-50 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200">
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-brand-600" />
-          <h2 className="text-sm font-semibold text-gray-900">Gold Data Audit Trail</h2>
+          <h2 className="text-sm font-semibold text-zinc-900">Gold Data Audit Trail</h2>
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+        <button onClick={onClose} className="text-zinc-400 hover:text-zinc-600 transition-colors">
           <X className="w-4 h-4" />
         </button>
       </div>
@@ -69,12 +69,12 @@ export function AuditPanel({ accountId, factKey, onClose }: Props) {
         {isLoading ? (
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-20 bg-gray-100 rounded-lg animate-pulse" />
+              <div key={i} className="h-20 bg-zinc-100 rounded-lg animate-pulse" />
             ))}
           </div>
         ) : Object.keys(goldData).length === 0 ? (
-          <div className="text-center py-8 text-gray-400">
-            <Shield className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+          <div className="text-center py-8 text-zinc-400">
+            <Shield className="w-8 h-8 mx-auto mb-2 text-zinc-300" />
             <p className="text-sm">No Gold Data available yet</p>
             <p className="text-xs mt-1">Run the agent on this account first to populate source data</p>
           </div>
@@ -88,9 +88,9 @@ export function AuditPanel({ accountId, factKey, onClose }: Props) {
       </div>
 
       {/* Footer: what this means */}
-      <div className="px-5 py-4 border-t border-gray-100 bg-gray-50">
-        <p className="text-xs text-gray-500 leading-relaxed">
-          <strong className="text-gray-700">Source audit</strong>: Every fact is cross-referenced
+      <div className="px-5 py-4 border-t border-zinc-100 bg-zinc-50">
+        <p className="text-xs text-zinc-500 leading-relaxed">
+          <strong className="text-zinc-700">Source audit</strong>: Every fact is cross-referenced
           across HubSpot, Gong, Perplexity, and rep notes. Conflicts are flagged,
           not hidden. Confidence reflects how much the sources agree.
         </p>
@@ -121,12 +121,12 @@ function GoldDataCard({ factKey, point }: { factKey: string; point: GoldDataPoin
     <AlertTriangle className="w-3.5 h-3.5 text-red-500" />;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <div className="bg-white border border-zinc-200 rounded-lg overflow-hidden">
       {/* Fact header */}
-      <div className="px-3 py-2.5 border-b border-gray-100 flex items-start justify-between">
+      <div className="px-3 py-2.5 border-b border-zinc-100 flex items-start justify-between">
         <div>
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{factKey.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
-          <p className="text-sm font-semibold text-gray-900 mt-0.5">{String(point.resolved_value ?? "-")}</p>
+          <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider">{factKey.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
+          <p className="text-sm font-semibold text-zinc-900 mt-0.5">{String(point.resolved_value ?? "-")}</p>
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {confidenceIcon}
@@ -138,23 +138,23 @@ function GoldDataCard({ factKey, point }: { factKey: string; point: GoldDataPoin
 
       {/* Confidence explanation */}
       {point.confidence_explanation && (
-        <div className="px-3 py-2 bg-gray-50 border-b border-gray-100">
-          <p className="text-xs text-gray-500">{point.confidence_explanation}</p>
+        <div className="px-3 py-2 bg-zinc-50 border-b border-zinc-100">
+          <p className="text-xs text-zinc-500">{point.confidence_explanation}</p>
         </div>
       )}
 
       {/* Sources */}
       {point.sources?.length > 0 && (
         <div className="px-3 py-2.5">
-          <p className="text-xs font-medium text-gray-500 mb-2">Sources</p>
+          <p className="text-xs font-medium text-zinc-500 mb-2">Sources</p>
           <div className="space-y-1.5">
             {point.sources.map((s, i) => (
               <div key={i} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-700">{s.source}</span>
-                  <span className="text-gray-400">{String(s.raw_value ?? "-")}</span>
+                  <span className="font-medium text-zinc-700">{s.source}</span>
+                  <span className="text-zinc-400">{String(s.raw_value ?? "-")}</span>
                 </div>
-                <span className="text-gray-400">weight: {Math.round((s.weight ?? 0) * 100)}%</span>
+                <span className="text-zinc-400">weight: {Math.round((s.weight ?? 0) * 100)}%</span>
               </div>
             ))}
           </div>
@@ -163,12 +163,12 @@ function GoldDataCard({ factKey, point }: { factKey: string; point: GoldDataPoin
 
       {/* Audit trail */}
       {point.audit_trail?.length > 0 && (
-        <div className="px-3 py-2.5 border-t border-gray-100">
-          <p className="text-xs font-medium text-gray-500 mb-2">Audit Trail</p>
+        <div className="px-3 py-2.5 border-t border-zinc-100">
+          <p className="text-xs font-medium text-zinc-500 mb-2">Audit Trail</p>
           <div className="space-y-1">
             {point.audit_trail.slice(-3).map((entry, i) => (
-              <div key={i} className="text-xs text-gray-400">
-                <span className="text-gray-600">{entry.action}</span>
+              <div key={i} className="text-xs text-zinc-400">
+                <span className="text-zinc-600">{entry.action}</span>
                 {entry.reason && <span>: {entry.reason}</span>}
                 <span className="ml-1">{new Date(entry.timestamp).toLocaleString()}</span>
               </div>

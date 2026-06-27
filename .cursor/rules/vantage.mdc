@@ -9,7 +9,7 @@ alwaysApply: true
 
 # Vantage
 
-Per-deal AI agent for HubSpot. Monorepo at hackathon 1/vantage-hackathon.
+Per-deal AI agent for HubSpot. Monorepo at C:\Users\gohje\vantage-hackathon. Frontend always http://localhost:3000. API http://localhost:8000.
 
 ## Structure
 - `apps/web` — Next.js 15 App Router frontend (port 3000)
@@ -39,3 +39,58 @@ Per-deal AI agent for HubSpot. Monorepo at hackathon 1/vantage-hackathon.
 - One page per agent session when possible
 - Extract components from large files instead of growing them
 - No drive-by refactors outside the requested page
+
+## Dogfood checkpoint (2026-06-27)
+
+Expert AE walkthrough. Scores: expert rep **7/10**, first-time **5/10**, 3-min judge demo **8/10** (right path).
+
+### What works
+- **Today** split panel (queue + detail) is the right home; auto-select first deal; top-7 finite queue
+- Draft review: full body, Approve/Decline + training categories, `J`/`K`/`E`/`D` shortcuts
+- **War Room**: Act / Intelligence / History; MEDDPICC; Outlook send after approve
+- **Watchtower**: signal clusters + $ at risk + weekly trend
+- **⌘K** command palette; **Forecast** override flow
+
+### P0 — fix before demo
+1. **`4d` on Today deal cards** = pending drafts count, NOT days (`inbox/page.tsx` ~L120). Deal Book correctly says "4 drafts".
+2. **Default queue is urgency-first** — #1 can be 0 drafts while #2 has 4. With pending drafts, default to **Drafts** tab or banner ("19 drafts waiting").
+3. **Run Agents** toast says "queued" with no completion signal — add done state + auto-refresh (signals/drafts counts).
+4. **Help widget stale** (`help-assistant.tsx`) — documents old Agent Inbox (Actions/History/Pipeline), not current Today UI.
+
+### P1 — expert friction
+5. Nav overlap: Today / Deal Book / War Room / Watchtower / Intelligence / Analytics — Intelligence overlaps Watchtower+Analytics; demote or merge.
+6. **Assistant missing from desktop navbar** (only in unused mobile sidebar).
+7. War Room header button overload (Chat, Generate, Run Agent, Brief, Share, Refresh).
+8. Approve on Today ≠ Send — Outlook send only in War Room; need post-approve CTA.
+9. **MorningBrief** built (`morning-brief.tsx`) but not mounted on Today.
+
+### P2 — polish
+10. Naming: "Run Agents" (nav) vs "Run Agent" (War Room) vs "Sweep" (code) — pick one.
+11. Urgency % lacks tooltip/legend vs health score.
+12. Visual drift: Today=zinc, Deal Book=gray/indigo, Watchtower=indigo.
+13. Analytics is manager-first — consider role-gating or demoting from primary nav.
+
+### Top 5 ROI fixes (agreed priority)
+1. Fix `4d` → drafts label/icon
+2. Drafts-first when `pending > 0`
+3. Agent run completion feedback
+4. Wire MorningBrief on Today
+5. Simplify nav (merge Intelligence; add Assistant to top bar)
+
+### Recommended demo path (expert rep)
+1. Today → **Drafts** tab → Meridian Ops → approve one (`E`)
+2. War Room → MEDDPICC gap + champion_dark / economic_buyer_dark signal
+3. Watchtower → cluster + $ at risk
+4. Assistant → "Which deals are most at risk this quarter?"
+5. Live agent run on **Meridian Ops only** — not seeded showcase accounts
+
+### API audit (same session)
+- Docker mount: `C:\Users\gohje\vantage-hackathon\apps\api` → `/app` ✓
+- LLM: `openai` (event credits); Anthropic empty
+- Auth: not open APIs — dev bypass token for local; `/health` + `/docs` public
+- **45/45 GET endpoints OK** after fixing `agent_runs.created_at` → `started_at` in `analytics.py` (overview, cost-trend) and `workspace.py` (usage)
+
+### Seeded data snapshot (dogfood)
+- 19 pending drafts total; Meridian Ops #2 with 4 drafts; Meridian Health #1 urgency 95% / 0 drafts
+- Demo account for live agent: Meridian Ops (`seed_demo_account.py`)
+- Do NOT batch-refresh the 9 showcase accounts — overwrites MEDDPICC

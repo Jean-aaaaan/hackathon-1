@@ -15,8 +15,8 @@ Total cost: ~$0.22/account/night
 import uuid
 from collections import Counter
 from datetime import datetime, timezone
-import anthropic
 import structlog
+from app.integrations.llm import bulk_model, quality_model
 
 from app.agents.base import (
     compute_win_probability,
@@ -150,11 +150,7 @@ class AgentOrchestrator:
     """
 
     def __init__(self):
-        settings = get_settings()
-        self.client = anthropic.AsyncAnthropic(
-            api_key=settings.anthropic_api_key,
-        )
-        self.settings = settings
+        self.settings = get_settings()
 
     async def run_account(
         self,
@@ -203,15 +199,15 @@ class AgentOrchestrator:
             seller_context = {**_AGENT_DEFAULTS, **{k: v for k, v in seller_context.items() if v}}
 
         # Initialise agents
-        haiku = self.settings.anthropic_model_bulk
-        sonnet = self.settings.anthropic_model_quality
+        bulk = bulk_model()
+        quality = quality_model()
 
-        researcher = ResearcherAgent(self.client, haiku)
-        risk_scanner = RiskScannerAgent(self.client, haiku)
-        grounding = GroundingAgent(self.client, haiku)
-        prioritiser = PrioritiserAgent(self.client, sonnet)
-        drafter = DrafterAgent(self.client, sonnet)
-        smart_fields = SmartFieldsAgent(self.client, haiku)
+        researcher = ResearcherAgent(bulk)
+        risk_scanner = RiskScannerAgent(bulk)
+        grounding = GroundingAgent(bulk)
+        prioritiser = PrioritiserAgent(quality)
+        drafter = DrafterAgent(quality)
+        smart_fields = SmartFieldsAgent(bulk)
 
         try:
             # [1] RESEARCHER
