@@ -11,8 +11,8 @@ import {
 import { SearchResults } from "@/components/inbox/search-results";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Search, Zap, CheckCircle, ChevronDown, ArrowUpRight,
-  AlertTriangle, Clock, X, ExternalLink, BarChart3, Sparkles, BookOpen,
+  CheckCircle, ChevronDown, ArrowUpRight,
+  AlertTriangle, Clock, ExternalLink, BarChart3, BookOpen,
 } from "lucide-react";
 import { cn, signalLabel, draftTypeLabel, formatCompactCurrency, cleanDealName, urgencyLevel, formatPct } from "@/lib/utils";
 import { DealFilterBar } from "@/components/deal-filter-bar";
@@ -24,17 +24,17 @@ import { toast } from "sonner";
 
 
 const URGENCY_DOT: Record<string, string> = {
-  critical: "bg-red-500 animate-[urgency-pulse_2s_ease-in-out_infinite]",
-  high:     "bg-orange-400",
-  medium:   "bg-amber-400",
-  low:      "bg-emerald-400",
+  critical: "dot-critical",
+  high:     "dot-high",
+  medium:   "dot-medium",
+  low:      "dot-low",
 };
 
-const URGENCY_TEXT: Record<string, string> = {
-  critical: "text-red-600",
-  high:     "text-orange-600",
-  medium:   "text-amber-700",
-  low:      "text-emerald-700",
+const URGENCY_CARD: Record<string, string> = {
+  critical: "card-urgent-critical",
+  high:     "card-urgent-high",
+  medium:   "card-urgent-medium",
+  low:      "card-urgent-low",
 };
 
 const DECLINE_CATEGORIES = [
@@ -63,10 +63,10 @@ const MEDDPICC_SHORT: Record<string, string> = {
 };
 
 const FORECAST_STYLES: Record<string, string> = {
-  Commit: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  "Best Case": "bg-sky-50 text-sky-700 border-sky-200",
-  Pipeline: "bg-violet-50 text-violet-700 border-violet-200",
-  Omit: "bg-gray-100 text-gray-500 border-gray-200",
+  Commit: "forecast-commit",
+  "Best Case": "forecast-bestcase",
+  Pipeline: "forecast-pipeline",
+  Omit: "forecast-omit",
 };
 
 function meddpiccBarColor(score: number) {
@@ -120,7 +120,7 @@ function DealCard({
               {account.pending_drafts}d
             </span>
           )}
-          <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", URGENCY_DOT[level])} />
+          <span className={cn("dot w-1.5 h-1.5", URGENCY_DOT[level])} />
         </div>
       </div>
 
@@ -208,7 +208,7 @@ function DraftCard({
   const typeLabel = draftTypeLabel(draft.type ?? "email");
 
   return (
-    <div className="bg-white rounded-md border border-zinc-200 overflow-hidden">
+    <div className="card overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100">
         <div className="flex items-center gap-2">
@@ -237,14 +237,14 @@ function DraftCard({
             <button
               onClick={() => reviewMutation.mutate({ verdict: "approved" })}
               disabled={reviewMutation.isPending}
-              className="flex items-center gap-1.5 text-xs font-medium px-3.5 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+              className="btn-accent flex items-center gap-1.5 text-xs px-3.5 py-2 disabled:opacity-50"
             >
               <CheckCircle className="w-3.5 h-3.5" />
               Approve
             </button>
             <button
               onClick={() => setDeclining(true)}
-              className="text-xs font-medium px-3.5 py-2 border border-zinc-200 text-zinc-600 rounded-md hover:bg-zinc-50 transition-colors"
+              className="btn-secondary text-xs px-3.5 py-2"
             >
               Decline
             </button>
@@ -278,7 +278,7 @@ function DraftCard({
               <button
                 onClick={() => reviewMutation.mutate({ verdict: "declined", category: declineCategory || undefined, notes: declineNotes || undefined })}
                 disabled={reviewMutation.isPending}
-                className="text-xs font-medium px-3 py-1.5 bg-zinc-800 text-white rounded-md hover:bg-zinc-900 disabled:opacity-50 transition-colors"
+                className="btn-accent text-xs px-3 py-1.5 disabled:opacity-50"
               >
                 Confirm Decline
               </button>
@@ -301,6 +301,7 @@ function DraftCard({
 function WarRoomHero({ account }: { account: AccountListItem }) {
   const id = account.id;
   const warRoomHref = `/account/${id}?center=intel`;
+  const urgencyLevel_key = urgencyLevel(account.urgency_score ?? 0);
 
   const { data: stateData, isLoading } = useQuery({
     queryKey: ["account", id, "state", "inbox-war-room"],
@@ -328,34 +329,29 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-4xl mx-auto space-y-5">
 
-          {/* Prompt banner */}
-          <div className="rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-700 text-white px-6 py-5 shadow-md">
+          {/* Prompt card — white with left border accent */}
+          <div className={cn("card px-6 py-5", URGENCY_CARD[urgencyLevel_key])}>
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Zap className="w-4 h-4 text-indigo-200 flex-shrink-0" />
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-200">
-                    No drafts pending
-                  </p>
-                </div>
-                <h3 className="text-lg font-semibold leading-snug">
+                <p className="section-header mb-1.5">No drafts pending</p>
+                <h3 className="text-lg font-semibold text-zinc-900 leading-snug">
                   Open the War Room for {cleanDealName(account.name)}
                 </h3>
-                <p className="text-sm text-indigo-100 mt-1.5 leading-relaxed max-w-xl">
-                  Review MEDDPICC scores, deal story, meeting intel, and AI-recommended next moves — all in one place.
+                <p className="text-sm text-zinc-500 mt-1.5 leading-relaxed max-w-xl">
+                  Review MEDDPICC scores, deal story, meeting intel, and recommended next moves — all in one place.
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
                 <Link
                   href={warRoomHref}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-indigo-700 text-sm font-semibold hover:bg-indigo-50 transition-colors shadow-sm"
+                  className="btn-accent inline-flex items-center justify-center gap-2"
                 >
                   Open War Room
                   <ArrowUpRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/deals"
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-indigo-400/60 text-indigo-100 text-sm font-medium hover:bg-indigo-500/40 transition-colors"
+                  className="btn-secondary inline-flex items-center justify-center gap-2"
                 >
                   <BookOpen className="w-3.5 h-3.5" />
                   Deal Book
@@ -373,11 +369,8 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
             <>
               {/* Deal story */}
               {narrative && (
-                <div className="bg-white rounded-2xl border border-zinc-200 p-5 shadow-sm">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Sparkles className="w-4 h-4 text-indigo-500" />
-                    <p className="text-sm font-semibold text-zinc-900">AI Deal Story</p>
-                  </div>
+                <div className="card p-5">
+                  <p className="section-header mb-3">Deal Story</p>
                   <p className="text-[15px] text-zinc-700 leading-relaxed">{narrative}</p>
                 </div>
               )}
@@ -392,10 +385,10 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
 
               {/* MEDDPICC preview */}
               {hasMeddpicc && (
-                <div className="bg-white rounded-2xl border border-zinc-200 p-5 shadow-sm">
+                <div className="card p-5">
                   <div className="flex items-center gap-2 mb-4 flex-wrap">
-                    <BarChart3 className="w-4 h-4 text-indigo-500" />
-                    <p className="text-sm font-semibold text-zinc-900">MEDDPICC Qualification</p>
+                    <BarChart3 className="w-4 h-4 text-zinc-400" />
+                    <p className="section-header !mb-0">MEDDPICC Qualification</p>
                     {overall != null && (
                       <span className={cn(
                         "text-sm font-bold tabular-nums ml-1",
@@ -416,7 +409,7 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
                     )}
                     {forecast && (
                       <span className={cn(
-                        "text-[11px] font-semibold px-2 py-0.5 rounded-full border",
+                        "text-[11px] font-semibold px-2 py-0.5 rounded-full",
                         FORECAST_STYLES[forecast] ?? FORECAST_STYLES.Pipeline
                       )}>
                         {forecast}
@@ -461,7 +454,7 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
                   </div>
                   <Link
                     href={warRoomHref}
-                    className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 hover:text-zinc-900 transition-colors"
                   >
                     Full scorecard &amp; meeting intel in War Room
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -470,13 +463,13 @@ function WarRoomHero({ account }: { account: AccountListItem }) {
               )}
 
               {!narrative && !hasMeddpicc && !topRisk && (
-                <div className="bg-white rounded-2xl border border-dashed border-zinc-200 px-6 py-10 text-center">
+                <div className="card border-dashed px-6 py-10 text-center">
                   <BarChart3 className="w-8 h-8 text-zinc-300 mx-auto mb-3" />
                   <p className="text-sm font-medium text-zinc-600">Agent hasn&apos;t analysed this deal yet</p>
                   <p className="text-xs text-zinc-400 mt-1 mb-4">Run agents from the top bar, then open the War Room for the full picture.</p>
                   <Link
                     href={warRoomHref}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-800 transition-colors"
+                    className="btn-accent inline-flex items-center gap-2"
                   >
                     Go to War Room
                     <ArrowUpRight className="w-4 h-4" />
@@ -567,14 +560,14 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
               )}
               {account.pov_forecast_cat && (
                 <span className={cn(
-                  "text-[10px] font-semibold px-1.5 py-0.5 rounded-full border",
+                  "text-[10px] font-semibold px-1.5 py-0.5 rounded-full",
                   FORECAST_STYLES[account.pov_forecast_cat] ?? FORECAST_STYLES.Pipeline
                 )}>
                   {account.pov_forecast_cat}
                 </span>
               )}
               <span className="text-[12px] text-zinc-400 flex items-center gap-1">
-                <span className={cn("w-1.5 h-1.5 rounded-full", URGENCY_DOT[level])} />
+                <span className={cn("dot w-1.5 h-1.5", URGENCY_DOT[level])} />
                 {Math.round(urgency * 100)}% urgency
               </span>
             </div>
@@ -582,7 +575,7 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
           {!warRoomFocus && (
             <Link
               href={`/account/${id}?center=intel`}
-              className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-zinc-500 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300 rounded-md px-3 py-1.5 transition-colors bg-white"
+              className="btn-secondary flex-shrink-0 flex items-center gap-1 text-xs"
             >
               War Room <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
@@ -597,14 +590,14 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
           {/* What to do */}
           {(actionsLoading || urgentActions.length > 0) && (
             <div>
-              <p className="page-section">What to do</p>
+              <p className="section-header mb-3">What to do</p>
               {actionsLoading ? (
                 <div className="space-y-2">
-                  <Skeleton className="h-10 rounded-xl" />
-                  <Skeleton className="h-10 rounded-xl" />
+                  <Skeleton className="h-10 rounded-lg" />
+                  <Skeleton className="h-10 rounded-lg" />
                 </div>
               ) : (
-                <div className="bg-white rounded-lg border border-zinc-200 divide-y divide-zinc-100">
+                <div className="card divide-y divide-zinc-100">
                   {urgentActions.map(action => (
                     <div key={action.id} className="flex items-center gap-3 px-4 py-3">
                       <div className="flex-shrink-0 w-12 text-right">
@@ -634,12 +627,12 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
           {/* Pending drafts */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <p className="page-section !mb-0">Pending drafts</p>
+              <p className="section-header !mb-0">Pending drafts</p>
               <span className="text-[11px] text-zinc-400">{drafts.length} waiting</span>
             </div>
             {draftsLoading ? (
               <div className="space-y-3">
-                <Skeleton className="h-40 rounded-xl" />
+                <Skeleton className="h-40 rounded-lg" />
               </div>
             ) : (
               <div className="space-y-3">
@@ -659,14 +652,14 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
           {/* Signals */}
           {signals.length > 0 && (
             <div>
-              <p className="page-section">Top signals</p>
-              <div className="bg-white rounded-lg border border-zinc-200 divide-y divide-zinc-100">
+              <p className="section-header mb-3">Top signals</p>
+              <div className="card divide-y divide-zinc-100">
                 {signals.slice(0, 5).map((signal, i) => {
                   const sigUrgency = (signal as any).urgency ?? "medium";
-                  const dotColor = sigUrgency === "critical" ? "bg-red-500" : sigUrgency === "high" ? "bg-orange-400" : "bg-amber-300";
+                  const dotClass = sigUrgency === "critical" ? "dot-critical" : sigUrgency === "high" ? "dot-high" : "dot-medium";
                   return (
                     <div key={i} className="flex items-start gap-3 px-4 py-3">
-                      <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5", dotColor)} />
+                      <span className={cn("dot w-1.5 h-1.5 flex-shrink-0 mt-1.5", dotClass)} />
                       <div className="flex-1 min-w-0">
                         <p className="text-[12px] font-medium text-zinc-700">{signalLabel((signal as any).type)}</p>
                         {(signal as any).detail && (
@@ -691,8 +684,8 @@ function EmptyPanel({ pendingCount }: { pendingCount: number }) {
   return (
     <div className="h-full flex items-center justify-center bg-zinc-50 px-6">
       <div className="text-center max-w-md">
-        <div className="w-12 h-12 bg-indigo-100 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-          <Zap className="w-5 h-5 text-indigo-600" />
+        <div className="w-12 h-12 bg-zinc-100 rounded-lg mx-auto mb-4 flex items-center justify-center border border-zinc-200">
+          <BookOpen className="w-5 h-5 text-zinc-500" />
         </div>
         <p className="text-base font-semibold text-zinc-800">Select a deal</p>
         <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
@@ -897,7 +890,7 @@ function InboxInner() {
             <>
               {/* Today's queue — finite, dollar-weighted */}
               <div className="flex items-center gap-2 px-3.5 pt-3 pb-1.5">
-                <span className="text-[10px] font-medium text-zinc-400">
+                <span className="section-header !mb-0">
                   {isQueueView ? `Today · ${todayQueue.length}` : `Results · ${todayQueue.length}`}
                 </span>
               </div>
