@@ -220,11 +220,8 @@ async def get_workspace(
                 "gong": {
                     "connected": bool(ws.gong_access_token),
                 },
-                "perplexity": {
-                    # Connected via workspace key OR the env-level key — the
-                    # settings UI showed "Not connected" while research was
-                    # actively running off the env key.
-                    "connected": bool(ws.perplexity_api_key or get_settings().perplexity_api_key),
+                "exa": {
+                    "connected": bool(get_settings().exa_api_key),
                 },
             },
             "created_at": ws.created_at.isoformat() if ws.created_at else None,
@@ -898,9 +895,8 @@ async def workspace_status(
                 "teams": {
                     "configured": bool(settings.teams_webhook_url),
                 },
-                "perplexity": {
-                    "configured": bool(settings.perplexity_api_key or
-                                       (ws.settings or {}).get("perplexity_api_key")),
+                "exa": {
+                    "configured": bool(get_settings().exa_api_key),
                 },
             },
             "last_nightly_run": {
@@ -1605,10 +1601,10 @@ async def get_workspace_health_score(
     check("HubSpot connected", bool(ws.hubspot_access_token), 25, "/settings → Integrations → Connect HubSpot")
     check("Deals synced", bool(settings.get("last_hubspot_sync")), 10, "Settings → Integrations → Sync now")
     check(
-        "Perplexity key set",
-        bool(settings.get("perplexity_api_key") or get_settings().perplexity_api_key),
+        "Exa key set",
+        bool(get_settings().exa_api_key),
         20,
-        "Add PERPLEXITY_API_KEY to .env and restart",
+        "Add EXA_API_KEY to .env and restart",
     )
     check("Voice profile set", bool(settings.get("voice_profile")), 10, "Settings → Voice Profile → Analyse")
     check("ICP configured", bool(settings.get("icp_profile", {}).get("product_name")), 20, "Settings → Sales Intelligence → Configure ICP")

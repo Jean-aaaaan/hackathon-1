@@ -24,7 +24,7 @@ Vantage is a per-account AI deal engine. One AI agent per HubSpot deal. It monit
 
 ## Core concept: The Vantage Sweep
 A "Vantage Sweep" is a full AI analysis run on one or more deals. It runs a 6-agent pipeline:
-1. Researcher — pulls HubSpot emails, notes, contacts, Fireflies transcripts, Perplexity news
+1. Researcher — pulls HubSpot emails, notes, contacts, Fireflies transcripts, Exa web signals
 2. Risk Scanner — scores 5 risk vectors (champion, economic, competitive, timeline, process)
 3. Grounding Agent — verifies every claim against source data
 4. Prioritiser — computes urgency and MEDDPICC scores
@@ -104,8 +104,8 @@ Connect from Settings → Integrations → Outlook → Connect. This enables:
 ### Fireflies.ai
 Add your Fireflies API key in Settings → Integrations → Fireflies. After connecting, run a backfill to match your existing 133+ transcripts to deals. New transcripts auto-process via webhook when a call recording finishes.
 
-### Perplexity
-Add your API key in Settings → Integrations. This enables the Researcher agent to pull live news and signals for each account (job changes, company news, competitor activity). Without it, research is based only on HubSpot/Fireflies data.
+### Exa (web research)
+Exa semantic search powers the Researcher agent's live signal detection — job changes, company news, competitor activity. The Exa API key is configured at the platform level; no per-workspace setup needed.
 
 ## Health scores and urgency:
 
@@ -119,7 +119,7 @@ Add your API key in Settings → Integrations. This enables the Researcher agent
 
 **"Vantage Sweep not yet run on this deal"**: The deal hasn't been analysed yet. Run a Vantage Sweep from the top bar — either for all urgent accounts or for this specific deal from the War Room.
 
-**Drafts not appearing**: Either (a) urgency score is below 0.7 threshold — run a Sweep or lower the threshold in Settings, or (b) Perplexity key is missing (agent has less signal data to trigger drafts).
+**Drafts not appearing**: Urgency score is likely below the 0.7 threshold — run a Sweep or lower the threshold in Settings.
 
 **Semantic search not working**: The Voyage AI API key is missing. Add it in Settings → Integrations.
 

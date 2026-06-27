@@ -32,7 +32,7 @@ class ChatRequest(BaseModel):
     message: str = _Field(..., min_length=1, max_length=10000)
     account_id: Optional[str] = None  # if scoped to a specific account
     thread_id: Optional[str] = None   # continue existing thread
-    use_perplexity: bool = False       # live web search for this query
+    use_web_research: bool = False     # live Exa web search for this query
 
 
 class MeetingBriefRequest(BaseModel):
@@ -104,7 +104,7 @@ async def chat(
                 message=body.message,
                 account=account,
                 thread_id=thread_id,
-                use_perplexity=body.use_perplexity,
+                use_web_research=body.use_web_research,
                 seller_context=seller_context,
             ):
                 if chunk["type"] == "text":

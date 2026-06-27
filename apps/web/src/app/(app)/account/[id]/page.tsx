@@ -622,7 +622,7 @@ function ChatPanel({ accountId, accountName, contextSeed, onClose }: {
     let newThreadId = threadId;
     setMessages(prev => [...prev, { role: "assistant", content: "" }]);
     try {
-      for await (const event of streamChat({ message: msg, account_id: accountId, thread_id: newThreadId, use_perplexity: false })) {
+      for await (const event of streamChat({ message: msg, account_id: accountId, thread_id: newThreadId, use_web_research: false })) {
         if (event.type === "thread") { newThreadId = event.thread_id; setThreadId(newThreadId); }
         else if (event.type === "text") {
           assistantText += event.delta ?? event.content ?? "";

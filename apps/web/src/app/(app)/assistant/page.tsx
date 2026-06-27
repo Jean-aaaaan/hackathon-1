@@ -43,7 +43,7 @@ function AssistantInner() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAccountId, setSelectedAccountId] = useState<string>(seedAccountId);
   const [threadId, setThreadId] = useState<string | undefined>();
-  const [usePerplexity, setUsePerplexity] = useState(false);
+  const [useWebResearch, setUseWebResearch] = useState(false);
   const [auditTarget, setAuditTarget] = useState<{ fact: string } | null>(null);
   // Ref, not state: Strict Mode double-fires effects before a state update
   // re-renders, which would post the seed question twice when the account
@@ -84,7 +84,7 @@ function AssistantInner() {
         message: userMessage,
         account_id: selectedAccountId || undefined,
         thread_id: threadId,
-        use_perplexity: usePerplexity,
+        use_web_research: useWebResearch,
       })) {
         if (chunk.type === "thread") {
           setThreadId(chunk.thread_id);
@@ -115,7 +115,7 @@ function AssistantInner() {
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, selectedAccountId, threadId, usePerplexity]);
+  }, [input, isLoading, selectedAccountId, threadId, useWebResearch]);
 
   // Auto-seed the conversation when ?seed=true is in the URL
   useEffect(() => {
@@ -159,16 +159,16 @@ function AssistantInner() {
               ))}
             </select>
 
-            {/* Perplexity toggle */}
+            {/* Exa web research toggle */}
             <label className="flex items-center gap-1.5 text-xs text-zinc-600 cursor-pointer select-none">
               <div className="relative">
                 <input
                   type="checkbox"
-                  checked={usePerplexity}
-                  onChange={e => setUsePerplexity(e.target.checked)}
+                  checked={useWebResearch}
+                  onChange={e => setUseWebResearch(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-8 h-4 bg-zinc-200 peer-checked:bg-brand-500 rounded-full transition-colors" />
+                <div className="w-8 h-4 bg-zinc-200 peer-checked:bg-zinc-800 rounded-full transition-colors" />
                 <div className="absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-4" />
               </div>
               <Zap className="w-3 h-3" />

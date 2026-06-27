@@ -16,7 +16,7 @@ import structlog
 
 from app.config import get_settings
 from app.models.account import Account
-from app.integrations.perplexity import PerplexityClient
+from app.integrations.exa import ExaClient
 from app.agents.drafter import strip_dashes
 
 log = structlog.get_logger()
@@ -54,7 +54,7 @@ def _build_system_prompt(seller_context: dict | None = None) -> str:
 You are helping a SELLER. Every account in the data below is a PROSPECT or CUSTOMER that {sender_company} is selling to. All contacts and stakeholders listed are BUYERS at those companies — they are NOT {sender_company} colleagues. When advising on next steps or drafting language, always write from {sender_company}'s perspective as the seller, never from inside the buyer's organization.
 
 You have account data loaded below (or portfolio-level data when no account is scoped).
-Only state facts that appear in that data. When you cite a fact, add its source in brackets: [HubSpot], [Fireflies], [Perplexity].
+Only state facts that appear in that data. When you cite a fact, add its source in brackets: [HubSpot], [Fireflies], [Exa].
 
 Rules:
 - Lead with what {sender_name} should do. Background comes second.
@@ -79,7 +79,7 @@ class AssistantService:
         message: str,
         account: Optional[Account],
         thread_id: str,
-        use_perplexity: bool = False,
+        use_web_research: bool = False,
         seller_context: dict | None = None,
     ) -> AsyncGenerator[dict, None]:
         """
@@ -103,7 +103,7 @@ class AssistantService:
         # Load thread history
         history = await self._get_thread_messages(thread_id, user_id, workspace_id)
 
-        messages = await self._build_messages(history, message, account, use_perplexity)
+        messages = await self._build_messages(history, message, account, use_web_research)
 
         # System prompt with seller identity + account context
         system = _build_system_prompt(seller_context)
@@ -327,27 +327,23 @@ One sentence.
         history: list[dict],
         message: str,
         account: Optional[Account],
-        use_perplexity: bool,
+        use_web_research: bool,
     ) -> list[dict]:
-        """Assemble the messages list for the Claude API call.
+        """Assemble the messages list for the LLM API call.
 
-        Optionally appends a <web_research> block when Perplexity returns data —
-        kept separate from the system prompt so it counts as user-turn grounding.
+        Optionally appends a <web_research> block from Exa when account context is available.
         """
-        perplexity_context = ""
-        if use_perplexity and account and self.settings.perplexity_api_key:
+        web_context = ""
+        if use_web_research and account and self.settings.exa_api_key:
             try:
-                perp = PerplexityClient(self.settings.perplexity_api_key)
-                perplexity_context = await perp.answer_question(
-                    question=message,
-                    context=f"Account: {account.name}. Question context: sales intelligence query.",
-                )
+                exa = ExaClient(self.settings.exa_api_key)
+                web_context = await exa.research_account(account.name)
             except Exception as e:
-                log.warning("perplexity_assistant_error", error=str(e))
+                log.warning("exa_assistant_error", error=str(e))
 
         user_content = message
-        if perplexity_context:
-            user_content += f"\n\n<web_research>\n{_html.escape(perplexity_context)}\n</web_research>"
+        if web_context:
+            user_content += f"\n\n<web_research>\n{_html.escape(web_context)}\n</web_research>"
 
         return [*history, {"role": "user", "content": user_content}]
 

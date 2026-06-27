@@ -557,7 +557,7 @@ export async function* streamChat(body: {
   message: string;
   account_id?: string;
   thread_id?: string;
-  use_perplexity?: boolean;
+  use_web_research?: boolean;
 }) {
   yield* drainSSE(await fetchSSE("/v1/agent/chat", body));
 }
