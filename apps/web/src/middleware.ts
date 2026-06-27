@@ -20,6 +20,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Demo mode — skips auth for hackathon judging. Set DEMO_MODE=1 in Vercel env vars.
+  if (process.env.DEMO_MODE === "1") {
+    return NextResponse.next();
+  }
+
   // Check for session cookie
   const session = request.cookies.get("vantage_session");
   if (!session) {
