@@ -777,13 +777,7 @@ function InboxInner() {
   const draftsCount  = openAccounts.filter(a => (a.pending_drafts ?? 0) > 0).length;
   const urgentCount  = openAccounts.filter(a => (a.urgency_score ?? 0) >= 0.7).length;
 
-  // When drafts are waiting, default to the Drafts tab (morning job #1).
-  useEffect(() => {
-    if (pendingCount > 0 && quickFilter === "all") {
-      setQuickFilter("drafts");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pendingCount > 0]);
+  // Inbox defaults to All — the Morning Brief surfaces drafts; don't hide non-draft deals.
 
   // Auto-select the queue's first item — the prime real estate should never
   // show "Select a deal" when the agent already knows what matters most.

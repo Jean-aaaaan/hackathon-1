@@ -24,9 +24,9 @@ interface Props {
 
 const URGENCY_COLOR: Record<string, string> = {
   critical: "bg-red-500",
-  high:     "bg-orange-400",
-  medium:   "bg-yellow-400",
-  low:      "bg-green-400",
+  high:     "bg-zinc-700",
+  medium:   "bg-zinc-400",
+  low:      "bg-zinc-300",
 };
 
 export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccount }: Props) {
@@ -47,8 +47,9 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
 
   if (accounts.length === 0 || dismissed) return null;
 
-  // Pick the single most urgent account for the "one action" prompt
-  const topAccount = accounts[0];
+  // Top 3 — brief is a daily highlight, not the full list
+  const top3 = accounts.slice(0, 3);
+  const topAccount = top3[0];
   const topPreview = topAccount.deal_narrative ?? topAccount.signals_summary[0]?.detail ?? null;
 
   const now = new Date();
@@ -68,7 +69,7 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
           <div className="flex items-center gap-2 mb-1">
             <p className="text-sm font-semibold text-zinc-900">{greeting}. Here&apos;s what needs your attention today.</p>
             {pendingDrafts > 0 && (
-              <span className="text-xs bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded-full font-medium">
+              <span className="text-xs bg-zinc-100 text-zinc-700 border border-zinc-200 px-2 py-0.5 rounded-full font-medium">
                 {pendingDrafts} draft{pendingDrafts > 1 ? "s" : ""} to review
               </span>
             )}
@@ -80,9 +81,9 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
             {topPreview && `: ${topPreview.charAt(0).toLowerCase() + topPreview.slice(1)}`}.
           </p>
 
-          {/* Account pills */}
+          {/* Account pills — top 3 only */}
           <div className="flex flex-wrap gap-2">
-            {accounts.map((a, i) => {
+            {top3.map((a, i) => {
               const level = urgencyLevel(a.urgency_score ?? 0);
               return (
                 <button
@@ -90,7 +91,7 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
                   onClick={() => onSelectAccount(a.id)}
                   className={cn(
                     "flex items-center gap-2 bg-white border rounded-xl px-3 py-2 text-left hover:shadow-sm transition-all",
-                    i === 0 ? "border-brand-200 shadow-sm" : "border-zinc-200"
+                    i === 0 ? "border-zinc-400 shadow-sm" : "border-zinc-200"
                   )}
                 >
                   <div className="flex items-center gap-1.5">
@@ -98,7 +99,7 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
                     <span className="text-sm font-medium text-zinc-900">{a.name}</span>
                   </div>
                   {a.pending_drafts > 0 && (
-                    <span className="text-xs bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full">
+                    <span className="text-xs bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded-full">
                       {a.pending_drafts}
                     </span>
                   )}
@@ -110,7 +111,7 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
             {/* Quick Ask Agent for top account */}
             <Link
               href={`/assistant?account_id=${topAccount.id}&seed=true`}
-              className="flex items-center gap-1.5 bg-brand-600 text-white rounded-xl px-3 py-2 text-sm font-medium hover:bg-brand-700 transition-colors"
+              className="flex items-center gap-1.5 bg-zinc-900 text-white rounded-xl px-3 py-2 text-sm font-medium hover:bg-zinc-700 transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               Ask Agent about {topAccount.name.split(" ")[0]}
