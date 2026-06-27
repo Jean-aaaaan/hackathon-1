@@ -240,6 +240,8 @@ def create_app() -> FastAPI:
         "http://localhost:3002",
         "https://vantage.vercel.app",
         "https://app.vantage.ai",
+        "https://web-puce-three-40.vercel.app",
+        "https://acetone-underpaid-undertook.ngrok-free.dev",
     ]
     if settings.environment == "production":
         insecure = [o for o in _cors_origins if o.startswith("http://")]
