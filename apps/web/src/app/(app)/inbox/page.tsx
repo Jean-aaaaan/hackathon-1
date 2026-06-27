@@ -105,10 +105,7 @@ function DealCard({
     <button
       onClick={onClick}
       data-deal-card
-      className={cn(
-        "w-full text-left px-3.5 py-2.5 transition-colors border-b border-zinc-100 last:border-0",
-        isSelected ? "bg-zinc-50" : "hover:bg-zinc-50/60"
-      )}
+      className={cn("deal-row", isSelected && "deal-row-selected")}
     >
       {/* Name + urgency dot */}
       <div className="flex items-center justify-between gap-2">
@@ -209,7 +206,7 @@ function DraftCard({
   const typeLabel = draftTypeLabel(draft.type ?? "email");
 
   return (
-    <div className="card overflow-hidden">
+    <div className="card-elevated overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100">
         <div className="flex items-center gap-2">
@@ -535,10 +532,9 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
   const warRoomFocus = !draftsLoading && drafts.length === 0;
 
   return (
-    <div className="h-full flex flex-col bg-zinc-50 min-h-0">
-      {/* Deal header — compact when War Room is the main view */}
+    <div className="h-full flex flex-col bg-zinc-50/50 min-h-0">
       <div className={cn(
-        "bg-white border-b border-zinc-100 flex-shrink-0",
+        "bg-white/90 backdrop-blur-sm border-b border-zinc-200/60 flex-shrink-0",
         warRoomFocus ? "px-6 py-3" : "px-6 py-4"
       )}>
         <div className="flex items-start justify-between gap-4">
@@ -683,12 +679,12 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
 
 function EmptyPanel({ pendingCount }: { pendingCount: number }) {
   return (
-    <div className="h-full flex items-center justify-center bg-zinc-50 px-6">
+    <div className="h-full flex items-center justify-center bg-zinc-50/50 px-6">
       <div className="text-center max-w-md">
-        <div className="w-12 h-12 bg-zinc-100 rounded-lg mx-auto mb-4 flex items-center justify-center border border-zinc-200">
-          <BookOpen className="w-5 h-5 text-zinc-500" />
+        <div className="w-14 h-14 bg-white rounded-2xl mx-auto mb-5 flex items-center justify-center border border-zinc-200/80 shadow-sm">
+          <BookOpen className="w-5 h-5 text-zinc-400" />
         </div>
-        <p className="text-base font-semibold text-zinc-800">Select a deal</p>
+        <p className="text-base font-semibold text-zinc-900 tracking-tight">Select a deal</p>
         <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
           {pendingCount > 0
             ? `${pendingCount} draft${pendingCount !== 1 ? "s" : ""} waiting for review — pick a deal from the queue.`
@@ -779,6 +775,15 @@ function InboxInner() {
 
   // Inbox defaults to All — the Morning Brief surfaces drafts; don't hide non-draft deals.
 
+  // Stale sessionStorage filters can silently hide all deals. If accounts exist but
+  // ranked is empty and active filters are set, reset to defaults so the rep sees their queue.
+  useEffect(() => {
+    if (!isLoading && allAccounts.length > 0 && ranked.length === 0 && hasActiveFilters(filters)) {
+      updateFilters({ ...filters, q: "", stages: [], categories: [], health: "all", draftsOnly: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, allAccounts.length, ranked.length]);
+
   // Auto-select the queue's first item — the prime real estate should never
   // show "Select a deal" when the agent already knows what matters most.
   useEffect(() => {
@@ -848,7 +853,7 @@ function InboxInner() {
 
       {/* ── Left panel — narrower when War Room preview owns the right side */}
       <div className={cn(
-        "flex-shrink-0 border-r border-zinc-100 bg-white flex flex-col",
+        "flex-shrink-0 border-r border-zinc-200/60 bg-white/80 backdrop-blur-sm flex flex-col",
         warRoomFocus ? "w-64" : "w-80"
       )}>
 
@@ -861,8 +866,7 @@ function InboxInner() {
             sortOptions={["priority", "urgency", "amount", "close", "health"]}
           />
 
-          {/* Quick filters */}
-          <div className="flex items-center gap-1.5 mt-2">
+          <div className="tab-bar-full mt-2">
             {(["all", "drafts", "urgent"] as QuickFilter[]).map(f => {
               const labels = {
                 all:    `All (${openAccounts.length})`,
@@ -874,10 +878,8 @@ function InboxInner() {
                   key={f}
                   onClick={() => setQuickFilter(f)}
                   className={cn(
-                    "flex-1 text-[11px] font-medium px-2 py-1.5 rounded-md transition-colors",
-                    quickFilter === f
-                      ? "bg-zinc-900 text-white"
-                      : "text-zinc-500 hover:bg-zinc-100"
+                    "flex-1 tab-pill text-center",
+                    quickFilter === f && "tab-pill-active"
                   )}
                 >
                   {labels[f]}

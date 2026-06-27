@@ -57,11 +57,10 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
-    <div data-testid="morning-brief" className="bg-white border-b border-zinc-100 border-l-4 border-l-zinc-800 px-5 py-4">
+    <div data-testid="morning-brief" className="intel-card mx-4 mt-4 mb-0 flex-shrink-0">
       <div className="flex items-start gap-4">
-        {/* Icon */}
-        <div className="w-9 h-9 bg-zinc-900 rounded-xl flex items-center justify-center flex-shrink-0">
-          <Zap className="w-5 h-5 text-white" />
+        <div className="w-9 h-9 bg-zinc-900 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+          <Zap className="w-4 h-4 text-white" />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -69,7 +68,7 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
           <div className="flex items-center gap-2 mb-1">
             <p className="text-sm font-semibold text-zinc-900">{greeting}. Here&apos;s what needs your attention today.</p>
             {pendingDrafts > 0 && (
-              <span className="text-xs bg-zinc-100 text-zinc-700 border border-zinc-200 px-2 py-0.5 rounded-full font-medium">
+              <span className="chip text-zinc-600">
                 {pendingDrafts} draft{pendingDrafts > 1 ? "s" : ""} to review
               </span>
             )}
@@ -90,8 +89,8 @@ export function MorningBrief({ accounts, pendingDrafts, onDismiss, onSelectAccou
                   key={a.id}
                   onClick={() => onSelectAccount(a.id)}
                   className={cn(
-                    "flex items-center gap-2 bg-white border rounded-xl px-3 py-2 text-left hover:shadow-sm transition-all",
-                    i === 0 ? "border-zinc-400 shadow-sm" : "border-zinc-200"
+                    "chip text-left py-2",
+                    i === 0 && "ring-1 ring-zinc-300/80 border-zinc-300"
                   )}
                 >
                   <div className="flex items-center gap-1.5">

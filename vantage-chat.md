@@ -1,5 +1,5 @@
 # Vantage Chat — Hackathon Prep Reference
-*Saved 2026-06-26, updated 2026-06-27. Say "read vantage-chat.md" in any future session.*
+*Saved 2026-06-26, updated 2026-06-27 (afternoon). Say "read vantage-chat.md" in any future session.*
 
 ---
 
@@ -10,7 +10,7 @@
 | **Path** | `C:\Users\gohje\vantage-hackathon\` (canonical — NOT `hackathon 1\`) |
 | **Product** | Per-deal AI agent for HubSpot — monitors signals, builds account context, drafts emails/briefs nightly |
 | **Frontend** | `http://localhost:3000` — Today, Watchtower, Deal Book, Forecast, Intelligence, Analytics, Assistant |
-| **Backend** | `http://localhost:8000` — 6-agent pipeline, HubSpot/Perplexity/Fireflies integrations |
+| **Backend** | `http://localhost:8000` — 6-agent pipeline, HubSpot/Exa/Fireflies integrations |
 
 ### Real agents (not mocked)
 Pipeline in `app/agents/orchestrator.py` → unified LLM layer `app/integrations/llm.py` (OpenAI for hackathon; Anthropic optional).
@@ -22,7 +22,7 @@ Pipeline in `app/agents/orchestrator.py` → unified LLM layer `app/integrations
 5. **Drafter** (Sonnet) — cited email drafts  
 6. **State Writer** (code) — merge → `account.state` in PostgreSQL  
 
-Cost ~**$0.22/deal/run**. Trigger: top bar **Run Agents** or War Room **Run Agent** → `POST /v1/accounts/batch-refresh`.
+Cost ~**$0.17/deal/run** (~3 min). Trigger: top bar **Run Agents** or War Room **Run Agent** → `POST /v1/accounts/batch-refresh`.
 
 ### Demo data (seeded)
 - `apps/api/scripts/seed_deals.py` — 10 deals, drafts, signals, interactions  
@@ -60,7 +60,38 @@ python scripts/fix_meddpicc_path.py
 5. Optional: **Analytics** (LLM cost), **Assistant** ("why is champion 0%?")  
 6. Re-seed after practice runs  
 
-**Requires:** `OPENAI_API_KEY` + `LLM_PROVIDER=openai` in `apps/api/.env` (hackathon event credits)
+**Requires:** `OPENAI_API_KEY` + `LLM_PROVIDER=openai` + `EXA_API_KEY` in `apps/api/.env`
+
+---
+
+## Session checkpoint (2026-06-27 afternoon)
+
+### 1. Exa integration (replaces Perplexity)
+- `apps/api/app/integrations/exa.py` — semantic search client (`research_account`, `check_people_signals`)
+- `nightly_worker.py` — Exa only for web research + stakeholder people signals
+- `EXA_API_KEY` in `apps/api/.env` (not committed)
+
+### 2. OpenAI switch
+- `LLM_PROVIDER=openai` — gpt-4o-mini (bulk) / gpt-4o (quality) via `llm.py`
+
+### 3. Zinc design system
+- `globals.css` — zinc-only palette (red = critical only)
+- War Room `account/[id]/page.tsx` — brand/gray cleanup
+- Today `inbox/page.tsx` — MEDDPICC, risk badges → zinc
+- `morning-brief.tsx` — fixed invisible buttons, top **3** accounts only
+- `onboarding/` — light theme (`bg-zinc-50`)
+
+### 4. Inbox "deals missing" fix
+- Removed auto-switch to Drafts tab (5/11 deals had no drafts and were hidden)
+- Morning Brief shows top 3, not all 11
+
+### Current state
+| Item | Value |
+|------|-------|
+| Git | `471d144` on `main` — `Jean-aaaaan/hackathon-1` |
+| Deals | 11 seeded |
+| Drafts | 19 pending |
+| Agent | ~$0.17/run, ~3 min verified |
 
 ---
 
@@ -142,17 +173,14 @@ Expert AE review. Full detail in `.cursor/rules/vantage.mdc` § Dogfood checkpoi
 
 ## Known gaps (audit + dogfood 2026-06-27)
 
-- **`4d` = drafts** on Today deal cards (confusing)  
-- Default queue urgency-first when drafts pending  
-- Run Agents no completion feedback  
+**Fixed (commits `13fc02d`, `471d144`):** drafts label · drafts-first default · agent completion toast · MorningBrief wired · Assistant in nav · zinc UI pass · inbox shows all deals · morning brief top 3
+
+**Still open:**
 - MEDDPICC default-hidden (Intelligence tab; Act is default)  
 - `HealthBadge` uses `urgencyScore` not `health_score`  
-- Help assistant docs out of sync with Today + 3-tab War Room  
-- `MorningBrief`, `DraftReviewPanel` built but not mounted  
 - Intelligence overlaps Watchtower/Analytics — nav sprawl  
-- Assistant not in desktop navbar  
 - Approve on Today ≠ Send (Outlook only in War Room)  
-- Visual drift: zinc vs gray/indigo across pages
+- Docker: rebuild API image so `openai` is baked in; WorkOS v8 breaks `/auth/login` (dev bypass OK)
 
 ---
 
@@ -164,5 +192,7 @@ Expert AE review. Full detail in `.cursor/rules/vantage.mdc` § Dogfood checkpoi
 | `apps/web/src/app/(app)/account/[id]/page.tsx` | War Room |
 | `apps/api/app/agents/orchestrator.py` | 6-agent pipeline |
 | `apps/api/app/services/nightly_worker.py` | Run orchestration + DB writes |
+| `apps/api/app/integrations/exa.py` | Exa semantic search (replaces Perplexity) |
+| `apps/api/app/integrations/llm.py` | Unified LLM layer (OpenAI) |
 | `apps/api/scripts/seed_deals.py` | Demo seed |
 | `apps/api/scripts/fix_meddpicc_path.py` | MEDDPICC fix |

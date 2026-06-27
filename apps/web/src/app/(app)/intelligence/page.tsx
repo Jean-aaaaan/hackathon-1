@@ -158,7 +158,7 @@ function IntelligenceInner() {
   }).slice(0, 5);
 
   return (
-    <div className="px-6 py-6 max-w-[1400px] mx-auto space-y-8">
+    <div className="page-scroll px-6 py-6 max-w-[1400px] mx-auto space-y-8">
 
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div>

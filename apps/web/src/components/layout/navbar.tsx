@@ -203,7 +203,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
 
   return (
     <>
-      <header className="h-14 bg-white border-b border-zinc-100 flex items-center px-4 md:px-6 gap-3 flex-shrink-0 sticky top-0 z-50">
+      <header className="nav-header px-4 md:px-6 gap-3">
 
         {/* Mobile hamburger */}
         <button
@@ -233,20 +233,17 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                 key={href}
                 href={href}
                 className={cn(
-                  "relative flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium rounded-md transition-colors whitespace-nowrap",
+                  "flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium rounded-lg transition-all whitespace-nowrap",
                   active
-                    ? "text-zinc-900 bg-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50"
+                    ? "text-zinc-900 bg-white shadow-sm ring-1 ring-zinc-200/80"
+                    : "text-zinc-500 hover:text-zinc-800 hover:bg-white/60"
                 )}
               >
                 {label}
                 {badge !== null && (
-                  <span className="text-[10px] font-bold bg-zinc-900 text-white px-1.5 py-0.5 rounded-full leading-none min-w-[1.1rem] text-center">
+                  <span className="text-[10px] font-semibold bg-zinc-900 text-white px-1.5 py-0.5 rounded-full leading-none min-w-[1.1rem] text-center tabular-nums">
                     {badge > 99 ? "99+" : badge}
                   </span>
-                )}
-                {active && (
-                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-zinc-900 rounded-full" />
                 )}
               </Link>
             );
@@ -259,8 +256,8 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
           {/* ⌘K search — desktop */}
           <button
             onClick={openPalette}
-            className="hidden md:flex items-center gap-2 px-3 py-1.5 w-48 lg:w-56 bg-zinc-50 hover:bg-zinc-100
-                       rounded-lg border border-zinc-200 transition-colors"
+            className="hidden md:flex items-center gap-2 px-3 py-1.5 w-48 lg:w-56 bg-white/70 hover:bg-white
+                       rounded-lg border border-zinc-200/80 transition-all hover:border-zinc-300 hover:shadow-sm"
           >
             <Search className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
             <span className="flex-1 text-left text-[13px] text-zinc-400">Search...</span>
@@ -305,7 +302,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
             </button>
 
             {sweepOpen && !isRefreshing && (
-              <div className="absolute right-0 top-full mt-2 w-72 bg-white border border-zinc-200 rounded-xl shadow-lg z-50 p-4 flex flex-col gap-3">
+              <div className="absolute right-0 top-full mt-2 w-72 bg-white border border-zinc-200/80 rounded-xl shadow-lg z-50 p-4 flex flex-col gap-3 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold text-zinc-700 uppercase tracking-wide">Sweep scope</p>
                   <button onClick={() => setSweepOpen(false)} className="text-zinc-400 hover:text-zinc-600">
@@ -377,7 +374,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
             </button>
 
             {avatarOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-zinc-200 rounded-xl shadow-lg z-50 overflow-hidden">
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-zinc-200/80 rounded-xl shadow-lg z-50 overflow-hidden">
                 {user && (
                   <div className="px-3 py-3 border-b border-zinc-100">
                     <p className="text-xs font-semibold text-zinc-900 truncate">{user.email.split("@")[0]}</p>

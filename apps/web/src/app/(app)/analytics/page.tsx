@@ -943,7 +943,7 @@ export default function AnalyticsPage() {
   const darColor = darPct >= 60 ? "text-emerald-600" : darPct >= 45 ? "text-amber-600" : "text-red-600";
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="page-scroll p-6 space-y-4">
 
       {/* ── Bento grid - top row ──────────────────────────────────────────── */}
       <div className="grid grid-cols-3 gap-4">

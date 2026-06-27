@@ -94,3 +94,34 @@ Expert AE walkthrough. Scores: expert rep **7/10**, first-time **5/10**, 3-min j
 - 19 pending drafts total; Meridian Ops #2 with 4 drafts; Meridian Health #1 urgency 95% / 0 drafts
 - Demo account for live agent: Meridian Ops (`seed_demo_account.py`)
 - Do NOT batch-refresh the 9 showcase accounts — overwrites MEDDPICC
+
+## Session checkpoint (2026-06-27, afternoon)
+
+### Integrations
+- **Exa replaces Perplexity** for web research in agent pipeline
+  - New: `apps/api/app/integrations/exa.py` — `ExaClient` with `research_account()` + `check_people_signals()` via `POST https://api.exa.ai/search`
+  - Updated: `apps/api/app/services/nightly_worker.py` — Exa only (no Perplexity imports/fallbacks)
+  - `EXA_API_KEY` set in `apps/api/.env` (never commit; rotate if exposed)
+- **OpenAI** — all LLM calls via `app/integrations/llm.py` (`LLM_PROVIDER=openai`, gpt-4o-mini bulk / gpt-4o quality)
+
+### UI — zinc design system (full pass)
+- `apps/web/src/app/globals.css` — rainbow urgency/forecast/signal → zinc-only; red for critical only
+- `apps/web/src/app/(app)/account/[id]/page.tsx` — fixed undefined `text-brand-600`, EVENT_TYPE_STYLE, URGENCY_BAR, signal dots, OWNER_CHIP; gray → zinc
+- `apps/web/src/app/(app)/inbox/page.tsx` — meddpiccBarColor, MEDDPICC score, gap risk badges, top risk card → zinc
+- `apps/web/src/components/inbox/morning-brief.tsx` — fixed invisible `brand-*` buttons; orange/yellow dots → zinc; **top 3 accounts only**
+- `apps/web/src/app/onboarding/page.tsx` + `layout.tsx` — dark theme → light zinc (`bg-zinc-50`)
+
+### Inbox fixes
+- Removed auto-switch to Drafts tab (was hiding 5/11 deals with no pending drafts)
+- Morning Brief capped at top 3 accounts (was dominating viewport with all 11)
+
+### Current state (post-push)
+- **Git:** `471d144` on `main` at `Jean-aaaaan/hackathon-1`
+- **Data:** 11 seeded deals, 19 pending drafts
+- **Agent run:** verified ~$0.17/run, ~3 min end-to-end
+- **Prior session fixes still in:** dogfood P0 (drafts label, drafts-first, agent toast, MorningBrief wired, Assistant in nav) — commit `13fc02d`
+
+### Docker notes (same day scan)
+- All 3 containers up; `/health` OK
+- **Rebuild API image** after requirements change — `openai` may only be in container user-site until `docker compose build api`
+- WorkOS SDK v8 breaks `/auth/login` (`workos.WorkOS` → use `WorkOSClient` or pin `workos<8`); dev bypass still works

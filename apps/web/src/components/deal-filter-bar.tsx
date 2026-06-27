@@ -85,7 +85,7 @@ export function DealFilterBar({
             placeholder={placeholder}
             value={state.q}
             onChange={e => set({ q: e.target.value })}
-            className="w-full pl-8 pr-7 py-2 text-[13px] border border-zinc-200 rounded-md focus:outline-none focus:border-zinc-400 bg-white placeholder-zinc-400"
+            className="input-field pl-8 pr-7 py-2"
           />
           {state.q && (
             <button

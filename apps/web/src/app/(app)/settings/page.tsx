@@ -431,7 +431,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-6 max-w-3xl space-y-6">
+    <div className="page-scroll p-6 max-w-3xl space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-xl font-semibold text-zinc-900">Settings</h1>
