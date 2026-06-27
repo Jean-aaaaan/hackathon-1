@@ -3,7 +3,12 @@
  * All requests go through /api/* (proxied by Next.js to FastAPI).
  */
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || "";
+// Browser: same-origin /api proxy (next.config rewrites → FastAPI). Avoids CORS and
+// dead NEXT_PUBLIC_API_URL values on Vercel. SSR/server: talk to API directly.
+const BASE =
+  typeof window !== "undefined"
+    ? "/api"
+    : (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000");
 // Dev bypass: only active when NODE_ENV=development AND NEXT_PUBLIC_DEV_BYPASS_TOKEN is set.
 // Token must match DEBUG_BYPASS_TOKEN in apps/api/.env. Backend startup refuses DEBUG=true in prod.
 const DEV_BYPASS_TOKEN = process.env.NEXT_PUBLIC_DEV_BYPASS_TOKEN || "";
