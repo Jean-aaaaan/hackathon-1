@@ -100,19 +100,53 @@ async def structured_call(
             output_tokens=response.usage.completion_tokens or 0,
         )
         message = response.choices[0].message
-        if message.tool_calls:
-            raw = message.tool_calls[0].function.arguments
-            result = json.loads(raw) if isinstance(raw, str) else raw
-            if not isinstance(result, dict):
-                raise ValueError(f"OpenAI tool output is not a dict: {type(result).__name__}")
-        else:
+        def _parse_openai_result(resp) -> dict:
+            msg = resp.choices[0].message
+            if msg.tool_calls:
+                raw = msg.tool_calls[0].function.arguments
+                r = json.loads(raw) if isinstance(raw, str) else raw
+                if not isinstance(r, dict):
+                    raise ValueError(f"OpenAI tool output is not a dict: {type(r).__name__}")
+                return r
             # Fallback: parse JSON from content if model skipped tool call
-            content = (message.content or "").strip()
+            content = (msg.content or "").strip()
             if content.startswith("```"):
                 content = content.split("```", 2)[1]
                 if content.startswith("json"):
                     content = content[4:]
-            result = json.loads(content)
+            return json.loads(content)
+
+        result = _parse_openai_result(response)
+
+        # GPT-4o-mini occasionally returns {} for complex schemas — retry once
+        if not result:
+            log.warning(
+                "structured_empty_result_retry",
+                agent=agent_name, tool=tool_name,
+                input_tokens=usage.input_tokens,
+            )
+            retry_response = await client.chat.completions.create(
+                model=model,
+                max_tokens=max_tokens,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message},
+                ],
+                tools=[{
+                    "type": "function",
+                    "function": {
+                        "name": tool_name,
+                        "description": f"Output the {tool_name} result",
+                        "parameters": tool_schema,
+                    },
+                }],
+                tool_choice={"type": "function", "function": {"name": tool_name}},
+            )
+            usage = LLMUsage(
+                input_tokens=usage.input_tokens + (retry_response.usage.prompt_tokens or 0),
+                output_tokens=usage.output_tokens + (retry_response.usage.completion_tokens or 0),
+            )
+            result = _parse_openai_result(retry_response)
     else:
         client = _anthropic_client()
         response = await client.messages.create(

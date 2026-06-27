@@ -350,7 +350,7 @@ class ResearchResult(BaseModel):
     @field_validator("new_signals", "updated_stakeholders", mode="before")
     @classmethod
     def _coerce_signal_lists(cls, v, info):
-        return _coerce_to_list(v, info.field_name)
+        return _coerce_model_list(v, info.field_name)
 
     @field_validator("deal_velocity_signals", "confidence_scores", mode="before")
     @classmethod
@@ -371,13 +371,44 @@ class ResearchResult(BaseModel):
         return _coerce_to_list(v, info.field_name)
 
 
+def _coerce_model_list(v, field: str = "model_list_field"):
+    """
+    Coerce a list of Pydantic model objects (SignalOut, StakeholderUpdate, etc.) from LLM output.
+    Keeps dict items as dicts so Pydantic can construct the model from them.
+    Parses JSON-encoded strings to dicts. Never stringifies — unlike _coerce_to_list.
+    """
+    if isinstance(v, list):
+        result = []
+        for item in v:
+            if isinstance(item, dict):
+                result.append(item)
+            elif isinstance(item, str):
+                parsed = _try_parse_json_dict(item)
+                if parsed is not None:
+                    result.append(parsed)
+        return result
+    if isinstance(v, str):
+        stripped = v.strip()
+        if stripped.startswith("["):
+            try:
+                parsed = json.loads(stripped)
+                if isinstance(parsed, list):
+                    return _coerce_model_list(parsed, field)
+            except Exception:
+                pass
+    if v is not None:
+        _record_lossy_coercion(field, "unparseable value dropped — empty list substituted", raw=v)
+    return []
+
+
 def _coerce_to_list(v, field: str = "list_field"):
     """
     Shared coercion: Haiku sometimes returns JSON-encoded strings or newline-delimited
     strings instead of arrays. Try JSON parse first; fall back to newline splitting.
+    For list[str] fields only — use _coerce_model_list for list[BaseModel] fields.
     """
     if isinstance(v, list):
-        # Flatten any dicts the LLM smuggles in — stringify them so downstream str validators pass
+        # Stringify non-string items — this is correct for list[str] fields
         return [item if isinstance(item, str) else json.dumps(item) if isinstance(item, dict) else str(item) for item in v]
     if isinstance(v, str):
         stripped = v.strip()
@@ -400,7 +431,7 @@ def _coerce_to_list(v, field: str = "list_field"):
 class RiskResult(BaseModel):
     """Output of RiskScannerAgent."""
     risks: list[SignalOut] = []
-    health_score: float = Field(ge=0.0, le=1.0, description="Overall account health 0-1")
+    health_score: float = Field(default=0.5, ge=0.0, le=1.0, description="Overall account health 0-1")
     health_score_delta: float = Field(
         default=0.0,
         description="Change vs previous health_score (positive = improving)"
@@ -528,7 +559,12 @@ class RiskResult(BaseModel):
             fallback_label="unparseable string — default scores substituted (overall 0.24)",
         )
 
-    @field_validator("risks", "pov_signals", "pov_risks", mode="before")
+    @field_validator("risks", mode="before")
+    @classmethod
+    def _coerce_risk_signals(cls, v, info):
+        return _coerce_model_list(v, info.field_name)
+
+    @field_validator("pov_signals", "pov_risks", mode="before")
     @classmethod
     def coerce_str_to_list(cls, v, info):
         return _coerce_to_list(v, info.field_name)
@@ -570,9 +606,7 @@ class GroundingResult(BaseModel):
     @field_validator("verified_signals", "unverified_claims", mode="before")
     @classmethod
     def _coerce_signal_list(cls, v, info):
-        # Losing verified_signals trips the zero-signal gate downstream —
-        # this must be visible, never silent.
-        return _coerce_to_list(v, info.field_name)
+        return _coerce_model_list(v, info.field_name)
 
 
 class ActionItem(BaseModel):
