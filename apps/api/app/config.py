@@ -92,7 +92,7 @@ class Settings(BaseSettings):
     allow_outbound_email: bool = False
     # Rate limiting (requests per window per IP)
     rate_limit_auth_per_minute: int = 10
-    rate_limit_batch_refresh_per_hour: int = 5
+    rate_limit_batch_refresh_per_hour: int = 50
     rate_limit_api_default_per_minute: int = 120
 
     # Agent pipeline

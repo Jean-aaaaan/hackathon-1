@@ -527,6 +527,159 @@ ACCOUNTS = [
                 ]
             }
         }
+    },
+
+    # ── Real companies — Exa can research these ──────────────────────────────
+
+    {
+        "id": str(uuid.uuid4()),
+        "name": "Snowflake",
+        "stage": "Negotiation",
+        "deal_amount": "620000.00",
+        "close_date": days_from_now(22, as_str=False),
+        "pov_forecast_cat": "Best Case",
+        "pov_confidence": 0.65,
+        "health_score": 0.44,
+        "urgency_score": 0.91,
+        "icp_score": 0.96,
+        "hubspot_deal_id": "hs_deal_2001",
+        "state": {
+            "health_trend": "down",
+            "crm_forecast_category": "Commit",
+            "pov": {
+                "forecast_category": "Best Case",
+                "confidence": 0.65,
+                "deal_narrative": "Snowflake's sales team has expanded aggressively post-IPO but rep productivity metrics are declining. New CEO Sridhar Ramaswamy (formerly Google) is under pressure to improve sales efficiency. Our champion Marcus Holloway (VP Revenue Operations) has internal buy-in but the CFO Mike Scarpelli is pushing back on new tooling spend following recent restructuring.",
+                "top_risk_summary": "CFO cost scrutiny + CEO transition uncertainty. Champion needs exec air cover before deal can close.",
+                "meddpicc": {
+                    "metrics": "Target: 23% increase in rep quota attainment, 18% reduction in CRM hygiene time",
+                    "economic_buyer": "CFO Mike Scarpelli — scrutinizing all new SaaS spend post-restructuring",
+                    "decision_criteria": "HubSpot-native integration, SOC2 Type II, <500ms API response, GDPR compliant",
+                    "decision_process": "RevOps eval -> IT security -> CFO approval. Targeting August 15 board sign-off.",
+                    "paper_process": "Legal DPA in review. MSA redline started June 20.",
+                    "identified_pain": "400+ enterprise reps with avg 31% of time on manual CRM updates. $8M/yr productivity loss.",
+                    "champion": "Marcus Holloway, VP Revenue Operations — strong internal advocate, needs CFO alignment",
+                    "competition": "Clari (incumbent for forecasting), Gong (partial overlap on call intelligence)"
+                }
+            },
+            "next_actions": [
+                {"action": "Prepare CFO-ready ROI model — quantify $8M productivity loss vs $620K investment", "priority": "critical", "due_date": days_from_now(2)},
+                {"action": "Request exec sponsor call with CEO Sridhar Ramaswamy — frame as sales efficiency mandate", "priority": "high", "due_date": days_from_now(5)},
+                {"action": "Accelerate legal DPA review — assign dedicated solutions engineer to unblock", "priority": "high", "due_date": days_from_now(3)}
+            ],
+            "next_step": {
+                "text": "CFO briefing with Mike Scarpelli — ROI model delivery",
+                "due_date": days_from_now(4),
+                "source": "agent",
+                "set_at": now().isoformat()
+            },
+            "gold_data": {
+                "facts": [
+                    {"fact": "Snowflake announced restructuring and headcount reduction in February 2024 alongside CEO transition", "source": "exa_web_search", "confidence": 0.96, "verified_by_grounding_agent": True},
+                    {"fact": "Sridhar Ramaswamy joined as CEO in February 2024, replacing Frank Slootman", "source": "exa_web_search", "confidence": 0.99, "verified_by_grounding_agent": True}
+                ]
+            }
+        }
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "name": "Figma",
+        "stage": "Proposal",
+        "deal_amount": "310000.00",
+        "close_date": days_from_now(38, as_str=False),
+        "pov_forecast_cat": "Forecast",
+        "pov_confidence": 0.71,
+        "health_score": 0.62,
+        "urgency_score": 0.79,
+        "icp_score": 0.88,
+        "hubspot_deal_id": "hs_deal_2002",
+        "state": {
+            "health_trend": "up",
+            "crm_forecast_category": "Forecast",
+            "pov": {
+                "forecast_category": "Forecast",
+                "confidence": 0.71,
+                "deal_narrative": "Figma is aggressively hiring sales reps following the collapse of the Adobe acquisition and their subsequent $1B independent funding round. New VP Sales Kris Rasmussen is building out a full enterprise motion from scratch and explicitly stated 'we need AI-native tooling across the stack'. Champion relationship is strong and budget is freshly allocated.",
+                "top_risk_summary": "Competitive evaluation with Outreach.io. Rep needs to accelerate timeline before Figma's Q3 hiring surge locks in competitor contracts.",
+                "meddpicc": {
+                    "metrics": "Target: onboard 200 new enterprise reps in 90 days with 60% quota attainment in month 3",
+                    "economic_buyer": "VP Sales Kris Rasmussen — has full discretionary budget for sales stack",
+                    "decision_criteria": "AI-native, fast deployment (<2 weeks), HubSpot + Salesforce compatible",
+                    "decision_process": "VP Sales evaluation -> Legal -> sign-off. Flat, fast process.",
+                    "paper_process": "Not started — waiting on proposal acceptance",
+                    "identified_pain": "Standing up enterprise sales motion from scratch — no existing tooling or playbooks",
+                    "champion": "Kris Rasmussen, VP Sales — is also the economic buyer",
+                    "competition": "Outreach.io — submitted competing proposal June 18"
+                }
+            },
+            "next_actions": [
+                {"action": "Differentiate from Outreach.io — send AI grounding agent demo focused on new rep ramp speed", "priority": "critical", "due_date": days_from_now(1)},
+                {"action": "Propose 2-week pilot with 10 reps — reduce perceived risk of full deployment", "priority": "high", "due_date": days_from_now(3)},
+                {"action": "Reference call: connect Kris with similar VP Sales who onboarded 150+ reps in 60 days", "priority": "high", "due_date": days_from_now(5)}
+            ],
+            "next_step": {
+                "text": "Competitive displacement: AI demo vs Outreach.io with Kris Rasmussen",
+                "due_date": days_from_now(2),
+                "source": "agent",
+                "set_at": now().isoformat()
+            },
+            "gold_data": {
+                "facts": [
+                    {"fact": "Adobe's $20B acquisition of Figma was blocked by EU regulators and abandoned in December 2023", "source": "exa_web_search", "confidence": 0.99, "verified_by_grounding_agent": True},
+                    {"fact": "Figma raised $1B in new funding at $12.5B valuation following Adobe deal collapse", "source": "exa_web_search", "confidence": 0.97, "verified_by_grounding_agent": True}
+                ]
+            }
+        }
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "name": "Databricks",
+        "stage": "Discovery",
+        "deal_amount": "890000.00",
+        "close_date": days_from_now(95, as_str=False),
+        "pov_forecast_cat": "Pipeline",
+        "pov_confidence": 0.55,
+        "health_score": 0.74,
+        "urgency_score": 0.52,
+        "icp_score": 0.94,
+        "hubspot_deal_id": "hs_deal_2003",
+        "state": {
+            "health_trend": "up",
+            "crm_forecast_category": "Pipeline",
+            "pov": {
+                "forecast_category": "Pipeline",
+                "confidence": 0.55,
+                "deal_narrative": "Databricks is in hypergrowth following their $10B Series J at a $62B valuation. Their 1,200+ sales team is expanding globally and leadership has publicly committed to AI-native go-to-market. Entry point is via Ali Ghodsi's (CEO) office — he made a public statement about requiring every GTM tool to have an AI backbone. Early stage but extremely high ICP fit.",
+                "top_risk_summary": "Long enterprise sales cycle. Key risk is getting lost in their massive vendor evaluation queue. Need to land a strong champion in RevOps fast.",
+                "meddpicc": {
+                    "metrics": "Target: 30% improvement in pipeline coverage ratio across 8 global sales regions",
+                    "economic_buyer": "CRO — not yet identified or engaged",
+                    "decision_criteria": "Enterprise-grade security, multi-region deployment, Salesforce CRM integration, AI-native",
+                    "decision_process": "RevOps eval -> Security review -> CRO -> legal. Expect 12-16 week process.",
+                    "paper_process": "Not started",
+                    "identified_pain": "1,200 reps across 8 regions — no unified AI layer for pipeline intelligence. Rep burnout on CRM hygiene.",
+                    "champion": "Target: Head of Revenue Operations — intro pending via mutual connection",
+                    "competition": "Clari (strong incumbent), Salesforce Einstein (native advantage)"
+                }
+            },
+            "next_actions": [
+                {"action": "Secure intro to Databricks Head of RevOps via LinkedIn mutual connection — personalize outreach around Ali Ghodsi's AI-native GTM mandate", "priority": "high", "due_date": days_from_now(7)},
+                {"action": "Prepare Databricks-specific pitch deck — lead with multi-region agent deployment and Salesforce CRM integration", "priority": "medium", "due_date": days_from_now(10)},
+                {"action": "Research recent Databricks earnings and sales hiring announcements for conversation hooks", "priority": "medium", "due_date": days_from_now(3)}
+            ],
+            "next_step": {
+                "text": "Champion identification: secure RevOps intro via mutual connection",
+                "due_date": days_from_now(7),
+                "source": "agent",
+                "set_at": now().isoformat()
+            },
+            "gold_data": {
+                "facts": [
+                    {"fact": "Databricks raised $10B Series J at $62B valuation in December 2024", "source": "exa_web_search", "confidence": 0.98, "verified_by_grounding_agent": True},
+                    {"fact": "Databricks CEO Ali Ghodsi has publicly committed to AI-native go-to-market tooling across all GTM functions", "source": "exa_web_search", "confidence": 0.82, "verified_by_grounding_agent": False}
+                ]
+            }
+        }
     }
 ]
 
@@ -644,6 +797,44 @@ def make_signals(accounts_by_name):
           gold_resolution="DOE grant confirmed via federal grants database. Q4 vendor mandate creates natural buying window.",
           gold_confidence=0.92, gold_sources=[{"source": "perplexity_web_search", "raw_value": "DOE grid modernization grant Verdant Energy April 2026", "confidence": 0.92, "weight": 1.0}],
           hours_ago=1200, created_hours_ago=1200),
+
+        s("Snowflake",
+          type="leadership_change", urgency="high", urgency_score=0.88,
+          detail="Snowflake CEO transition: Frank Slootman stepped down, Sridhar Ramaswamy (ex-Google) named CEO Feb 2024. New leadership is auditing all vendor contracts.",
+          source="exa", confidence=0.99,
+          gold_resolution="CEO transition confirmed via Snowflake press release and SEC filing. All major vendor relationships under review per new CTO directive.",
+          gold_confidence=0.99, gold_sources=[{"source": "exa_web_search", "raw_value": "Snowflake CEO Frank Slootman steps down, Sridhar Ramaswamy named CEO", "confidence": 0.99, "weight": 1.0}],
+          hours_ago=12, created_hours_ago=12),
+        s("Snowflake",
+          type="competitive_mention", urgency="high", urgency_score=0.82,
+          detail="Clari (incumbent forecasting tool) is pitching expanded AI features to Snowflake's RevOps team — direct overlap with our pipeline intelligence module.",
+          source="exa", confidence=0.84,
+          gold_resolution="Clari-Snowflake renewal discussions confirmed via LinkedIn post by Snowflake RevOps analyst. Competitive risk is real.",
+          gold_confidence=0.84, gold_sources=[{"source": "exa_web_search", "raw_value": "Clari Snowflake renewal enterprise forecasting platform", "confidence": 0.84, "weight": 1.0}],
+          hours_ago=36, created_hours_ago=36),
+
+        s("Figma",
+          type="funding_event", urgency="medium", urgency_score=0.74,
+          detail="Figma raised $1B at $12.5B valuation following Adobe acquisition collapse. Actively building enterprise sales team from scratch — 80+ open sales roles posted.",
+          source="exa", confidence=0.98,
+          gold_resolution="Funding confirmed via TechCrunch and SEC filing. 83 open sales roles confirmed on LinkedIn Jobs as of June 2026.",
+          gold_confidence=0.98, gold_sources=[{"source": "exa_web_search", "raw_value": "Figma $1B funding round $12.5B valuation 2024", "confidence": 0.98, "weight": 1.0}],
+          hours_ago=48, created_hours_ago=48),
+        s("Figma",
+          type="competitive_mention", urgency="high", urgency_score=0.87,
+          detail="Outreach.io submitted competing proposal to Figma VP Sales June 18. Outreach is pitching their AI SDR module as 'Figma's full sales stack in one platform'.",
+          source="exa", confidence=0.79,
+          gold_resolution="Outreach-Figma evaluation confirmed via LinkedIn mutual connection at Figma RevOps. Competing on deployment speed and AI differentiation.",
+          gold_confidence=0.81, gold_sources=[{"source": "exa_web_search", "raw_value": "Outreach.io enterprise proposal Figma sales team", "confidence": 0.79, "weight": 1.0}],
+          hours_ago=72, created_hours_ago=72),
+
+        s("Databricks",
+          type="funding_event", urgency="medium", urgency_score=0.61,
+          detail="Databricks closed $10B Series J at $62B valuation Dec 2024. CEO stated all GTM tools must be AI-native. Budget for 2026 sales stack refresh confirmed at board level.",
+          source="exa", confidence=0.98,
+          gold_resolution="Series J funding confirmed via Databricks press release and Bloomberg. AI-native GTM mandate sourced from CEO keynote at Data+AI Summit.",
+          gold_confidence=0.97, gold_sources=[{"source": "exa_web_search", "raw_value": "Databricks $10B Series J $62B valuation December 2024", "confidence": 0.98, "weight": 1.0}],
+          hours_ago=240, created_hours_ago=240),
     ]
     return rows
 
@@ -837,6 +1028,17 @@ def make_interactions(accounts_by_name):
 
         i("Verdant Energy Solutions", type="email_received", source="hubspot", notes="Inbound inquiry from Verdant following DOE grant announcement. Expressed interest in grid intelligence platform.", sentiment="positive", sentiment_score=0.72, contact_name="Elena Marchetti", occurred_days_ago=20, days_ago=20),
         i("Verdant Energy Solutions", type="call", source="hubspot", notes="Intro call with Elena Marchetti (CEO). Confirmed DOE grant mandate. Asked for NERC CIP compliance overview. Rep scheduled follow-up.", sentiment="positive", sentiment_score=0.76, contact_name="Elena Marchetti", occurred_days_ago=16, days_ago=16),
+
+        i("Snowflake", type="call", source="hubspot", notes="Intro call with Marcus Holloway (VP RevOps). Immediately validated pain — 400+ reps spending 31% of time on CRM hygiene. Budget approved, needs CFO sign-off.", sentiment="positive", sentiment_score=0.89, contact_name="Marcus Holloway", occurred_days_ago=21, days_ago=21),
+        i("Snowflake", type="meeting", source="hubspot", notes="Technical deep-dive with Snowflake IT Security team. SOC2 Type II and GDPR DPA requirements scoped. Legal review started same day.", sentiment="positive", sentiment_score=0.71, contact_name="Marcus Holloway", occurred_days_ago=10, days_ago=10),
+        i("Snowflake", type="email_received", source="hubspot", notes="Marcus: 'CFO is asking for a formal ROI model before he'll approve. Can you put something together before July 1?' Rep flagged as urgent.", sentiment="neutral", sentiment_score=0.12, contact_name="Marcus Holloway", occurred_days_ago=3, days_ago=3),
+
+        i("Figma", type="email_received", source="hubspot", notes="Inbound from Kris Rasmussen (VP Sales): 'We're rebuilding our sales stack from scratch post-Adobe. Heard good things about Vantage from a Figma investor. Can we talk?' Very strong signal.", sentiment="positive", sentiment_score=0.94, contact_name="Kris Rasmussen", occurred_days_ago=18, days_ago=18),
+        i("Figma", type="call", source="hubspot", notes="Discovery call with Kris Rasmussen. Confirmed: 200 new reps being hired Q3, zero existing AI tooling, budget fully discretionary. Asked for proposal by Friday.", sentiment="positive", sentiment_score=0.92, contact_name="Kris Rasmussen", occurred_days_ago=12, days_ago=12),
+        i("Figma", type="email_sent", source="hubspot", notes="Proposal sent with 2-week pilot option and Outreach competitive comparison. Kris acknowledged and shared with his team.", sentiment="positive", sentiment_score=0.68, contact_name="Kris Rasmussen", occurred_days_ago=7, days_ago=7),
+
+        i("Databricks", type="email_received", source="hubspot", notes="Cold inbound from Databricks RevOps analyst: 'Saw your product at SaaStr. We're evaluating AI-native sales tools for 2026. Can you send an overview?' Early but very high value signal.", sentiment="positive", sentiment_score=0.77, contact_name="RevOps Analyst", occurred_days_ago=14, days_ago=14),
+        i("Databricks", type="call", source="hubspot", notes="Intro call with Databricks senior RevOps analyst. Confirmed 1,200+ reps globally, 8 sales regions, no unified AI layer. Identified path to Head of RevOps intro.", sentiment="positive", sentiment_score=0.83, contact_name="RevOps Analyst", occurred_days_ago=8, days_ago=8),
     ]
     return rows
 

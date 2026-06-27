@@ -231,6 +231,7 @@ class MeddpiccScore(BaseModel):
         description="Legal/security/procurement process understood with timeline. 0=unknown, 1=fully mapped with dates"
     )
     overall_score: float = Field(
+        default=0.0,
         ge=0.0, le=1.0,
         description="Weighted average - critical gaps (EB, champion) weighted 2x"
     )
@@ -249,6 +250,20 @@ class MeddpiccScore(BaseModel):
             "Each present: true/false with evidence string."
         )
     )
+
+    from pydantic import model_validator
+
+    @model_validator(mode="after")
+    def _fill_overall_score(self):
+        if self.overall_score == 0.0:
+            # Weighted average: EB + champion get 2x weight
+            components = [
+                self.metrics, self.decision_criteria, self.decision_process,
+                self.implicate_pain, self.competition, self.paper_process,
+            ]
+            weighted = sum(components) + self.economic_buyer * 2 + self.champion * 2
+            self.overall_score = round(weighted / (len(components) + 4), 3)
+        return self
 
 
 # ── Shared signal schema ─────────────────────────────────────────────────────
@@ -362,7 +377,8 @@ def _coerce_to_list(v, field: str = "list_field"):
     strings instead of arrays. Try JSON parse first; fall back to newline splitting.
     """
     if isinstance(v, list):
-        return v
+        # Flatten any dicts the LLM smuggles in — stringify them so downstream str validators pass
+        return [item if isinstance(item, str) else json.dumps(item) if isinstance(item, dict) else str(item) for item in v]
     if isinstance(v, str):
         stripped = v.strip()
         if stripped.startswith("["):
@@ -542,6 +558,14 @@ class GroundingResult(BaseModel):
         default={},
         description="Resolved, confidence-scored data points with full audit trail"
     )
+
+    @field_validator("gold_data_points", mode="before")
+    @classmethod
+    def _coerce_gold_data(cls, v):
+        if not isinstance(v, dict):
+            return {}
+        # Drop keys whose values aren't GoldDataPoint-compatible dicts
+        return {k: val for k, val in v.items() if isinstance(val, dict)}
 
     @field_validator("verified_signals", "unverified_claims", mode="before")
     @classmethod

@@ -976,13 +976,19 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   const runAgentMutation = useMutation({
     mutationFn: () => accountsApi.batchRefresh([id]),
     onMutate: () => setAgentRunning(true),
-    onSettled: () => {
+    onError: (err: unknown) => {
+      setAgentRunning(false);
+      const msg = (err as { message?: string })?.message ?? "Agent run failed — try again shortly";
+      setGenerateToast(msg);
+      setTimeout(() => setGenerateToast(null), 5000);
+    },
+    onSuccess: () => {
       setTimeout(() => {
         setAgentRunning(false);
         queryClient.invalidateQueries({ queryKey: ["account", id] });
         queryClient.invalidateQueries({ queryKey: ["signals", id] });
         queryClient.invalidateQueries({ queryKey: ["drafts", id] });
-      }, 15_000);
+      }, 25_000);
     },
   });
 
