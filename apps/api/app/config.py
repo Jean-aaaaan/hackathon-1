@@ -34,7 +34,10 @@ class Settings(BaseSettings):
     anthropic_model_bulk: str = "claude-haiku-4-5-20251001"
     anthropic_model_quality: str = "claude-sonnet-4-6"
 
-    # Perplexity
+    # Exa (semantic web research — primary)
+    exa_api_key: str = ""
+
+    # Perplexity (web research — fallback if Exa not configured)
     perplexity_api_key: str = ""
     perplexity_model: str = "sonar-pro"
 

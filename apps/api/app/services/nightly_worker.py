@@ -5,7 +5,7 @@ Called by: Azure Container Jobs (nightly), batch-refresh endpoint (manual).
 
 Pipeline per account:
 1. Pull fresh HubSpot data + Gong transcripts
-2. Fetch Perplexity news (async, bounded)
+2. Fetch web intelligence via Exa (semantic search)
 3. Run 6-agent pipeline via AgentOrchestrator
 4. Write updated Account state + new Signals + Drafts to DB
 5. Log AgentRun record with costs
@@ -27,7 +27,7 @@ from app.models.account import Account, Signal, Draft, AgentRun, AuditLog, Inter
 from app.models.workspace import Workspace
 from app.agents.orchestrator import AgentOrchestrator
 from app.integrations.hubspot import HubSpotClient
-from app.integrations.perplexity import PerplexityClient
+from app.integrations.exa import ExaClient
 from app.integrations.anthropic_embed import get_embedding
 from app.integrations.fireflies import FirefliesClient, backfill_all_transcripts, _domain_root, _SELLER_DOMAINS, _GENERIC_WORDS
 from app.integrations.teams import TeamsWebhookClient
@@ -692,22 +692,26 @@ class NightlyWorker:
                 fireflies_transcripts or [],
             )
 
-            # 2. Fetch Perplexity news (with timeout — don't block pipeline)
+            # 2. Fetch web intelligence via Exa
+            # exa_api_key: workspace-level key takes precedence; global .env key is the dev fallback.
+            _exa_key = getattr(ws, "exa_api_key", None) or self.settings.exa_api_key
             news_content = ""
-            if ws.perplexity_api_key:
+            if _exa_key:
                 try:
-                    perp = PerplexityClient(ws.perplexity_api_key)
+                    exa = ExaClient(_exa_key)
                     news_content = await asyncio.wait_for(
-                        perp.research_account(account.name),
-                        timeout=20.0,
+                        exa.research_account(account.name),
+                        timeout=25.0,
                     )
+                    if news_content:
+                        log.info("exa_research_complete", account=account.name, chars=len(news_content))
                 except asyncio.TimeoutError:
-                    log.warning("perplexity_timeout", account=account.name)
+                    log.warning("exa_timeout", account=account.name)
                 except Exception as e:
-                    log.warning("perplexity_error", account=account.name, error=str(e))
+                    log.warning("exa_error", account=account.name, error=str(e))
 
-            # 2b. LinkedIn people signals — Perplexity search for stakeholder job changes
-            if ws.perplexity_api_key:
+            # 2b. Stakeholder people signals via Exa
+            if _exa_key:
                 stakeholders = (account.state or {}).get("stakeholders", [])
                 key_roles = {"champion", "economic_buyer", "decision_maker"}
                 key_stakeholders = [
@@ -716,19 +720,19 @@ class NightlyWorker:
                 ][:3]
                 if key_stakeholders:
                     try:
-                        perp_people = PerplexityClient(ws.perplexity_api_key)
+                        exa_people = ExaClient(_exa_key)
                         for stk in key_stakeholders:
                             stk_name = stk.get("name", "")
                             stk_title = stk.get("title", "")
                             if not stk_name:
                                 continue
                             change_text = await asyncio.wait_for(
-                                perp_people.check_people_signals(
+                                exa_people.check_people_signals(
                                     name=stk_name,
                                     title=stk_title,
                                     company=account.name,
                                 ),
-                                timeout=10.0,
+                                timeout=12.0,
                             )
                             if change_text:
                                 lower = change_text.lower()
@@ -737,7 +741,7 @@ class NightlyWorker:
                                 ) else "champion_role_change"
                                 raw_signals.append({
                                     "type": sig_type,
-                                    "source": "perplexity:linkedin",
+                                    "source": "exa:linkedin",
                                     "detail": f"{_html.escape(stk_name)} ({_html.escape(stk.get('role', 'stakeholder'))}): {_html.escape(change_text)}",
                                     "raw": {"name": stk_name, "change": change_text},
                                 })
