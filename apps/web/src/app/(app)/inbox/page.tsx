@@ -3,7 +3,7 @@
 import React, { Suspense, useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   accountsApi, draftsApi, signalsApi, timelineApi,
   type AccountListItem, type Draft, type TimelineAction,
@@ -44,6 +44,7 @@ const DECLINE_CATEGORIES = [
   { value: "already_sent",  label: "Already sent" },
   { value: "wrong_content", label: "Wrong content" },
   { value: "not_relevant",  label: "Not relevant" },
+  { value: "hallucination", label: "Unsupported fact" },
   { value: "other",         label: "Other" },
 ];
 
@@ -532,9 +533,9 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
   const warRoomFocus = !draftsLoading && drafts.length === 0;
 
   return (
-    <div className="h-full flex flex-col bg-zinc-50/50 min-h-0">
+    <div className="h-full flex flex-col bg-lily min-h-0">
       <div className={cn(
-        "bg-white/90 backdrop-blur-sm border-b border-zinc-200/60 flex-shrink-0",
+        "bg-white/90 backdrop-blur-sm border-b border-zinc-100/90 flex-shrink-0",
         warRoomFocus ? "px-6 py-3" : "px-6 py-4"
       )}>
         <div className="flex items-start justify-between gap-4">
@@ -679,9 +680,9 @@ function DealContextPanel({ account }: { account: AccountListItem }) {
 
 function EmptyPanel({ pendingCount }: { pendingCount: number }) {
   return (
-    <div className="h-full flex items-center justify-center bg-zinc-50/50 px-6">
+    <div className="h-full flex items-center justify-center bg-lily px-6">
       <div className="text-center max-w-md">
-        <div className="w-14 h-14 bg-white rounded-2xl mx-auto mb-5 flex items-center justify-center border border-zinc-200/80 shadow-sm">
+        <div className="w-14 h-14 bg-white rounded-2xl mx-auto mb-5 flex items-center justify-center border border-zinc-100 shadow-sm">
           <BookOpen className="w-5 h-5 text-zinc-400" />
         </div>
         <p className="text-base font-semibold text-zinc-900 tracking-tight">Select a deal</p>
@@ -701,6 +702,7 @@ type QuickFilter = "all" | "drafts" | "urgent";
 
 function InboxInner() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = searchParams.get("q");
 
   const [selectedAccount, setSelectedAccount] = useState<AccountListItem | null>(null);
@@ -824,16 +826,18 @@ function InboxInner() {
         results={searchData?.data ?? []}
         isLoading={searchLoading}
         onSelect={(id) => {
-          const found = allAccounts.find(a => a.id === id);
+          const found =
+            allAccounts.find(a => a.id === id) ??
+            searchData?.data?.find(a => a.id === id);
           if (found) setSelectedAccount(found);
+          router.replace("/inbox");
         }}
       />
     );
   }
 
   const warRoomFocus =
-    !!selectedAccount &&
-    (selectedAccount.pending_drafts === 0 || pendingCount === 0);
+    !!selectedAccount && (selectedAccount.pending_drafts ?? 0) === 0;
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -853,7 +857,7 @@ function InboxInner() {
 
       {/* ── Left panel — narrower when War Room preview owns the right side */}
       <div className={cn(
-        "flex-shrink-0 border-r border-zinc-200/60 bg-white/80 backdrop-blur-sm flex flex-col",
+        "flex-shrink-0 border-r border-zinc-100/90 bg-white/85 backdrop-blur-sm flex flex-col",
         warRoomFocus ? "w-64" : "w-80"
       )}>
 
@@ -930,7 +934,7 @@ function InboxInner() {
                 <div>
                   <button
                     onClick={() => setShowRest(v => !v)}
-                    className="w-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-700 py-2.5 border-t border-zinc-100 hover:bg-zinc-50 transition-colors"
+                    className="w-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-700 py-2.5 border-t border-zinc-100 hover:bg-lily-wash transition-colors"
                   >
                     {showRest ? "Hide" : "Show"} rest of pipeline ({restOfPipeline.length})
                     <ChevronDown className={cn("w-3 h-3 transition-transform", showRest && "rotate-180")} />
@@ -955,9 +959,9 @@ function InboxInner() {
 
         {/* Keyboard hints */}
         <div className="flex-shrink-0 border-t border-zinc-100 px-4 py-2 flex items-center gap-3 text-[10px] text-zinc-400">
-          <span><kbd className="font-sans border border-zinc-200 rounded px-1">J</kbd>/<kbd className="font-sans border border-zinc-200 rounded px-1">K</kbd> navigate</span>
-          <span><kbd className="font-sans border border-zinc-200 rounded px-1">E</kbd> approve</span>
-          <span><kbd className="font-sans border border-zinc-200 rounded px-1">D</kbd> decline</span>
+          <span><kbd className="font-sans border border-zinc-100 rounded px-1 bg-white">J</kbd>/<kbd className="font-sans border border-zinc-100 rounded px-1 bg-white">K</kbd> navigate</span>
+          <span><kbd className="font-sans border border-zinc-100 rounded px-1 bg-white">E</kbd> approve</span>
+          <span><kbd className="font-sans border border-zinc-100 rounded px-1 bg-white">D</kbd> decline</span>
         </div>
       </div>
 

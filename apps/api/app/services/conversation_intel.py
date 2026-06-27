@@ -35,21 +35,42 @@ def identify_rep_speakers(transcript: dict, rep_domains: set[str] = REP_DOMAINS)
     Sources: organizer_email + meeting_attendees whose email is a rep domain,
     matched to attendee displayName (Fireflies speaker_name follows displayName).
     Falls back to first-token matching on the local part of the email address.
+
+    When seller_domains is not configured, infer rep side from the call
+    organizer's email domain — Fireflies almost always sets organizer to the rep.
     """
     rep_names: set[str] = set()
     rep_emails: set[str] = set()
 
     organizer = (transcript.get("organizer_email") or "").lower()
-    if organizer and organizer.split("@")[-1] in rep_domains:
+    org_domain = organizer.split("@")[-1] if organizer and "@" in organizer else None
+
+    # Explicit workspace config wins; otherwise infer from organizer domain.
+    effective_domains: set[str] = set(rep_domains) if rep_domains else set()
+    if not effective_domains and org_domain:
+        effective_domains.add(org_domain)
+
+    # Organizer is almost always on our side — always treat as a rep email.
+    if organizer:
         rep_emails.add(organizer)
+
+    def _add_rep_name(name: str) -> None:
+        cf = name.casefold()
+        rep_names.add(cf)
+        first = cf.split()[0] if cf.split() else ""
+        if len(first) > 2:
+            rep_names.add(first)
 
     for att in transcript.get("meeting_attendees") or []:
         email = (att.get("email") or "").lower()
         name = (att.get("displayName") or "").strip()
-        if email and email.split("@")[-1] in rep_domains:
+        if not email:
+            continue
+        domain = email.split("@")[-1]
+        if domain in effective_domains or email in rep_emails:
             rep_emails.add(email)
             if name:
-                rep_names.add(name.casefold())
+                _add_rep_name(name)
 
     # No attendee names? Derive from the email local part ("vishnu.saran@…" → "vishnu")
     for email in rep_emails:

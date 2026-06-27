@@ -232,10 +232,14 @@ async def fireflies_webhook(
     # commitments) immediately — not only after the next nightly run.
     try:
         from sqlalchemy.orm.attributes import flag_modified
+        from app.models.workspace import Workspace as _Workspace
         from app.services.conversation_intel import (
             build_transcript_entry, merge_transcript_entries, compute_conversation_rollup,
         )
-        entry = build_transcript_entry(transcript)
+        ws_row = await db.execute(select(_Workspace).where(_Workspace.id == _uuid.UUID(_ws_id)))
+        ws = ws_row.scalar_one_or_none()
+        seller_domains = set((ws.settings or {}).get("seller_domains", [])) if ws else set()
+        entry = build_transcript_entry(transcript, seller_domains)
         for account_row in matched_accounts:
             acc_result = await db.execute(
                 select(_Account).where(_Account.id == account_row.id)

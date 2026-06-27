@@ -572,6 +572,7 @@ const DECLINE_CATEGORIES = [
   { value: "already_sent",  label: "Already sent" },
   { value: "wrong_content", label: "Wrong content" },
   { value: "not_relevant",  label: "Not relevant" },
+  { value: "hallucination", label: "Unsupported fact" },
   { value: "other",         label: "Other" },
 ];
 

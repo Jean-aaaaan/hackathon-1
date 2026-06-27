@@ -223,7 +223,7 @@ export function CommandPalette({ open, onClose }: Props) {
                       onClick={() => navigate({ kind: "action", action })}
                       className={cn(
                         "w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors text-left",
-                        activeIdx === globalIdx ? "bg-zinc-50 text-zinc-700" : "text-zinc-700 hover:bg-zinc-50"
+                        activeIdx === globalIdx ? "bg-lily-wash text-zinc-700" : "text-zinc-700 hover:bg-lily-wash"
                       )}
                     >
                       <Icon className="w-4 h-4 flex-shrink-0 text-zinc-400" />
@@ -272,7 +272,7 @@ function AccountRow({
       onClick={onClick}
       className={cn(
         "w-full flex items-center gap-3 px-4 py-2.5 transition-colors text-left",
-        active ? "bg-zinc-50" : "hover:bg-zinc-50"
+        active ? "bg-lily-wash" : "hover:bg-lily-wash"
       )}
     >
       <UrgencyDot score={account.urgency_score} />

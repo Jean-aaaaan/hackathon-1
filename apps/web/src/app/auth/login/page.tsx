@@ -3,14 +3,14 @@ import { Zap } from "lucide-react";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-      <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-10 w-full max-w-sm text-center">
+    <div className="min-h-screen bg-lily flex items-center justify-center">
+      <div className="bg-white border border-zinc-100 rounded-2xl shadow-md p-10 w-full max-w-sm text-center">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
-          <div className="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center">
+          <div className="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center shadow-sm shadow-brand-600/15">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-semibold text-zinc-900">Vantage</span>
+          <span className="text-xl font-bold tracking-tight text-zinc-900">Vantage</span>
         </div>
 
         <h1 className="text-lg font-semibold text-zinc-900 mb-1">Sign in to Vantage</h1>
@@ -19,7 +19,7 @@ export default function LoginPage() {
         {/* Sign in with Google (via WorkOS) */}
         <a
           href="/api/auth/login"
-          className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-zinc-200 rounded-xl text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-300 transition-colors"
+          className="flex items-center justify-center gap-3 w-full px-4 py-3 border border-zinc-100 rounded-xl text-sm font-medium text-zinc-700 bg-white hover:bg-lily-wash hover:border-zinc-200 transition-colors"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

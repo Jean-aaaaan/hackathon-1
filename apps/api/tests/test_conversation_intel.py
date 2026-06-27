@@ -80,7 +80,7 @@ def test_commitment_attribution():
     owners = {c["text"][:10]: c["owner"] for c in commitments}
     assert owners["Alex Send "] == "us"
     assert owners["Sarah Shar"] == "buyer"
-    assert owners["Review budge"] == "unknown"
+    assert owners["Review bud"] == "unknown"  # text[:10] of "Review budget internally"
 
 
 def test_commitment_header_format():

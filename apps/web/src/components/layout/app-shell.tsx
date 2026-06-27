@@ -9,7 +9,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-zinc-50">
+    <div className="flex flex-col h-screen overflow-hidden bg-lily text-zinc-900">
       <NavBar onMobileMenuClick={() => setSidebarOpen(o => !o)} />
 
       {/* Mobile sidebar drawer */}

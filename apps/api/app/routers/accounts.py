@@ -48,6 +48,7 @@ _DECLINE_CATEGORY_LABELS: dict[str, str] = {
     "already_sent": "Already sent something similar",
     "wrong_content": "Missing key context",
     "not_relevant": "Not relevant to current situation",
+    "hallucination": "Fact not supported by account data",
     "other": "Other reason",
 }
 
@@ -89,7 +90,10 @@ class FeedbackRequest(BaseModel):
     notes: str = Field(..., max_length=10000)
     outcome: Optional[str] = Field(None, max_length=500)
     is_training_signal: bool = False
-    training_category: Optional[str] = Field(None, pattern="^(wrong_tone|wrong_timing|wrong_content|hallucination|other)$")
+    training_category: Optional[str] = Field(
+        None,
+        pattern="^(wrong_tone|wrong_timing|wrong_content|already_sent|not_relevant|hallucination|other)$",
+    )
 
 class SearchRequest(BaseModel):
     query: str = Field(..., max_length=1000)

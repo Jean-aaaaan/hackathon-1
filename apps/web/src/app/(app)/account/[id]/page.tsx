@@ -69,6 +69,7 @@ const DECLINE_CATEGORIES = [
   { value: "already_sent",  label: "Already sent" },
   { value: "wrong_content", label: "Wrong content" },
   { value: "not_relevant",  label: "Not relevant" },
+  { value: "hallucination", label: "Unsupported fact" },
   { value: "other",         label: "Other" },
 ];
 
@@ -983,12 +984,18 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
       setTimeout(() => setGenerateToast(null), 5000);
     },
     onSuccess: () => {
-      setTimeout(() => {
-        setAgentRunning(false);
+      // Pipeline takes 30–120s per account — poll every 20s for up to 3 minutes
+      let polls = 0;
+      const interval = setInterval(() => {
+        polls++;
         queryClient.invalidateQueries({ queryKey: ["account", id] });
         queryClient.invalidateQueries({ queryKey: ["signals", id] });
         queryClient.invalidateQueries({ queryKey: ["drafts", id] });
-      }, 25_000);
+        if (polls >= 9) {
+          clearInterval(interval);
+          setAgentRunning(false);
+        }
+      }, 20_000);
     },
   });
 

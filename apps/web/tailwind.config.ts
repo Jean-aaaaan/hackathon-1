@@ -19,10 +19,15 @@ const config: Config = {
         },
         ring: "hsl(var(--ring))",
         // Vantage brand — indigo-500 as accent, violet as gradient second stop
+        lily: {
+          DEFAULT: "#FFFEFC",
+          wash:    "#FAFAF8",
+        },
         brand: {
           50:  "#EEF2FF",   // indigo-50
           100: "#E0E7FF",   // indigo-100
           200: "#C7D2FE",   // indigo-200
+          300: "#A5B4FC",   // indigo-300
           400: "#818CF8",   // indigo-400
           500: "#6366F1",   // indigo-500
           600: "#4F46E5",   // indigo-600

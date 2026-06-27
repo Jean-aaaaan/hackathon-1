@@ -158,7 +158,7 @@ function AssistantInner() {
       {/* Chat panel */}
       <div className="flex flex-col flex-1">
         {/* Header */}
-        <div className="bg-white border-b border-zinc-200 px-6 py-4 flex items-center justify-between">
+        <div className="border-b border-zinc-100/90 bg-white/90 backdrop-blur-sm px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-base font-semibold text-zinc-900">Assistant</h1>
             <p className="text-xs text-zinc-500 mt-0.5">
@@ -175,7 +175,7 @@ function AssistantInner() {
                 setMessages([]);
                 seededRef.current = false;
               }}
-              className="text-sm border border-zinc-200 rounded-lg px-3 py-1.5 bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="text-sm border border-zinc-100 rounded-lg px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/15"
             >
               <option value="">All accounts</option>
               {accounts.map(a => (
@@ -230,7 +230,7 @@ function AssistantInner() {
                   <button
                     key={i}
                     onClick={() => handleSend(prompt)}
-                    className="text-left text-xs text-zinc-600 border border-zinc-200 rounded-xl px-3.5 py-2.5 hover:bg-zinc-50 hover:border-zinc-300 transition-colors"
+                    className="text-left text-xs text-zinc-600 border border-zinc-100 rounded-xl px-3.5 py-2.5 hover:bg-lily-wash hover:border-zinc-200 transition-colors"
                   >
                     {prompt}
                   </button>
@@ -254,7 +254,7 @@ function AssistantInner() {
                     "rounded-2xl px-4 py-3 text-sm leading-relaxed",
                     msg.role === "user"
                       ? "bg-brand-600 text-white rounded-br-sm"
-                      : "bg-white border border-zinc-200 text-zinc-800 rounded-bl-sm"
+                      : "bg-white border border-zinc-100 text-zinc-800 rounded-bl-sm"
                   )}>
                   {msg.role === "user" ? (
                     msg.content
@@ -286,7 +286,7 @@ function AssistantInner() {
                         // Inline code & code blocks
                         code: ({ children, className }) =>
                           className ? (
-                            <pre className="bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2 my-2 text-xs font-mono overflow-x-auto">
+                            <pre className="bg-lily-wash border border-zinc-100 rounded-lg px-3 py-2 my-2 text-xs font-mono overflow-x-auto">
                               <code>{children}</code>
                             </pre>
                           ) : (
@@ -298,8 +298,8 @@ function AssistantInner() {
                             <table className="min-w-full text-xs border-collapse">{children}</table>
                           </div>
                         ),
-                        th: ({ children }) => <th className="border border-zinc-200 px-2 py-1 bg-zinc-50 font-semibold text-left">{children}</th>,
-                        td: ({ children }) => <td className="border border-zinc-200 px-2 py-1">{children}</td>,
+                        th: ({ children }) => <th className="border border-zinc-100 px-2 py-1 bg-lily-wash font-semibold text-left">{children}</th>,
+                        td: ({ children }) => <td className="border border-zinc-100 px-2 py-1">{children}</td>,
                       }}
                     >
                       {msg.content}
@@ -340,7 +340,7 @@ function AssistantInner() {
         </div>
 
         {/* Input */}
-        <div className="bg-white border-t border-zinc-200 px-6 py-4">
+        <div className="border-t border-zinc-100/90 bg-white/90 backdrop-blur-sm px-6 py-4">
           <div className="flex gap-3">
             <input
               type="text"
@@ -352,7 +352,7 @@ function AssistantInner() {
                   ? `Ask about ${seedAccount.name}…`
                   : "Ask about any account, or search across your portfolio…"
               }
-              className="flex-1 text-sm border border-zinc-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+              className="flex-1 text-sm border border-zinc-100 rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/15 focus:border-transparent"
             />
             <button
               onClick={() => handleSend()}

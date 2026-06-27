@@ -291,7 +291,10 @@ def strip_dashes(text: str) -> str:
 
 # Accepted reason codes for rep draft-decline feedback. Anything outside this set
 # is noise (e.g. free-text keys from old API clients) and must not reach the prompt.
-_DECLINE_KEYS = {"wrong_tone", "wrong_timing", "wrong_content", "hallucination", "not_relevant", "other"}
+_DECLINE_KEYS = {
+    "wrong_tone", "wrong_timing", "wrong_content", "already_sent",
+    "not_relevant", "hallucination", "other",
+}
 
 # 10 KB cap: the voice_profile blob can be large; beyond this the prompt ROI
 # drops and we risk hitting the context window for the drafter call.

@@ -6,16 +6,18 @@
 
 @layer base {
   :root {
-    --background:       0 0% 100%;
+    --background:       40 20% 99%;
     --foreground:       240 6% 10%;
-    --muted:            240 5% 96%;
+    --muted:            40 15% 97%;
     --muted-foreground: 240 4% 46%;
-    --border:           240 6% 90%;
+    --border:           40 10% 92%;
     --ring:             240 5% 65%;
-    --surface:          240 5% 98%;
-    --shadow-xs:        0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md:        0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --surface:          0 0% 100%;
+    --lily:             #FFFEFC;
+    --lily-wash:        #FAFAF8;
+    --shadow-xs:        0 1px 2px rgba(15, 15, 20, 0.03);
+    --shadow-sm:        0 1px 3px rgba(15, 15, 20, 0.04), 0 1px 2px rgba(15, 15, 20, 0.02);
+    --shadow-md:        0 4px 14px rgba(15, 15, 20, 0.05), 0 2px 4px rgba(15, 15, 20, 0.03);
   }
 
   * { @apply border-border; }
@@ -23,7 +25,8 @@
   html { font-size: 15px; }
 
   body {
-    @apply bg-zinc-50 text-zinc-900;
+    background-color: var(--lily);
+    @apply text-zinc-900;
     font-feature-settings: "cv02", "cv03", "cv04", "ss01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -34,7 +37,7 @@
 
   ::-webkit-scrollbar       { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { @apply bg-zinc-200 rounded-full; }
+  ::-webkit-scrollbar-thumb { @apply bg-zinc-200/80 rounded-full; }
   ::-webkit-scrollbar-thumb:hover { @apply bg-zinc-300; }
 }
 
@@ -42,7 +45,7 @@
 
   /* ── Surfaces ──────────────────────────────────────────────────────── */
   .surface {
-    @apply bg-zinc-50/80;
+    background-color: var(--lily-wash);
   }
   .page-scroll {
     @apply h-full overflow-y-auto;
@@ -50,91 +53,92 @@
 
   /* ── Base card ─────────────────────────────────────────────────────── */
   .card {
-    @apply bg-white rounded-xl border border-zinc-200/80;
+    @apply bg-white rounded-xl border border-zinc-100/90;
     box-shadow: var(--shadow-xs);
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
   .card-interactive:hover {
-    @apply border-zinc-300/90;
+    @apply border-zinc-200/90;
     box-shadow: var(--shadow-sm);
   }
   .card-elevated {
-    @apply bg-white rounded-xl border border-zinc-200/70;
+    @apply bg-white rounded-xl border border-zinc-100/80;
     box-shadow: var(--shadow-md);
   }
 
-  /* ── KPI number (Dossier-style bold metrics) ───────────────────────── */
+  /* ── KPI number ────────────────────────────────────────────────────── */
   .kpi-number {
     @apply text-4xl font-bold text-zinc-900 tabular-nums tracking-tight leading-none;
   }
 
-  /* ── Intel callout (cross-portfolio insight panels) ────────────────── */
+  /* ── Intel callout ─────────────────────────────────────────────────── */
   .intel-callout {
-    @apply bg-amber-50 border border-amber-200 rounded-xl p-4;
+    @apply bg-amber-50/80 border border-amber-100 rounded-xl p-4;
   }
 
-  /* Urgency left-stripe — single subtle indicator */
+  /* Urgency left-stripe */
   .card-urgent          { border-left-width: 2px; }
-  .card-urgent-critical { @apply card-urgent border-l-zinc-800; }
+  .card-urgent-critical { @apply card-urgent border-l-red-500; }
   .card-urgent-high     { @apply card-urgent border-l-zinc-500; }
   .card-urgent-medium   { @apply card-urgent border-l-zinc-300; }
   .card-urgent-low      { @apply card-urgent border-l-zinc-200; }
 
-  /* ── Urgency dots — red only for critical ──────────────────────────── */
+  /* ── Urgency dots ──────────────────────────────────────────────────── */
   .dot          { @apply w-2 h-2 rounded-full flex-shrink-0 inline-block; }
   .dot-critical { background: #EF4444; }
   .dot-high     { background: #3f3f46; }
   .dot-medium   { background: #a1a1aa; }
   .dot-low      { background: #d4d4d8; }
 
-  /* ── Urgency text — zinc only ──────────────────────────────────────── */
+  /* ── Urgency text ──────────────────────────────────────────────────── */
   .urgency-critical { @apply text-red-600; }
   .urgency-high     { @apply text-zinc-800; }
   .urgency-medium   { @apply text-zinc-500; }
   .urgency-low      { @apply text-zinc-400; }
 
-  /* ── Forecast badges — monochrome ──────────────────────────────────── */
+  /* ── Forecast badges ───────────────────────────────────────────────── */
   .forecast-commit   { @apply bg-zinc-900 text-white border border-zinc-900; }
   .forecast-bestcase { @apply bg-zinc-700 text-white border border-zinc-700; }
-  .forecast-pipeline { @apply bg-zinc-100 text-zinc-600 border border-zinc-200; }
-  .forecast-omit     { @apply bg-zinc-50 text-zinc-400 border border-zinc-200; }
+  .forecast-pipeline { @apply bg-white text-zinc-600 border border-zinc-200; }
+  .forecast-omit     { @apply bg-zinc-50 text-zinc-400 border border-zinc-100; }
 
   /* ── Pill tabs / segmented control ─────────────────────────────────── */
-  .tab-bar         { @apply flex gap-0.5 bg-zinc-100/80 p-0.5 rounded-lg w-fit border border-zinc-200/60; }
-  .tab-bar-full    { @apply flex gap-0.5 bg-zinc-100/80 p-0.5 rounded-lg w-full border border-zinc-200/60; }
+  .tab-bar         { @apply flex gap-0.5 p-0.5 rounded-lg w-fit border border-zinc-100/90; background-color: var(--lily-wash); }
+  .tab-bar-full    { @apply flex gap-0.5 p-0.5 rounded-lg w-full border border-zinc-100/90; background-color: var(--lily-wash); }
   .tab-pill        { @apply px-3 py-1.5 text-[11px] font-medium rounded-md text-zinc-500 transition-all cursor-pointer; }
   .tab-pill:hover  { @apply text-zinc-700; }
-  .tab-pill-active { @apply bg-white text-zinc-900 shadow-sm ring-1 ring-zinc-200/80; }
+  .tab-pill-active { @apply bg-white text-zinc-900 shadow-sm ring-1 ring-zinc-100; }
 
   /* ── Deal list row ─────────────────────────────────────────────────── */
   .deal-row {
     @apply w-full text-left px-3.5 py-2.5 transition-all duration-150 border-b border-zinc-100/80 last:border-0;
   }
-  .deal-row:hover  { @apply bg-white/70; }
+  .deal-row:hover  { @apply bg-white/80; }
   .deal-row-selected {
     @apply bg-white border-l-2 border-l-zinc-900 pl-[calc(0.875rem-2px)];
     box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
   }
 
-  /* ── Nav header (frosted) ──────────────────────────────────────────── */
+  /* ── Nav header (frosted lily) ─────────────────────────────────────── */
   .nav-header {
     @apply h-14 flex items-center flex-shrink-0 sticky top-0 z-50
-           border-b border-zinc-200/60 bg-white/85 backdrop-blur-md;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+           border-b border-zinc-100/90 backdrop-blur-md;
+    background-color: rgba(255, 254, 252, 0.88);
+    box-shadow: 0 1px 0 rgba(15, 15, 20, 0.03);
   }
 
   /* ── Form inputs ───────────────────────────────────────────────────── */
   .input-field {
-    @apply w-full text-[13px] border border-zinc-200/90 rounded-lg bg-white
+    @apply w-full text-[13px] border border-zinc-100 rounded-lg bg-white text-zinc-900
            placeholder-zinc-400 transition-shadow duration-150;
   }
   .input-field:focus {
-    @apply outline-none border-zinc-300 ring-2 ring-zinc-900/5;
+    @apply outline-none border-zinc-200 ring-2 ring-brand-500/10;
   }
 
-  /* ── Intelligence card (morning brief, hero tiles) ─────────────────── */
+  /* ── Intelligence card ─────────────────────────────────────────────── */
   .intel-card {
-    @apply bg-white rounded-xl border border-zinc-200/70 px-5 py-4;
+    @apply bg-white rounded-xl border border-zinc-100/90 px-5 py-4;
     box-shadow: var(--shadow-sm);
   }
 
@@ -148,45 +152,45 @@
 
   /* ── Command palette overlay ───────────────────────────────────────── */
   .palette-overlay {
-    @apply fixed inset-0 bg-black/20 backdrop-blur-[2px] z-50;
+    @apply fixed inset-0 bg-zinc-900/10 backdrop-blur-[2px] z-50;
   }
   .palette-box {
-    @apply bg-white rounded-xl border border-zinc-200 shadow-2xl w-full max-w-xl mx-auto mt-[16vh];
+    @apply bg-white rounded-xl border border-zinc-100 shadow-2xl w-full max-w-xl mx-auto mt-[16vh];
     animation: palette-in 0.1s ease-out;
   }
 
   /* ── Primary button ────────────────────────────────────────────────── */
   .btn-accent {
-    @apply bg-zinc-900 text-white font-medium rounded-lg px-4 py-2 text-sm
+    @apply bg-brand-600 hover:bg-brand-500 text-white font-medium rounded-lg px-4 py-2 text-sm
            transition-all cursor-pointer select-none;
-    box-shadow: var(--shadow-xs);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.18);
   }
-  .btn-accent:hover  { @apply bg-zinc-800; box-shadow: var(--shadow-sm); }
-  .btn-accent:active { @apply bg-zinc-700 scale-[0.98]; }
+  .btn-accent:hover  { box-shadow: 0 4px 12px rgba(79, 70, 229, 0.22); }
+  .btn-accent:active { @apply scale-[0.98]; }
 
   /* ── Secondary button ──────────────────────────────────────────────── */
   .btn-secondary {
-    @apply border border-zinc-200/90 text-zinc-700 bg-white hover:bg-zinc-50 hover:border-zinc-300
+    @apply border border-zinc-100 text-zinc-700 bg-white hover:bg-zinc-50/80 hover:border-zinc-200
            rounded-lg px-3 py-1.5 text-sm font-medium transition-all cursor-pointer;
   }
 
-  /* ── Ghost chip (pills, tags) ──────────────────────────────────────── */
+  /* ── Ghost chip ────────────────────────────────────────────────────── */
   .chip {
     @apply inline-flex items-center gap-1.5 text-xs font-medium
-           bg-white border border-zinc-200/80 rounded-full px-2.5 py-1
-           transition-all hover:border-zinc-300 hover:shadow-sm;
+           bg-white border border-zinc-100 rounded-full px-2.5 py-1 text-zinc-600
+           transition-all hover:border-zinc-200 hover:shadow-sm;
   }
 
   /* ── Neutral badge ─────────────────────────────────────────────────── */
   .badge-neutral {
-    @apply text-xs bg-zinc-100 text-zinc-500 rounded px-2 py-0.5 font-medium;
+    @apply text-xs bg-zinc-50 text-zinc-500 rounded px-2 py-0.5 font-medium border border-zinc-100;
   }
 
   /* ── Gold Data citation chip ───────────────────────────────────────── */
   .citation-chip {
     @apply inline-flex items-center gap-1 text-xs bg-amber-50 text-amber-700
-           border border-amber-200 rounded px-1.5 py-0.5 cursor-pointer
-           hover:bg-amber-100 transition-colors;
+           border border-amber-100 rounded px-1.5 py-0.5 cursor-pointer
+           hover:bg-amber-100/80 transition-colors;
   }
 
   /* ── Section header text ───────────────────────────────────────────── */
@@ -194,14 +198,15 @@
     @apply text-[11px] font-medium text-zinc-400 uppercase tracking-wider;
   }
 
-  /* ── Panel (recessed background) ──────────────────────────────────── */
+  /* ── Panel (recessed) ──────────────────────────────────────────────── */
   .panel {
-    @apply bg-zinc-50 rounded-lg border border-zinc-100 p-4;
+    background-color: var(--lily-wash);
+    @apply rounded-lg border border-zinc-100/80 p-4;
   }
 
   /* ── Slide-over drawer ─────────────────────────────────────────────── */
   .slide-over {
-    @apply fixed right-0 top-0 h-full w-[400px] bg-white border-l border-zinc-200
+    @apply fixed right-0 top-0 h-full w-[400px] bg-white border-l border-zinc-100
            shadow-xl z-40 flex flex-col;
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -217,13 +222,18 @@
   .action-row {
     @apply flex items-center gap-3 py-2.5 border-b border-zinc-100 last:border-0;
   }
+
+  /* ── Gradient headline accent ──────────────────────────────────────── */
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-brand-400 via-brand-500 to-violet-400 bg-clip-text text-transparent;
+  }
 }
 
 /* ── NProgress bar ─────────────────────────────────────────────────────── */
 #nprogress .bar {
-  background: #18181B !important;
+  background: #4F46E5 !important;
   height: 2px !important;
 }
 #nprogress .peg {
-  box-shadow: 0 0 6px #18181B, 0 0 2px #18181B !important;
+  box-shadow: 0 0 6px #4F46E5, 0 0 2px #4F46E5 !important;
 }

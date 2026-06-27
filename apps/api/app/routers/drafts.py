@@ -35,7 +35,10 @@ class DraftReviewRequest(BaseModel):
     action: str = Field(..., pattern="^(approved|approved_modified|declined)$")
     modified_content: Optional[str] = Field(None, max_length=50000)
     reviewer_notes: Optional[str] = Field(None, max_length=2000)
-    training_category: Optional[str] = Field(None, pattern="^(wrong_tone|wrong_timing|wrong_content|hallucination|other)$")
+    training_category: Optional[str] = Field(
+        None,
+        pattern="^(wrong_tone|wrong_timing|wrong_content|already_sent|not_relevant|hallucination|other)$",
+    )
 
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────

@@ -102,8 +102,8 @@ export function DealFilterBar({
             className={cn(
               "flex items-center gap-1 px-2.5 py-2 rounded-md border text-[11px] font-medium transition-colors",
               activeCount > 0
-                ? "border-zinc-400 bg-zinc-100 text-zinc-800"
-                : "border-zinc-200 text-zinc-500 hover:bg-zinc-50"
+                ? "border-zinc-300 bg-lily-wash text-zinc-800"
+                : "border-zinc-100 text-zinc-500 hover:bg-lily-wash"
             )}
             title="Filters"
           >
@@ -113,7 +113,7 @@ export function DealFilterBar({
 
           {/* Filter popover */}
           {filtersOpen && (
-            <div className="absolute right-0 top-full mt-1.5 w-64 bg-white border border-zinc-200 rounded-md shadow-lg z-40 p-3 space-y-3">
+            <div className="absolute right-0 top-full mt-1.5 w-64 bg-white border border-zinc-100 rounded-xl shadow-lg z-40 p-3 space-y-3">
               {/* Stage */}
               {stages.length > 0 && (
                 <div>
@@ -127,7 +127,7 @@ export function DealFilterBar({
                           "text-[10px] px-2 py-1 rounded border transition-colors",
                           state.stages.includes(s)
                             ? "bg-zinc-900 text-white border-zinc-900"
-                            : "border-zinc-200 text-zinc-500 hover:border-zinc-400"
+                            : "border-zinc-100 text-zinc-500 hover:border-zinc-300"
                         )}
                       >
                         {s}
@@ -149,7 +149,7 @@ export function DealFilterBar({
                         "text-[10px] px-2 py-1 rounded border transition-colors",
                         state.categories.includes(c)
                           ? "bg-zinc-900 text-white border-zinc-900"
-                          : "border-zinc-200 text-zinc-500 hover:border-zinc-400"
+                          : "border-zinc-100 text-zinc-500 hover:border-zinc-300"
                       )}
                     >
                       {c}
@@ -175,7 +175,7 @@ export function DealFilterBar({
                         "text-[10px] px-2 py-1 rounded border transition-colors",
                         state.health === v
                           ? "bg-zinc-900 text-white border-zinc-900"
-                          : "border-zinc-200 text-zinc-500 hover:border-zinc-400"
+                          : "border-zinc-100 text-zinc-500 hover:border-zinc-300"
                       )}
                     >
                       {label}
@@ -219,8 +219,8 @@ export function DealFilterBar({
             className={cn(
               "flex-shrink-0 text-[12px] px-2.5 py-1 rounded-md transition-colors flex items-center gap-0.5 whitespace-nowrap",
               state.sort === k
-                ? "font-semibold text-zinc-900 bg-zinc-100 border border-zinc-300"
-                : "font-medium text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 border border-transparent"
+                ? "font-semibold text-zinc-900 bg-white border border-zinc-200 shadow-sm"
+                : "font-medium text-zinc-500 hover:text-zinc-800 hover:bg-lily-wash border border-transparent"
             )}
           >
             {SORT_LABELS[k]}

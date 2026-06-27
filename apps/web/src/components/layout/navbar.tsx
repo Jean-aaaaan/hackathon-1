@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { Search, RefreshCw, ChevronDown, X, Menu, Settings, LogOut, Building2 } from "lucide-react";
+import { Search, RefreshCw, ChevronDown, X, Menu, Settings, LogOut, Building2, Zap } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   accountsApi, authApi, draftsApi, setPreferredWorkspace,
@@ -18,16 +18,9 @@ import { CommandPalette } from "@/components/ui/command-palette";
 
 function VantageMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true">
-      <rect width="32" height="32" rx="8" fill="#18181B" />
-      <path
-        d="M16 10.5C12.1 10.5 8.5 14 8.5 16c0 2 3.6 5.5 7.5 5.5s7.5-3.5 7.5-5.5c0-2-3.6-5.5-7.5-5.5z"
-        fill="white"
-        fillOpacity="0.95"
-      />
-      <circle cx="16" cy="16" r="2.8" fill="#18181B" />
-      <circle cx="16" cy="16" r="1.2" fill="white" />
-    </svg>
+    <div className={cn("w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center shadow-sm shadow-brand-600/20", className)}>
+      <Zap className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+    </div>
   );
 }
 
@@ -79,8 +72,8 @@ function AccountSearchResults({ query, onSelect }: {
         <button
           key={a.id}
           onClick={() => onSelect(a.id)}
-          className="text-left text-sm px-2.5 py-1.5 rounded-lg hover:bg-zinc-100
-                     hover:text-zinc-900 text-zinc-700 transition-colors truncate"
+          className="text-left text-sm px-2.5 py-1.5 rounded-lg hover:bg-lily-wash
+                     hover:text-zinc-900 text-zinc-600 transition-colors truncate"
         >
           {a.name}
         </button>
@@ -217,11 +210,11 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
         {/* Brand */}
         <Link href="/inbox" className="flex items-center gap-2 flex-shrink-0">
           <VantageMark className="w-7 h-7" />
-          <span className="text-sm font-semibold text-zinc-900 hidden lg:block">Vantage</span>
+          <span className="text-sm font-bold tracking-tight text-zinc-900 hidden lg:block">Vantage</span>
         </Link>
 
         {/* Divider */}
-        <div className="hidden md:block w-px h-5 bg-zinc-200 flex-shrink-0" />
+        <div className="hidden md:block w-px h-5 bg-zinc-200/80 flex-shrink-0" />
 
         {/* Primary nav — horizontal text links */}
         <nav className="hidden md:flex items-center gap-0.5 flex-1 min-w-0">
@@ -235,13 +228,13 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium rounded-lg transition-all whitespace-nowrap",
                   active
-                    ? "text-zinc-900 bg-white shadow-sm ring-1 ring-zinc-200/80"
-                    : "text-zinc-500 hover:text-zinc-800 hover:bg-white/60"
+                    ? "text-zinc-900 bg-white shadow-sm ring-1 ring-zinc-100"
+                    : "text-zinc-500 hover:text-zinc-800 hover:bg-white/70"
                 )}
               >
                 {label}
                 {badge !== null && (
-                  <span className="text-[10px] font-semibold bg-zinc-900 text-white px-1.5 py-0.5 rounded-full leading-none min-w-[1.1rem] text-center tabular-nums">
+                  <span className="text-[10px] font-semibold bg-brand-600 text-white px-1.5 py-0.5 rounded-full leading-none min-w-[1.1rem] text-center tabular-nums">
                     {badge > 99 ? "99+" : badge}
                   </span>
                 )}
@@ -256,12 +249,12 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
           {/* ⌘K search — desktop */}
           <button
             onClick={openPalette}
-            className="hidden md:flex items-center gap-2 px-3 py-1.5 w-48 lg:w-56 bg-white/70 hover:bg-white
-                       rounded-lg border border-zinc-200/80 transition-all hover:border-zinc-300 hover:shadow-sm"
+            className="hidden md:flex items-center gap-2 px-3 py-1.5 w-48 lg:w-56 bg-white hover:bg-lily-wash
+                       rounded-lg border border-zinc-100 transition-all hover:border-zinc-200 hover:shadow-sm"
           >
             <Search className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
             <span className="flex-1 text-left text-[13px] text-zinc-400">Search...</span>
-            <kbd className="bg-white border border-zinc-200 rounded text-[10px] px-1.5 py-0.5 text-zinc-400 font-sans hidden lg:block">
+            <kbd className="bg-lily-wash border border-zinc-100 rounded text-[10px] px-1.5 py-0.5 text-zinc-400 font-sans hidden lg:block">
               ⌘K
             </kbd>
           </button>
@@ -279,7 +272,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all",
                 isRefreshing
-                  ? "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                  ? "bg-lily-wash text-zinc-600 border border-zinc-100"
                   : "bg-zinc-900 hover:bg-zinc-800 text-white"
               )}
             >
@@ -302,7 +295,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
             </button>
 
             {sweepOpen && !isRefreshing && (
-              <div className="absolute right-0 top-full mt-2 w-72 bg-white border border-zinc-200/80 rounded-xl shadow-lg z-50 p-4 flex flex-col gap-3 backdrop-blur-sm">
+              <div className="absolute right-0 top-full mt-2 w-72 bg-white border border-zinc-100 rounded-xl shadow-lg z-50 p-4 flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold text-zinc-700 uppercase tracking-wide">Sweep scope</p>
                   <button onClick={() => setSweepOpen(false)} className="text-zinc-400 hover:text-zinc-600">
@@ -320,8 +313,8 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                         className={cn(
                           "flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors text-left",
                           selectedStage === opt.value
-                            ? "bg-zinc-100 text-zinc-900 border border-zinc-300 font-medium"
-                            : "text-zinc-600 hover:bg-zinc-50 border border-transparent"
+                            ? "bg-lily-wash text-zinc-900 border border-zinc-200 font-medium"
+                            : "text-zinc-600 hover:bg-lily-wash border border-transparent"
                         )}
                       >
                         {opt.label}
@@ -340,8 +333,8 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                     placeholder="Account name..."
                     value={accountSearch}
                     onChange={e => setAccountSearch(e.target.value)}
-                    className="text-sm px-2.5 py-1.5 border border-zinc-200 rounded-lg
-                               text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-400"
+                    className="text-sm px-2.5 py-1.5 border border-zinc-100 rounded-lg bg-white
+                               text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300"
                   />
                   {accountSearch.trim() && (
                     <AccountSearchResults
@@ -368,13 +361,13 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
           <div className="relative" ref={avatarRef}>
             <button
               onClick={() => setAvatarOpen(v => !v)}
-              className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center transition-colors flex-shrink-0"
+              className="w-8 h-8 rounded-full bg-lily-wash hover:bg-zinc-100 border border-zinc-100 flex items-center justify-center transition-colors flex-shrink-0"
             >
               <span className="text-[11px] font-semibold text-zinc-700">{initials}</span>
             </button>
 
             {avatarOpen && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-zinc-200/80 rounded-xl shadow-lg z-50 overflow-hidden">
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white border border-zinc-100 rounded-xl shadow-lg z-50 overflow-hidden">
                 {user && (
                   <div className="px-3 py-3 border-b border-zinc-100">
                     <p className="text-xs font-semibold text-zinc-900 truncate">{user.email.split("@")[0]}</p>
@@ -386,7 +379,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                   <div className="border-b border-zinc-100">
                     <button
                       onClick={() => setWsOpen(o => !o)}
-                      className="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-zinc-600 hover:bg-zinc-50 transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-[13px] text-zinc-600 hover:bg-lily-wash transition-colors"
                     >
                       <Building2 className="w-4 h-4 text-zinc-400 flex-shrink-0" />
                       <span className="flex-1 text-left truncate">
@@ -395,7 +388,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                       <ChevronDown className={cn("w-3 h-3 text-zinc-400 transition-transform", wsOpen && "rotate-180")} />
                     </button>
                     {wsOpen && (
-                      <div className="border-t border-zinc-100 bg-zinc-50">
+                      <div className="border-t border-zinc-100 bg-lily-wash">
                         {workspaces.map(ws => (
                           <button
                             key={ws.workspace_id}
@@ -408,7 +401,7 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                             }}
                             className={cn(
                               "w-full flex items-center gap-2 px-4 py-2 text-[12px] text-left transition-colors",
-                              ws.is_current ? "text-zinc-900 font-medium" : "text-zinc-600 hover:bg-zinc-100"
+                              ws.is_current ? "text-zinc-900 font-medium" : "text-zinc-600 hover:bg-white"
                             )}
                           >
                             <span className={cn("w-1.5 h-1.5 rounded-full flex-shrink-0", ws.is_current ? "bg-zinc-900" : "bg-zinc-300")} />
@@ -424,14 +417,14 @@ export function NavBar({ onMobileMenuClick }: { onMobileMenuClick?: () => void }
                 <Link
                   href="/settings"
                   onClick={() => setAvatarOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2.5 text-[13px] text-zinc-600 hover:bg-zinc-50 transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2.5 text-[13px] text-zinc-600 hover:bg-lily-wash transition-colors"
                 >
                   <Settings className="w-4 h-4 text-zinc-400 flex-shrink-0" />
                   Settings
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-2.5 px-3 py-2.5 text-[13px] text-zinc-600 hover:bg-zinc-50 transition-colors border-t border-zinc-100"
+                  className="w-full flex items-center gap-2.5 px-3 py-2.5 text-[13px] text-zinc-600 hover:bg-lily-wash transition-colors border-t border-zinc-100"
                 >
                   <LogOut className="w-4 h-4 text-zinc-400 flex-shrink-0" />
                   Sign out
