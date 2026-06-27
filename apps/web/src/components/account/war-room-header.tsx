@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import {
-  ArrowLeft, Zap, ChevronDown, ExternalLink, RefreshCw, FileText,
+  ArrowLeft, Zap, ChevronDown, FileText,
   MessagesSquare, BarChart3, Clock,
 } from "lucide-react";
 import { DOC_TYPE_LABELS, type DocType } from "@/lib/api";
@@ -19,13 +19,13 @@ function HealthBadge({ score }: { score: number }) {
   const level = urgencyLevel(score);
   const styles = {
     critical: "bg-red-50 text-red-700 border-red-200 ring-red-100",
-    high:     "bg-orange-50 text-orange-700 border-orange-200 ring-orange-100",
-    medium:   "bg-amber-50 text-amber-700 border-amber-200 ring-amber-100",
-    low:      "bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-100",
+    high:     "bg-zinc-100 text-zinc-800 border-zinc-300 ring-zinc-100",
+    medium:   "bg-zinc-50 text-zinc-600 border-zinc-200 ring-zinc-100",
+    low:      "bg-zinc-50 text-zinc-500 border-zinc-100 ring-zinc-50",
   };
   const dots = {
-    critical: "bg-red-500", high: "bg-orange-400",
-    medium: "bg-amber-400", low: "bg-emerald-500",
+    critical: "bg-red-500", high: "bg-zinc-700",
+    medium: "bg-zinc-400", low: "bg-zinc-300",
   };
   const labels = { critical: "Critical", high: "High Risk", medium: "At Risk", low: "Healthy" };
   return (
@@ -51,17 +51,11 @@ export interface WarRoomHeaderProps {
   generateOpen: boolean;
   generatingDoc: boolean;
   agentRunning: boolean;
-  briefFetching: boolean;
-  sharePending: boolean;
-  shareCopied: boolean;
   onChatOpen: () => void;
   onGenerateToggle: () => void;
   onGenerateDoc: (type: DocType) => void;
   onRunAgent: () => void;
   onGenerateClose: () => void;
-  onFetchBrief: () => void;
-  onShare: () => void;
-  onRefresh: () => void;
 }
 
 export function WarRoomHeader({
@@ -76,19 +70,13 @@ export function WarRoomHeader({
   generateOpen,
   generatingDoc,
   agentRunning,
-  briefFetching,
-  sharePending,
-  shareCopied,
   onChatOpen,
   onGenerateToggle,
   onGenerateDoc,
   onRunAgent,
   onGenerateClose,
-  onFetchBrief,
-  onShare,
-  onRefresh,
 }: WarRoomHeaderProps) {
-  const momentumStyle = momentum === "accelerating" ? "text-emerald-600" : momentum === "declining" ? "text-red-500" : "text-amber-500";
+  const momentumStyle = momentum === "accelerating" ? "text-zinc-700" : momentum === "declining" ? "text-red-500" : "text-zinc-500";
   const momentumIcon = momentum === "accelerating" ? "↗" : momentum === "declining" ? "↓" : "↘";
 
   return (
@@ -147,7 +135,7 @@ export function WarRoomHeader({
           {generateOpen && (
             <div className="absolute right-0 top-full mt-1.5 bg-white border border-zinc-200 rounded-xl shadow-lg z-30 min-w-[200px] py-1.5 overflow-hidden">
               {(Object.entries(DOC_TYPE_LABELS) as [DocType, string][]).map(([type, label]) => (
-                <button key={type} onClick={() => onGenerateDoc(type)}
+                <button key={type} onClick={() => { onGenerateDoc(type); onGenerateClose(); }}
                   className="w-full text-left px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 transition-colors">
                   {label}
                 </button>
@@ -163,30 +151,6 @@ export function WarRoomHeader({
           )}>
           <Zap className="w-3 h-3" />
           {agentRunning ? "Running…" : "Run Agent"}
-        </button>
-
-        <div className="relative">
-          <button onClick={onGenerateClose}
-            className="flex items-center gap-1 text-zinc-400 hover:text-zinc-600 transition-colors px-1.5 py-1.5 rounded-lg hover:bg-zinc-100">
-            <ChevronDown className="w-4 h-4" />
-          </button>
-        </div>
-
-        <button onClick={onFetchBrief} disabled={briefFetching}
-          className="btn-secondary flex items-center gap-1.5 text-xs px-2.5 disabled:opacity-50"
-          title="Meeting Brief">
-          <FileText className="w-3.5 h-3.5" />
-        </button>
-
-        <button onClick={onShare} disabled={sharePending}
-          title={shareCopied ? "Copied!" : "Copy share link"}
-          className="text-zinc-400 hover:text-zinc-600 transition-colors p-1 disabled:opacity-50">
-          <ExternalLink className="w-4 h-4" />
-        </button>
-
-        <button onClick={onRefresh} title="Refresh"
-          className="text-zinc-400 hover:text-zinc-600 transition-colors p-1">
-          <RefreshCw className="w-4 h-4" />
         </button>
       </div>
     </div>

@@ -442,9 +442,9 @@ function DraftCard({ draft, onApprove, onDecline, outlookConnected }: {
   const [sentConfirm, setSentConfirm] = useState(false);
 
   const statusColors: Record<string, string> = {
-    pending: "bg-amber-100 text-amber-700",
-    approved: "bg-green-100 text-green-700",
-    approved_modified: "bg-teal-100 text-teal-700",
+    pending: "bg-zinc-100 text-zinc-600",
+    approved: "bg-zinc-800 text-white",
+    approved_modified: "bg-zinc-700 text-white",
     declined: "bg-red-100 text-red-600",
   };
 
@@ -914,7 +914,9 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
   const activitySummary = state?.activity_summary as ActivitySummary | undefined;
   const outlookConnected = workspaceData?.data?.integrations?.outlook?.connected ?? false;
 
-  const accountName = (state?.name as string) ?? "Account";
+  const cachedAccounts = queryClient.getQueryData<{ data: Array<{ id: string; name: string }> }>(["accounts", "inbox"]);
+  const cachedAccountName = cachedAccounts?.data?.find(a => a.id === id)?.name;
+  const accountName = (state?.name as string) ?? cachedAccountName ?? "Account";
   const accountStage = state?.stage as string | undefined;
   const dealAmount = state?.deal_amount as number | null ?? null;
 
@@ -1118,17 +1120,11 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
         generateOpen={generateOpen}
         generatingDoc={!!generatingDoc}
         agentRunning={agentRunning}
-        briefFetching={briefFetching}
-        sharePending={shareMutation.isPending}
-        shareCopied={shareCopied}
         onChatOpen={() => setChatOpen(true)}
         onGenerateToggle={() => setGenerateOpen(v => !v)}
         onGenerateDoc={handleGenerateDoc}
         onRunAgent={() => runAgentMutation.mutate()}
         onGenerateClose={() => setGenerateOpen(false)}
-        onFetchBrief={fetchBrief}
-        onShare={() => shareMutation.mutate()}
-        onRefresh={() => queryClient.invalidateQueries({ queryKey: ["account", id] })}
       />
 
       {/* ── Body: sidebar + main ───────────────────────────────────────────── */}
@@ -1187,8 +1183,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
               <div className="flex items-center gap-2 flex-wrap">
                 {(meddpiccData.overall_score ?? healthScore) != null && (
                   <span className={cn("text-xs font-semibold tabular-nums",
-                    (meddpiccData.overall_score ?? healthScore) >= 0.6 ? "text-emerald-600" :
-                    (meddpiccData.overall_score ?? healthScore) >= 0.3 ? "text-amber-600" : "text-red-600")}>
+                    (meddpiccData.overall_score ?? healthScore) >= 0.6 ? "text-zinc-700" :
+                    (meddpiccData.overall_score ?? healthScore) >= 0.3 ? "text-zinc-500" : "text-red-600")}>
                     {fmtPct(meddpiccData.overall_score ?? healthScore)} MEDDPICC
                   </span>
                 )}
@@ -1196,7 +1192,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   <>
                     <span className="text-zinc-200">·</span>
                     <span className={cn("text-xs font-semibold tabular-nums",
-                      urgencyScore >= 0.85 ? "text-red-600" : urgencyScore >= 0.6 ? "text-orange-600" : "text-emerald-600")}>
+                      urgencyScore >= 0.85 ? "text-red-600" : urgencyScore >= 0.6 ? "text-zinc-700" : "text-zinc-500")}>
                       {fmtPct(urgencyScore)} urgency
                     </span>
                   </>
@@ -1209,7 +1205,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
               <div className="space-y-1">
                 <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Signals</p>
                 <SignalGroup label="Critical" dotColor="bg-red-500" count={criticalSignals.length} signals={criticalSignals} defaultExpanded={criticalSignals.length > 0} onAck={id => ackMutation.mutate(id)} />
-                <SignalGroup label="Warning"  dotColor="bg-amber-400" count={warningSignals.length}  signals={warningSignals}  defaultExpanded={false} onAck={id => ackMutation.mutate(id)} />
+                <SignalGroup label="Warning"  dotColor="bg-zinc-400" count={warningSignals.length}  signals={warningSignals}  defaultExpanded={false} onAck={id => ackMutation.mutate(id)} />
                 <SignalGroup label="Activity" dotColor="bg-zinc-300"  count={activitySignals.length} signals={activitySignals} defaultExpanded={false} onAck={id => ackMutation.mutate(id)} />
               </div>
             )}
@@ -1348,18 +1344,18 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                   {isClosed && !winLossAlreadyCaptured && (
                     <div className={cn(
                       "rounded-2xl p-4 border flex items-center gap-3",
-                      accountStage?.toLowerCase().includes("won") ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"
+                      accountStage?.toLowerCase().includes("won") ? "bg-zinc-50 border-zinc-200" : "bg-red-50 border-red-200"
                     )}>
                       <div className="flex-1">
                         <p className={cn("text-sm font-semibold",
-                          accountStage?.toLowerCase().includes("won") ? "text-emerald-800" : "text-red-800")}>
+                          accountStage?.toLowerCase().includes("won") ? "text-zinc-800" : "text-red-800")}>
                           {accountStage?.toLowerCase().includes("won") ? "Deal closed. Capture the win." : "Deal lost. Capture the reason."}
                         </p>
                       </div>
                       <button onClick={() => setWinLossOpen(true)}
                         className={cn("text-xs font-medium px-3 py-1.5 rounded-xl transition-colors",
                           accountStage?.toLowerCase().includes("won")
-                            ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                            ? "bg-zinc-900 text-white hover:bg-zinc-700"
                             : "bg-red-600 text-white hover:bg-red-700")}>
                         Capture Reason
                       </button>
@@ -1396,7 +1392,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                           <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Completed</p>
                           {completedPlanActions.slice(0, 5).map((a: TimelineAction) => (
                             <div key={a.id} className="flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-zinc-100">
-                              <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
+                              <CheckCircle className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
                               <span className="text-sm text-zinc-600 line-through">{a.title}</span>
                               <span className="text-xs text-zinc-400 ml-auto">{a.completed_at ? format(new Date(a.completed_at), "MMM d") : ""}</span>
                             </div>
@@ -1493,8 +1489,8 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                         {meddpiccData.gap_risk && (
                           <span className={cn("text-xs font-medium px-2 py-0.5 rounded-full",
                             meddpiccData.gap_risk === "critical" ? "bg-red-100 text-red-700" :
-                            meddpiccData.gap_risk === "high" ? "bg-orange-100 text-orange-700" :
-                            "bg-amber-100 text-amber-700")}>
+                            meddpiccData.gap_risk === "high" ? "bg-zinc-800 text-white" :
+                            "bg-zinc-100 text-zinc-600")}>
                             {meddpiccData.gap_risk} risk
                           </span>
                         )}
@@ -1510,7 +1506,7 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                             : val >= 0.3
                             ? "bg-zinc-500"
                             : "bg-zinc-300";
-                          const textColor = val >= 0.6 ? "text-emerald-600" : val >= 0.3 ? "text-amber-600" : "text-red-500";
+                          const textColor = val >= 0.6 ? "text-zinc-700" : val >= 0.3 ? "text-zinc-500" : "text-red-500";
                           const isGap = val < 0.5;
                           return (
                             <div key={k} className="flex items-center gap-2">
@@ -1545,10 +1541,10 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                         {["champion","economic","timeline","competition","stakeholder"].map(k => {
                           const level = ((riskVectors[k] ?? "unknown") as string).toLowerCase();
                           const style = level === "critical" ? "bg-red-50 border-red-200 text-red-700" :
-                            level === "high" ? "bg-orange-50 border-orange-200 text-orange-700" :
-                            level === "medium" ? "bg-amber-50 border-amber-200 text-amber-700" :
-                            level === "low" ? "bg-green-50 border-green-200 text-green-700" :
-                            "bg-zinc-50 border-zinc-200 text-zinc-500";
+                            level === "high" ? "bg-zinc-800 border-zinc-700 text-white" :
+                            level === "medium" ? "bg-zinc-100 border-zinc-200 text-zinc-700" :
+                            level === "low" ? "bg-zinc-50 border-zinc-100 text-zinc-500" :
+                            "bg-zinc-50 border-zinc-200 text-zinc-400";
                           return (
                             <div key={k} className={cn("flex flex-col items-center gap-1 px-1.5 py-2.5 rounded-xl border text-center", style)}>
                               <span className="text-[10px] font-semibold leading-tight">{RISK_LABELS[k]}</span>
@@ -1583,14 +1579,14 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                         </div>
                         <div className={cn(
                           "rounded-lg border px-3 py-2.5 text-center",
-                          (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "bg-amber-50 border-amber-200" : "bg-zinc-50 border-zinc-100"
+                          (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "bg-zinc-800 border-zinc-700" : "bg-zinc-50 border-zinc-100"
                         )}>
                           <p className={cn("text-base font-bold tabular-nums",
-                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-700" : "text-zinc-800")}>
+                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-white" : "text-zinc-800")}>
                             {activitySummary!.days_since_last_inbound != null ? `${activitySummary!.days_since_last_inbound}d` : "—"}
                           </p>
                           <p className={cn("text-[10px]",
-                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-amber-600" : "text-zinc-400")}>since reply</p>
+                            (activitySummary!.days_since_last_inbound ?? 0) > 14 ? "text-zinc-300" : "text-zinc-400")}>since reply</p>
                         </div>
                       </div>
                     ) : (
@@ -1662,12 +1658,12 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                           </div>
                           <div className={cn(
                             "rounded-lg border px-3 py-2.5 text-center",
-                            talkPct != null && talkPct > 65 ? "bg-amber-50 border-amber-200" : "bg-zinc-50 border-zinc-100"
+                            talkPct != null && talkPct > 65 ? "bg-zinc-800 border-zinc-700" : "bg-zinc-50 border-zinc-100"
                           )}>
-                            <p className={cn("text-base font-bold tabular-nums", talkPct != null && talkPct > 65 ? "text-amber-700" : "text-zinc-800")}>
+                            <p className={cn("text-base font-bold tabular-nums", talkPct != null && talkPct > 65 ? "text-white" : "text-zinc-800")}>
                               {talkPct != null ? `${talkPct}%` : "—"}
                             </p>
-                            <p className={cn("text-[10px]", talkPct != null && talkPct > 65 ? "text-amber-600" : "text-zinc-400")}>
+                            <p className={cn("text-[10px]", talkPct != null && talkPct > 65 ? "text-zinc-300" : "text-zinc-400")}>
                               rep talk share{talkPct != null && talkPct > 65 ? " · high" : ""}
                             </p>
                           </div>
@@ -1751,14 +1747,14 @@ export default function WarRoomPage({ params }: { params: Promise<{ id: string }
                             return m ? m[1].trim() : raw;
                           })();
                           return (
-                            <div key={key} className={cn("rounded-xl p-3.5 border", present ? "bg-green-50 border-green-200" : "bg-red-50/50 border-red-100")}>
+                            <div key={key} className={cn("rounded-xl p-3.5 border", present ? "bg-zinc-50 border-zinc-200" : "bg-red-50/50 border-red-100")}>
                               <div className="flex items-center gap-2 mb-1">
-                                {present ? <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" /> : <XCircle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />}
-                                <span className={cn("text-sm font-semibold", present ? "text-green-800" : "text-red-700")}>{label}</span>
+                                {present ? <CheckCircle className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" /> : <XCircle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />}
+                                <span className={cn("text-sm font-semibold", present ? "text-zinc-800" : "text-red-700")}>{label}</span>
                                 {!present && <span className="text-xs text-red-400 ml-auto">Missing</span>}
                               </div>
                               {present && evidence ? (
-                                <p className="text-xs text-green-700 leading-relaxed pl-5 line-clamp-3">{evidence}</p>
+                                <p className="text-xs text-zinc-600 leading-relaxed pl-5 line-clamp-3">{evidence}</p>
                               ) : !present ? (
                                 <p className="text-xs text-red-500/70 pl-5">{hint}</p>
                               ) : null}
